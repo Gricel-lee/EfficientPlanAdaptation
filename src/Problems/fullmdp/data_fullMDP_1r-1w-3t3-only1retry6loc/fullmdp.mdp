@@ -1,0 +1,124 @@
+mdp
+// Labels & formulae 
+label "success" = t3l3=1 & t3l5=1;
+label "done" = !(t3l3=0) & !(t3l5=0);
+formula success = t3l3=1 & t3l5=1;
+// Retries
+const int worker1_maxRetry_t3l3 = 3;
+const int worker1_maxRetry_t3l5 = 3;
+const int r1_maxRetry_t3l3 = 3;
+const int r1_maxRetry_t3l5 = 3;
+// Cost
+const int worker1_cost_t3l3 = 5;
+const int worker1_cost_t3l5 = 5;
+const int r1_cost_t3l3 = 1;
+const int r1_cost_t3l5 = 1;
+
+
+module agents
+  //  worker1 state vars
+  worker1Loc : [0..6] init 1; //location
+  worker1retry_t3l3 : [0..worker1_maxRetry_t3l3] init 0; //retry
+  worker1retry_t3l5 : [0..worker1_maxRetry_t3l5] init 0; //retry
+  //  r1 state vars
+  r1Loc : [0..6] init 1; //location
+  r1retry_t3l3 : [0..r1_maxRetry_t3l3] init 0; //retry
+  r1retry_t3l5 : [0..r1_maxRetry_t3l5] init 0; //retry
+  // empty locations
+  emptyl1 : bool init false;
+  emptyl2 : bool init true;
+  emptyl3 : bool init true;
+  emptyl4 : bool init true;
+  emptyl5 : bool init true;
+  emptyl6 : bool init true;
+  // tasks
+  t3l3 : [0..2] init 0; //1: success, 2: failure
+  t3l5 : [0..2] init 0; //1: success, 2: failure
+
+
+  // Transitions move
+  // worker1
+  [worker1movel1_l2] worker1Loc=1 & emptyl2 & !success-> 1.0 : (emptyl1'=true) & (emptyl2'=false) & (worker1Loc'=2);
+  [worker1movel2_l1] worker1Loc=2 & emptyl1 & !success -> 1.0 : (emptyl2'=true) & (emptyl1'=false) & (worker1Loc'=1);
+  [worker1movel1_l3] worker1Loc=1 & emptyl3 & !success-> 1.0 : (emptyl1'=true) & (emptyl3'=false) & (worker1Loc'=3);
+  [worker1movel3_l1] worker1Loc=3 & emptyl1 & !success -> 1.0 : (emptyl3'=true) & (emptyl1'=false) & (worker1Loc'=1);
+  [worker1movel2_l4] worker1Loc=2 & emptyl4 & !success-> 1.0 : (emptyl2'=true) & (emptyl4'=false) & (worker1Loc'=4);
+  [worker1movel4_l2] worker1Loc=4 & emptyl2 & !success -> 1.0 : (emptyl4'=true) & (emptyl2'=false) & (worker1Loc'=2);
+  [worker1movel3_l4] worker1Loc=3 & emptyl4 & !success-> 1.0 : (emptyl3'=true) & (emptyl4'=false) & (worker1Loc'=4);
+  [worker1movel4_l3] worker1Loc=4 & emptyl3 & !success -> 1.0 : (emptyl4'=true) & (emptyl3'=false) & (worker1Loc'=3);
+  [worker1movel3_l5] worker1Loc=3 & emptyl5 & !success-> 1.0 : (emptyl3'=true) & (emptyl5'=false) & (worker1Loc'=5);
+  [worker1movel5_l3] worker1Loc=5 & emptyl3 & !success -> 1.0 : (emptyl5'=true) & (emptyl3'=false) & (worker1Loc'=3);
+  [worker1movel4_l6] worker1Loc=4 & emptyl6 & !success-> 1.0 : (emptyl4'=true) & (emptyl6'=false) & (worker1Loc'=6);
+  [worker1movel6_l4] worker1Loc=6 & emptyl4 & !success -> 1.0 : (emptyl6'=true) & (emptyl4'=false) & (worker1Loc'=4);
+  [worker1movel5_l6] worker1Loc=5 & emptyl6 & !success-> 1.0 : (emptyl5'=true) & (emptyl6'=false) & (worker1Loc'=6);
+  [worker1movel6_l5] worker1Loc=6 & emptyl5 & !success -> 1.0 : (emptyl6'=true) & (emptyl5'=false) & (worker1Loc'=5);
+  // r1
+  [r1movel1_l2] r1Loc=1 & emptyl2 & !success-> 1.0 : (emptyl1'=true) & (emptyl2'=false) & (r1Loc'=2);
+  [r1movel2_l1] r1Loc=2 & emptyl1 & !success -> 1.0 : (emptyl2'=true) & (emptyl1'=false) & (r1Loc'=1);
+  [r1movel1_l3] r1Loc=1 & emptyl3 & !success-> 1.0 : (emptyl1'=true) & (emptyl3'=false) & (r1Loc'=3);
+  [r1movel3_l1] r1Loc=3 & emptyl1 & !success -> 1.0 : (emptyl3'=true) & (emptyl1'=false) & (r1Loc'=1);
+  [r1movel2_l4] r1Loc=2 & emptyl4 & !success-> 1.0 : (emptyl2'=true) & (emptyl4'=false) & (r1Loc'=4);
+  [r1movel4_l2] r1Loc=4 & emptyl2 & !success -> 1.0 : (emptyl4'=true) & (emptyl2'=false) & (r1Loc'=2);
+  [r1movel3_l4] r1Loc=3 & emptyl4 & !success-> 1.0 : (emptyl3'=true) & (emptyl4'=false) & (r1Loc'=4);
+  [r1movel4_l3] r1Loc=4 & emptyl3 & !success -> 1.0 : (emptyl4'=true) & (emptyl3'=false) & (r1Loc'=3);
+  [r1movel3_l5] r1Loc=3 & emptyl5 & !success-> 1.0 : (emptyl3'=true) & (emptyl5'=false) & (r1Loc'=5);
+  [r1movel5_l3] r1Loc=5 & emptyl3 & !success -> 1.0 : (emptyl5'=true) & (emptyl3'=false) & (r1Loc'=3);
+  [r1movel4_l6] r1Loc=4 & emptyl6 & !success-> 1.0 : (emptyl4'=true) & (emptyl6'=false) & (r1Loc'=6);
+  [r1movel6_l4] r1Loc=6 & emptyl4 & !success -> 1.0 : (emptyl6'=true) & (emptyl4'=false) & (r1Loc'=4);
+  [r1movel5_l6] r1Loc=5 & emptyl6 & !success-> 1.0 : (emptyl5'=true) & (emptyl6'=false) & (r1Loc'=6);
+  [r1movel6_l5] r1Loc=6 & emptyl5 & !success -> 1.0 : (emptyl6'=true) & (emptyl5'=false) & (r1Loc'=5);
+
+
+  // Transitions dotask
+  // worker1
+  [worker1dotask_t3l3] t3l3=0 & worker1Loc=3 & worker1retry_t3l3<worker1_maxRetry_t3l3 -> 0.99 : (t3l3'=1) + 0.01 : (worker1retry_t3l3'=worker1retry_t3l3+1);
+  [worker1dotask_t3l3] t3l3=0 & worker1Loc=3 & worker1retry_t3l3>=worker1_maxRetry_t3l3 -> 1 : (t3l3'=2);
+  [worker1dotask_t3l5] t3l5=0 & worker1Loc=5 & worker1retry_t3l5<worker1_maxRetry_t3l5 -> 0.99 : (t3l5'=1) + 0.01 : (worker1retry_t3l5'=worker1retry_t3l5+1);
+  [worker1dotask_t3l5] t3l5=0 & worker1Loc=5 & worker1retry_t3l5>=worker1_maxRetry_t3l5 -> 1 : (t3l5'=2);
+  // r1
+  [r1dotask_t3l3] t3l3=0 & r1Loc=3 & r1retry_t3l3<r1_maxRetry_t3l3 -> 0.97 : (t3l3'=1) + 0.03 : (r1retry_t3l3'=r1retry_t3l3+1);
+  [r1dotask_t3l3] t3l3=0 & r1Loc=3 & r1retry_t3l3>=r1_maxRetry_t3l3 -> 1 : (t3l3'=2);
+  [r1dotask_t3l5] t3l5=0 & r1Loc=5 & r1retry_t3l5<r1_maxRetry_t3l5 -> 0.97 : (t3l5'=1) + 0.03 : (r1retry_t3l5'=r1retry_t3l5+1);
+  [r1dotask_t3l5] t3l5=0 & r1Loc=5 & r1retry_t3l5>=r1_maxRetry_t3l5 -> 1 : (t3l5'=2);
+endmodule
+
+
+// Reward: cost
+rewards
+  // worker1 move
+  [worker1movel1_l2] true : 1;
+  [worker1movel2_l1] true : 1;
+  [worker1movel1_l3] true : 1;
+  [worker1movel3_l1] true : 1;
+  [worker1movel2_l4] true : 1;
+  [worker1movel4_l2] true : 1;
+  [worker1movel3_l4] true : 1;
+  [worker1movel4_l3] true : 1;
+  [worker1movel3_l5] true : 1;
+  [worker1movel5_l3] true : 1;
+  [worker1movel4_l6] true : 1;
+  [worker1movel6_l4] true : 1;
+  [worker1movel5_l6] true : 1;
+  [worker1movel6_l5] true : 1;
+  // worker1 dotask
+  [worker1dotask_t3l3] true : worker1_cost_t3l3;
+  [worker1dotask_t3l5] true : worker1_cost_t3l5;
+  // r1 move
+  [r1movel1_l2] true : 1;
+  [r1movel2_l1] true : 1;
+  [r1movel1_l3] true : 1;
+  [r1movel3_l1] true : 1;
+  [r1movel2_l4] true : 1;
+  [r1movel4_l2] true : 1;
+  [r1movel3_l4] true : 1;
+  [r1movel4_l3] true : 1;
+  [r1movel3_l5] true : 1;
+  [r1movel5_l3] true : 1;
+  [r1movel4_l6] true : 1;
+  [r1movel6_l4] true : 1;
+  [r1movel5_l6] true : 1;
+  [r1movel6_l5] true : 1;
+  // r1 dotask
+  [r1dotask_t3l3] true : r1_cost_t3l3;
+  [r1dotask_t3l5] true : r1_cost_t3l5;
+endrewards

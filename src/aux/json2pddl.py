@@ -6,7 +6,7 @@ Read the json file containing the problem specification.
 
 import json
 import os
-
+import aux.auxiliary as auxiliary
 
 def generate_pddl_domain(data):
     ''' Generate the PDDL domain file content from the JSON data.'''
@@ -113,40 +113,60 @@ def generate_pddl_problem(data):
     return problem
 
 
-def createFolder(fpath):
-    # Create empty directory or delete files if they exist
-    if not os.path.exists(fpath):
-        os.makedirs(fpath)
-    else:
-        #delete all files in the directory
-        files = os.listdir(fpath)
-        for f in files:
-            os.remove(fpath+f)
-            
+   
 
-def main(fpath ="./src/",
-    fdomain = 'mrmh_planning_domain.pddl',
-    fproblem = 'mrmh_planning_problem.pddl'):
+def main(json_file_path,
+         output_dir = '',
+         fdomain='mrmh_planning_domain.pddl',
+         fproblem='mrmh_planning_problem.pddl',
+         ):
     ''' Generate PDDL domain and problem files from the JSON data.'''
-    fout = fpath+"data/"
-    # Load the JSON data
-    with open(fpath+'input-json/problem.json', 'r') as f:
-        data = json.load(f)
-    # Generate PDDL domain and problem files
+    
+    # Set output directory
+    if output_dir=='':    
+        output_dir = os.path.join(os.path.dirname(json_file_path), "data")
+    
+    # Debug: Check the input JSON file path
+    print(f"[JSON2PDDL] Input JSON file path: {json_file_path}")
+    
+    # Load the JSON data from the provided file path
+    try:
+        with open(json_file_path, 'r') as f:
+            data = json.load(f)
+        print("[JSON2PDDL] Successfully loaded JSON data.")
+    except FileNotFoundError as e:
+        print(f"[JSON2PDDL] Error: {e}")
+        return
+    
+    # Generate PDDL domain and problem
+    print("[JSON2PDDL] Generating PDDL domain and problem files...")
     domain_content = generate_pddl_domain(data)
     problem_content = generate_pddl_problem(data)
-    # Create folder
-    createFolder(fout)
+    
+    # # Create folder for output if it doesn't exist
+    # print(f"[JSON2PDDL] Creating folder (if needed) at: {output_dir}")
+    # auxiliary.createFolder(output_dir)
+    
     # Save the files
-    with open(fout+fdomain, 'w') as f:
+    print(f"[JSON2PDDL] Saving domain file to: {os.path.join(output_dir, fdomain)}")
+    with open(os.path.join(output_dir, fdomain), 'w') as f:
         f.write(domain_content)
-    with open(fout+fproblem, 'w') as f:
+    
+    print(f"[JSON2PDDL] Saving problem file to: {os.path.join(output_dir, fproblem)}")
+    with open(os.path.join(output_dir, fproblem), 'w') as f:
         f.write(problem_content)
-    print("PDDL files generated: mrmh_planning_domain.pddl and mrmh_planning_problem.pddl")
+    
+    print(f"[JSON2PDDL] PDDL files generated for {os.path.basename(json_file_path)}")
     return data
 
+
 if __name__ == "__main__":
-    fpath ="./src/"
-    fdomain = 'mrmh_planning_domain.pddl'
-    fproblem = 'mrmh_planning_problem.pddl'
-    main(fpath, fdomain, fproblem)
+    # Define the directory containing the JSON files
+    input_dir = "./src/Problems/AgentVariation"  # Ensure this path exists
+    
+    # Iterate through all files in the directory
+    for filename in os.listdir(input_dir):
+        if filename.endswith(".json"):  # Only process .json files
+            json_file_path = os.path.join(input_dir, filename)
+            print(f"[JSON2PDDL] Processing file: {json_file_path}")
+            main(json_file_path)  # Call main with the full path to each JSON file
