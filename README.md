@@ -27,7 +27,7 @@ pip install -r requirements.txt
 
 For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-environments/
 
-2) Download [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside src/apps. The new folder must contain the following files:
+2) Download [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/apps](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/apps). The new folder must contain the following files:
 ![image](https://github.com/user-attachments/assets/752140ef-b815-4eed-854f-06414dee453d)
 
 
