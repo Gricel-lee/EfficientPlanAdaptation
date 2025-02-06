@@ -31,7 +31,7 @@ For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-
 ![image](https://github.com/user-attachments/assets/752140ef-b815-4eed-854f-06414dee453d)
 
 
-3) Modify ```run.sh``` file with your installation paths:
+3) Modify ```run.sh``` file with your installation paths.
 
 
 4) Run the hybrid planner in the terminal as:
