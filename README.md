@@ -8,7 +8,7 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 
 
 
-# Run hybrid planning
+## Running hybrid planning
 
 Follow the steps to run the hybrid task planner from the terminal! 
 
