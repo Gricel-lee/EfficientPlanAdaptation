@@ -50,7 +50,7 @@ To create a full-MDP PRISM file from a JSON file, go to:
 ```src/aux/fullMDP```
 
 
-# Git commit note (for devs)
+## Git commit note (for devs)
 To submit changes, avoid large files by:
 ```
 git add .
