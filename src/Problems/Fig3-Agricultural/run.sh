@@ -14,7 +14,7 @@
 #---- Note: Nor folder called "libs" must be present. A libs folder will be created. It contains the necessary libraries for EvoChecker.
 
 #---- Set variables (change as needed) ----
-HP_PATH="/home/gnvf500/Gricel-Documents/GithubGris/Playing-with-multirobot-systems/src"
+HP_PATH="/home/gnvf500/Gricel-Documents/GithubGris/EfficientPlanAdaptation/src"
 INPUT_DIR=$HP_PATH"/Problems/Agricultural"
 PYTHON_SCRIPT_TP=$HP_PATH"/runPlanner.py"
 PYTHON_SCRIPT_EVO=$HP_PATH"/runEvo.py"
