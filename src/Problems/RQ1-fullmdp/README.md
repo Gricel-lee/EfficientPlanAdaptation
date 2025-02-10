@@ -1,0 +1,1 @@
+The files names describe the number of robots (r), human workers (w), tasks (t), retries (if only one allowed, or as in agricultural case study) and locations (l1-l9 as in case study, if not defined).

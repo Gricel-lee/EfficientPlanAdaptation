@@ -1,8 +1,0 @@
-SequentialPlan:
-    move(worker1, l1, l4)
-    dotask(worker1, t3l4, l4)
-    move(worker1, l4, l7)
-    dotask(worker1, t3l7, l7)
-    move(worker1, l7, l8)
-    move(worker1, l8, l9)
-    dotask(worker1, t3l9, l9)

@@ -6,6 +6,7 @@ import aux.auxiliary as auxiliary
 import os
 import subprocess
 import time
+import aux.plot as p
 
 def main(input_dir, evo_jar_file, evo=True, num_runs=1, verbose=True):
     '''
@@ -76,7 +77,16 @@ def main(input_dir, evo_jar_file, evo=True, num_runs=1, verbose=True):
                 with open(time_log_file, 'a') as f:
                     f.write(f"[{name_file}-{run}] Time elapsed: {elapsed_time:.2f} seconds\n")
                 
+                # ----- Run for: save plot of Pareto front-----
+                
+                evo_file = p.get_first_file_with_suffix(os.path.join(dir,"NSGAII/"))    
+                print(f"[{name_file}-{run}] Saving plot")
+                p.plot_EvoChecker_pareto_front(points = p.read_points_from_Evofile(evo_file))
+                p.save_plot(output_dir + '/plot.png')
+    
             
+
+
 
 if __name__ == "__main__":
     '''
