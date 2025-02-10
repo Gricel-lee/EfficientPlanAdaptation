@@ -112,8 +112,8 @@ def make_dir(file_savePlot):
 if __name__ == "__main__":
     
     # >>>>>>>>>> Set paths <<<<<<<<<<<
-    files_path = "/home/gnvf500/Gricel-Documents/GithubGris/Playing-with-multirobot-systems/RQ1-3/RQ1/EvoChecker"
-    output_path = '/home/gnvf500/Gricel-Documents/GithubGris/Playing-with-multirobot-systems/RQ1-3/RQ1/plots/'
+    files_path = "/Users/grisv/GitHub/EfficientPlanAdaptation/RQ1-3/RQ1/EvoChecker"
+    output_path = '/Users/grisv/GitHub/EfficientPlanAdaptation/RQ1-3/RQ1/plots/'
 
     
     # ----- Run for: save plot with Hybrid Planner vs full MDP data Pareto front policies-----
@@ -171,7 +171,7 @@ if __name__ == "__main__":
 
 
     # # ----- Run for: Check all Pareto Front files in directory
-    # folder_path = '/home/gnvf500/Gricel-Documents/GithubGris/Playing-with-multirobot-systems/RQ1-3/RQ1/EvoChecker/FullMDP-4'  # Replace with the path to your folder
+    # folder_path = '/Users/grisv/GitHub/EfficientPlanAdaptation/RQ1-3/RQ1/EvoChecker/FullMDP-4'  # Replace with the path to your folder
     # files = get_all_files_in_subfolders(folder_path)
     # for file_path in files:
     #     if file_path[-5:] == "Front":
