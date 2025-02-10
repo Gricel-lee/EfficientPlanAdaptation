@@ -26,9 +26,9 @@ def read_points_from_Evofile(filename):
 
 
 # 1) Run for: Check mean number of solutions and std
-folder_path = '/Users/grisv/GitHub/EfficientPlanAdaptation/RQ1-3/RQ1/EvoChecker/FullMDP-4'  # Replace with the path to your folder
+folder_path = '/Users/grisv/GitHub/EfficientPlanAdaptation/RQ1-3/RQ1/EvoChecker/FullMDP-3'  # Replace with the path to your folder
 files = get_all_files_in_subfolders(folder_path)
-front_or_set = "s" # f or s
+front_or_set = "f" # f or s
 
 n_sol = []
 n_sum = 0
@@ -56,9 +56,10 @@ print(np.average(n_sol),np.std(n_sol))
 # 1.0 0.0
 
 # M3
-# Avg num of sol: 27.774193548387096
-# 27.774193548387096 1.4747263807306399
+# Front: 8.516129032258064 1.214720669920176
+# Set: 27.774193548387096 1.4747263807306399
 
 # M4
 # Avg num of sol: 22.258064516129032
-# 22.258064516129032 2.094042886079675
+# Front: 6.354838709677419 0.8249491517770595
+# Set: 22.258064516129032 2.094042886079675
