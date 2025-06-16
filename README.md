@@ -8,7 +8,7 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 
 
 
-## Running hybrid planning
+## Running the hybrid planning
 
 Follow the steps to run the hybrid task planner from the terminal! 
 
@@ -43,6 +43,16 @@ This should create a folder with the name of each of your .json files, with:
 - Data from uncertainty augmentation: Pareto front and set obtained per run, execution times per run
 
 **Enjoy!**
+
+## Specify a new planning problem
+
+Planning problems are specified using JSON files located in the INPUT_DIR path, as defined in run.sh. These JSON files contain the full description of the task, including agents, locations, paths, and mission constraints. To create a new planning problem, follow the structure of the example file:```src/Problems/Agricultural/agricultural.json```:
+Guidelines for Creating JSON Planning Files:
+- Do not use underscores (_) in any ID names.
+- All IDs must be unique.
+- Probabilities must be specified as floating-point numbers between 0.0 and 1.0, with at least one decimal place.
+- Task instance IDs must follow the pattern: taskID + locationID + uniqueCharacter (e.g., t2l5a where t2 is the task, l5 is the location, and a differentiates the instance).
+
 
 
 ## Full-MDP
