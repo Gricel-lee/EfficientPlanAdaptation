@@ -8,7 +8,7 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 
 
 
-## Running hybrid planning
+## Installing hybrid planner
 
 Follow the steps to run the hybrid task planner from the terminal! 
 
@@ -33,6 +33,12 @@ For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-
 
 3) Modify ```run.sh``` file with your installation paths.
 
+## Running hybrid planner
+
+If not activated yet, activate virtual environment:
+```
+source prj-venv/bin/activate
+```
 
 4) Run the hybrid planner in the terminal as:
 ```
