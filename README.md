@@ -8,43 +8,28 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 
 
 
-## Installing hybrid planner
-
-Follow the steps to run the hybrid task planner from the terminal! 
-
-1) First, create a python environment:
-```
-cd src
-python3 -m venv prj-venv
-```
-(or python)
-
-```
-source prj-venv/bin/activate
-pip install -r requirements.txt
-```
-(or pip3)
-
-For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-environments/
-
-2) Download [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/apps](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/apps). The new folder must contain the following files:
-![image](https://github.com/user-attachments/assets/752140ef-b815-4eed-854f-06414dee453d)
-
-
-3) Modify ```run.sh``` file with your installation paths.
-
 ## Running hybrid planner
 
-If not activated yet, activate virtual environment:
-```
-source prj-venv/bin/activate
-```
+1) Download [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/apps](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/apps). The new folder must contain the following files:
+![image](https://github.com/user-attachments/assets/752140ef-b815-4eed-854f-06414dee453d)
 
-4) Run the hybrid planner in the terminal as:
+2) Modify ```run.sh``` and ```config.ini``` file with your installation paths.
+
+3) Run the hybrid planner in the terminal as:
 ```
 ./run.sh
 ```
-This should create a folder with the name of each of your .json files, with:
+4) After running this script, the FastAPI server will be running.
+
+For documentation and to check how it works, go to http://localhost:8001/docs
+
+Here, you can interact with the server to submit a planning problem (for more documentation visit [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs) )
+For example, in @post/problems/Add Problem, set a submit a new planning problem by providing the Json file and a description of the problem.
+
+![alt text](image.png)
+
+After executing this, the Hybrid planner is started under-the-hood. See the status and all jobs in @post/problems/Get All Planning Problems
+ At completion, it should create a folder in the .json file folder, with:
 - Data from numerical planner: PDDL files, plan, EvoChecker files, execution times per run
 - Data from uncertainty augmentation: Pareto front and set obtained per run, execution times per run
 
