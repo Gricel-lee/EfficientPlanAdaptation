@@ -19,14 +19,16 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 ```
 ./run.sh
 ```
-4) After running this script, the FastAPI server will be running.
+4) After running this script, the FastAPI server will be running locally at http://localhost:8001 (port defined in run.sh). 
 
-For documentation and to check how it works, go to http://localhost:8001/docs
+For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
 
-Here, you can interact with the server to submit a planning problem (for more documentation visit [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs) )
-For example, in @post/problems/Add Problem, set a submit a new planning problem by providing the Json file and a description of the problem.
+To manually test and submit a planning problem, go to http://localhost:8001/docs
 
-![alt text](image.png)
+Here, you can interact with the server. Endpoint ```@post/problems/Add Problem``` allows to submit new planning problem to solve by providing a Json file and a description of the problem:
+
+<img width="585" height="413" alt="image" src="https://github.com/user-attachments/assets/bed9a93a-3ce7-4cfa-98ba-0e0a4e74ff55" />
+
 
 After executing this, the Hybrid planner is started under-the-hood. See the status and all jobs in @post/problems/Get All Planning Problems
  At completion, it should create a folder in the .json file folder, with:
