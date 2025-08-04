@@ -103,15 +103,25 @@ if __name__ == "__main__":
     '''
     if len(sys.argv) != 8:
         print("Usage: python run.py <input_dir> <libs_dir> <evo> <num_runs> <verbose> <population> <max_evals>")
-        sys.exit(1)
-    
-    input_dir = sys.argv[1]
-    libs_dir = sys.argv[2]
-    evo = sys.argv[3]
-    num_runs = int(sys.argv[4])
-    verbose = sys.argv[5]
-    population = sys.argv[6]
-    max_evals = sys.argv[7]
+        #sys.exit(1)
+        # Test
+        path = "/home/gnvf500/Gricel-Documents/GithubGris/EfficientPlanAdaptation/src"
+        input_dir = path + "/Problems/Agricultural"
+        libs_dir = path + "/apps/EvoChecker/libs/runtime"
+        evo = True
+        num_runs = 1
+        verbose = False
+        population = 10
+        max_evals = 100
+        
+    else:
+        input_dir = sys.argv[1]
+        libs_dir = sys.argv[2]
+        evo = sys.argv[3]
+        num_runs = int(sys.argv[4])
+        verbose = sys.argv[5]
+        population = sys.argv[6]
+        max_evals = sys.argv[7]
     
     main(input_dir, libs_dir, evo, num_runs, verbose, population, max_evals)
     

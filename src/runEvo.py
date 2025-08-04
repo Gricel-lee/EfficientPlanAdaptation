@@ -7,7 +7,7 @@ import os
 import subprocess
 import time
 import aux.plot as p
-
+import config.config as config
 def main(input_dir, evo_jar_file, evo=True, num_runs=1, verbose=True):
     '''
     Args:
@@ -51,7 +51,9 @@ def main(input_dir, evo_jar_file, evo=True, num_runs=1, verbose=True):
                     # os.system(f"java -jar {evo_jar_file} {evo_config_file}")
                     
                     # Command that runs the Java program
-                    command = f"java -jar {evo_jar_file} {evo_config_file}"
+                    command = (
+                        f"LD_LIBRARY_PATH={config.LD_LIBRARY_PATH} "
+                        f"java -jar {evo_jar_file} {evo_config_file}")
 
                     # Run the command and continue, even if it fails
                     os.system(f"{command} || true")

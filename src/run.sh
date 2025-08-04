@@ -3,12 +3,12 @@
 #---- This script runs the hybrid planner.
 # It first generates a plan and its EvoChecker file
 # Then it runs EvoChecker to generate multiple possible uncertainty-augmented plans
+# Results are stored in the "data_{name of json file}" folder
 # Json folder in set in the INPUT_DIR variable
-# Results are stored in the "data_{name of json file}" folder inside the INPUT_DIR folder
 
 #---- Note: Remember to make this file executable by running:
 # chmod +x run_task.sh
-#---- Note: If EvoChecker stops during iterations, restart terminal and any IDEs ----
+#---- Note: If evochecker stops in iterations, restart terminal and any IDEs ----
 #---- Note: All .json files in INPUT_DIR must be planning problems
 #---- Note: No folder called "data" must be present from which this .sh file is called (EvoChecker creates one and it will be deleted)
 #---- Note: Nor folder called "libs" must be present. A libs folder will be created. It contains the necessary libraries for EvoChecker.

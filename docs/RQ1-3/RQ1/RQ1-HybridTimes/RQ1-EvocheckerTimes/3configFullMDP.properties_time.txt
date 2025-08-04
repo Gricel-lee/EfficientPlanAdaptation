@@ -1,0 +1,120 @@
+Run 1:
+Execution Time: 14.362 seconds
+Statistics: 
+
+Run 2:
+Execution Time: 13.214 seconds
+Statistics: 
+
+Run 3:
+Execution Time: 13.402 seconds
+Statistics: 
+
+Run 4:
+Execution Time: 11.177 seconds
+Statistics: 
+
+Run 5:
+Execution Time: 15.063 seconds
+Statistics: 
+
+Run 6:
+Execution Time: 12.233 seconds
+Statistics: 
+
+Run 7:
+Execution Time: 15.671 seconds
+Statistics: 
+
+Run 8:
+Execution Time: 16.348 seconds
+Statistics: 
+
+Run 9:
+Execution Time: 15.433 seconds
+Statistics: 
+
+Run 10:
+Execution Time: 16.662 seconds
+Statistics: 
+
+Run 11:
+Execution Time: 14.594 seconds
+Statistics: 
+
+Run 12:
+Execution Time: 12.643 seconds
+Statistics: 
+
+Run 13:
+Execution Time: 14.648 seconds
+Statistics: 
+
+Run 14:
+Execution Time: 14.28 seconds
+Statistics: 
+
+Run 15:
+Execution Time: 14.145 seconds
+Statistics: 
+
+Run 16:
+Execution Time: 13.821 seconds
+Statistics: 
+
+Run 17:
+Execution Time: 21.104 seconds
+Statistics: 
+
+Run 18:
+Execution Time: 22.358 seconds
+Statistics: 
+
+Run 19:
+Execution Time: 13.764 seconds
+Statistics: 
+
+Run 20:
+Execution Time: 14.662 seconds
+Statistics: 
+
+Run 21:
+Execution Time: 13.638 seconds
+Statistics: 
+
+Run 22:
+Execution Time: 13.713 seconds
+Statistics: 
+
+Run 23:
+Execution Time: 14.466 seconds
+Statistics: 
+
+Run 24:
+Execution Time: 13.897 seconds
+Statistics: 
+
+Run 25:
+Execution Time: 15.424 seconds
+Statistics: 
+
+Run 26:
+Execution Time: 13.621 seconds
+Statistics: 
+
+Run 27:
+Execution Time: 11.695 seconds
+Statistics: 
+
+Run 28:
+Execution Time: 16.521 seconds
+Statistics: 
+
+Run 29:
+Execution Time: 14.691 seconds
+Statistics: 
+
+Run 30:
+Execution Time: 14.853 seconds
+Statistics: 
+

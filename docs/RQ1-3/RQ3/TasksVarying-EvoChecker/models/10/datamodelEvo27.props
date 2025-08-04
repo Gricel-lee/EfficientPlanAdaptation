@@ -1,0 +1,12 @@
+label "success" = worker1=worker1Final & worker2=worker2Final & r1=r1Final & r2=r2Final ;
+label "done" = ((worker1=worker1Final | worker1=worker1Fail) & (worker2=worker2Final | worker2=worker2Fail) & (r1=r1Final | r1=r1Fail) & (r2=r2Final | r2=r2Fail));
+
+//objective, max
+P=? [ F "success" ]
+
+//objective, min
+R=? [ F "done" ]
+
+////constraint, min, 0.95
+//P=? [ F "success" ]
+

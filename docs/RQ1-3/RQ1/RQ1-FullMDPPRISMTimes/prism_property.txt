@@ -1,0 +1,1 @@
+multi(Pmax=?[F "success"],Rmin=?[C<=50])
