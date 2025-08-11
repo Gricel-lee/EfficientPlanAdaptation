@@ -11,29 +11,42 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 ## Running hybrid planner
 
 1) Download [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/apps](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/apps). The new folder must contain the following files:
-![image](https://github.com/user-attachments/assets/752140ef-b815-4eed-854f-06414dee453d)
+![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dirFiles.png)
 
 2) Modify ```run.sh``` and ```config.ini``` file with your installation paths.
 
-3) Run the hybrid planner in the terminal as:
+3) Run the hybrid planner in the terminal as
 ```
 ./run.sh
 ```
-4) After running this script, the FastAPI server will be running locally at http://localhost:8001 (port defined in run.sh). 
+This will automatically activate the Python environment, FastAPI, and the web app.
 
-For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
+4) After running this script, the API and **web app** will be running locally at **```http://localhost:8001```** (port defined in run.sh).
 
-To manually test and submit a planning problem, go to http://localhost:8001/docs
-
-Here, you can interact with the server. Endpoint ```@post/problems/Add Problem``` allows to submit new planning problem to solve by providing a Json file and a description of the problem:
-
-<img width="585" height="413" alt="image" src="https://github.com/user-attachments/assets/bed9a93a-3ce7-4cfa-98ba-0e0a4e74ff55" />
+Note: To test and submit a planning problem directly throught the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
 
 
-After executing this, the Hybrid planner is started under-the-hood. See the status and all jobs in @post/problems/Get All Planning Problems
- At completion, it should create a folder in the .json file folder, with:
+The web app allows you to submit planning problems (a description and the path to the JSON path with the planning problem). 
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard.png"/>
+
+Check the Pareto front results when a planning problem is completed.
+
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard-completed.png"/>
+
+Check failure messages:
+
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard-failed.png"/>
+
+And delete planning problem:
+
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard-delete.png"/>
+
+
+Note: When a new planning problem is added, the Hybrid planner is started under-the-hood using our API. For example, the status of all jobs are avaialble at ```http://127.0.0.1:8001/api/problems/```.
+ At completion, the hybrid planner should create a folder in the input .JSON file directory, with the generated data:
 - Data from numerical planner: PDDL files, plan, EvoChecker files, execution times per run
 - Data from uncertainty augmentation: Pareto front and set obtained per run, execution times per run
+
 
 **Enjoy!**
 
