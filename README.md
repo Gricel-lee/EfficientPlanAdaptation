@@ -25,6 +25,7 @@ This will automatically activate the Python environment, FastAPI, and the web ap
 
 Note: To test and submit a planning problem directly throught the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
 
+## Interacting with web app
 
 The web app allows you to submit planning problems (a description and the path to the JSON path with the planning problem). 
 <img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard.png"/>
