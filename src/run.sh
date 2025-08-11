@@ -10,8 +10,13 @@
 #---- Note: No folder called "libs" must be present. A libs folder will be created. It contains the necessary libraries for EvoChecker.
 
 # After running this script, the FastAPI server will be running at http://localhost:8001
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-HP_PATH="/home/gnvf500/Gricel-Documents/GithubGris/EfficientPlanAdaptation/src"
+# 1 Read HP_PATH from config.ini
+HP_PATH=$(grep '^HP_PATH' "$SCRIPT_DIR/config.ini" | cut -d'=' -f2- | xargs)
+echo "HP_PATH is: $HP_PATH"
+
 LIBS_PATH=$HP_PATH"/apps/EvoChecker/libs"
 # Python virtual environment
 SOURCE=$HP_PATH"/prj-venv/bin/activate"
