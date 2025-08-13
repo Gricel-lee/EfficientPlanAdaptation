@@ -13,20 +13,40 @@
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Make sure to run this script with the LTA argument: sharp or arch
+echo $1
+
 # 1 Read HP_PATH from config.ini
 HP_PATH=$(grep '^HP_PATH' "$SCRIPT_DIR/config.ini" | cut -d'=' -f2- | xargs)
 echo "HP_PATH is: $HP_PATH"
 
-LIBS_PATH=$HP_PATH"/apps/EvoChecker/libs"
-# Python virtual environment
-SOURCE=$HP_PATH"/prj-venv/bin/activate"
+# 2 Run Planner
+# ----------2.1 Run ARCH planner
+if [ "$1" == "arch" ]; then
 
-#----- Copy libs folder from EvoChecker to the folder containing this script
-cp -r $LIBS_PATH .
+    LIBS_PATH=$HP_PATH"/apps/EvoChecker/libs"
+    # Python virtual environment
+    SOURCE=$HP_PATH"/prj-venv/bin/activate"
 
-#----- Activate python virtual environment
-source $SOURCE
+    #----- Copy libs folder from EvoChecker to the folder containing this script
+    cp -r $LIBS_PATH .
 
-#----- Run FastAPI server
-echo "Running FastAPI server for Hybrid Planning..."
-fastapi dev main.py --port 8001
+    #----- Activate python virtual environment
+    source $SOURCE
+
+    #----- Run FastAPI server
+    echo "Running FastAPI server for Hybrid Planning..."
+
+    echo "Running main_arch.py on port 8001"
+    fastapi dev main_arch.py --port 8001
+
+# ---------- or 2.2 Run SHARP planner
+elif [ "$1" == "sharp" ]; then
+    echo "Running main_sharp.py on port 8001"
+    fastapi dev main_sharp.py --port 8001
+
+# ---------- else
+else
+    echo "Invalid argument. Use 'sharp' or 'arch'."
+    exit 1
+fi

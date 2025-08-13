@@ -19,6 +19,8 @@ class Problem(Problem2Create):
     id: str = Field(..., example="a1b2c3d4e5f67890a1b2c3d4e5f67890", description="Unique identifier for the problem.")
     date_creation: datetime = Field(..., description="The date and time the problem was created.")
     status: str = Field("created", description="The current status of the problem processing. Possible values: 'created', 'processing', 'completed', 'failed'.")
+    error_message : str = Field(None, description="Error message if the problem processing failed.")
+
 
 class ProblemStatusUpdate(BaseModel):
     """

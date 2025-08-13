@@ -186,7 +186,7 @@ function renderProblemDetail(problem) {
     } else if (problem.status === 'failed') {
         plotErrorView.classList.remove('hidden');
         plotErrorTitle.textContent = "Processing Failed";
-        plotErrorMessage.textContent = "The planner encountered an error.";
+        plotErrorMessage.textContent = "Error. " + (problem.error_message || "An unknown error occurred.");
     } else if (problem.status === 'completed') {
         plotChartView.classList.remove('hidden');
         fetchPlotData(problem.id);

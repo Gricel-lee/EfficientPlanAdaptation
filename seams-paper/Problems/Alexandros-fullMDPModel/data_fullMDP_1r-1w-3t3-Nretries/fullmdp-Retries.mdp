@@ -1,0 +1,212 @@
+mdp
+// Labels & formulae 
+label "success" = t3l4=1 & t3l7=1 & t3l9=1;
+label "done" = !(t3l4=0) & !(t3l7=0) & !(t3l9=0);
+formula success = t3l4=1 & t3l7=1 & t3l9=1;
+// Retries
+const int worker1_maxRetry_t3l4_SET = 3;
+const int worker1_maxRetry_t3l7_SET = 3;
+const int worker1_maxRetry_t3l9_SET = 3;
+const int r1_maxRetry_t3l4_SET = 2;
+const int r1_maxRetry_t3l7_SET = 2;
+const int r1_maxRetry_t3l9_SET = 2;
+// Cost
+const int worker1_cost_t3l4 = 5;
+const int worker1_cost_t3l7 = 5;
+const int worker1_cost_t3l9 = 5;
+const int r1_cost_t3l4 = 1;
+const int r1_cost_t3l7 = 1;
+const int r1_cost_t3l9 = 1;
+// Turn and retry selection
+module selectRetries
+  turn : [0..6] init 1; // turn =0 to 6: retry selection, turn=6: planning
+  worker1_maxRetry_t3l4 : [0..worker1_maxRetry_t3l4_SET] init 0;
+  worker1_maxRetry_t3l7 : [0..worker1_maxRetry_t3l7_SET] init 0;
+  worker1_maxRetry_t3l9 : [0..worker1_maxRetry_t3l9_SET] init 0;
+  r1_maxRetry_t3l4 : [0..r1_maxRetry_t3l4_SET] init 0;
+  r1_maxRetry_t3l7 : [0..r1_maxRetry_t3l7_SET] init 0;
+  r1_maxRetry_t3l9 : [0..r1_maxRetry_t3l9_SET] init 0;
+  worker1Alloct3l4:bool init false;
+  worker1Alloct3l7:bool init false;
+  worker1Alloct3l9:bool init false;
+  r1Alloct3l4:bool init false;
+  r1Alloct3l7:bool init false;
+  r1Alloct3l9:bool init false;
+  [selectRetriesworker1t3l4_1] turn=0 -> 1:(worker1_maxRetry_t3l4'= 1) & (worker1Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l4_2] turn=0 -> 1:(worker1_maxRetry_t3l4'= 2) & (worker1Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l4_3] turn=0 -> 1:(worker1_maxRetry_t3l4'= 3) & (worker1Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l7_1] turn=1 -> 1:(worker1_maxRetry_t3l7'= 1) & (worker1Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l7_2] turn=1 -> 1:(worker1_maxRetry_t3l7'= 2) & (worker1Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l7_3] turn=1 -> 1:(worker1_maxRetry_t3l7'= 3) & (worker1Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9_1] turn=2 -> 1:(worker1_maxRetry_t3l9'= 1) & (worker1Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9_2] turn=2 -> 1:(worker1_maxRetry_t3l9'= 2) & (worker1Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9_3] turn=2 -> 1:(worker1_maxRetry_t3l9'= 3) & (worker1Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr1t3l4_1] turn=3 -> 1:(r1_maxRetry_t3l4'= 1) & (r1Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr1t3l4_2] turn=3 -> 1:(r1_maxRetry_t3l4'= 2) & (r1Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr1t3l7_1] turn=4 -> 1:(r1_maxRetry_t3l7'= 1) & (r1Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr1t3l7_2] turn=4 -> 1:(r1_maxRetry_t3l7'= 2) & (r1Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr1t3l9_1] turn=5 -> 1:(r1_maxRetry_t3l9'= 1) & (r1Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr1t3l9_2] turn=5 -> 1:(r1_maxRetry_t3l9'= 2) & (r1Alloct3l9'=true) & (turn'=turn+1);
+
+endmodule
+
+
+module agents
+  //  worker1 state vars
+  worker1Loc : [0..9] init 1; //location
+  worker1retry_t3l4 : [0..1000] init 0; //retry
+  worker1retry_t3l7 : [0..1000] init 0; //retry
+  worker1retry_t3l9 : [0..1000] init 0; //retry
+  //  r1 state vars
+  r1Loc : [0..9] init 1; //location
+  r1retry_t3l4 : [0..1000] init 0; //retry
+  r1retry_t3l7 : [0..1000] init 0; //retry
+  r1retry_t3l9 : [0..1000] init 0; //retry
+  // empty locations
+  emptyl1 : bool init false;
+  emptyl2 : bool init true;
+  emptyl3 : bool init true;
+  emptyl4 : bool init true;
+  emptyl5 : bool init true;
+  emptyl6 : bool init true;
+  emptyl7 : bool init true;
+  emptyl8 : bool init true;
+  emptyl9 : bool init true;
+  // tasks
+  t3l4 : [0..2] init 0; //1: success, 2: failure
+  t3l7 : [0..2] init 0; //1: success, 2: failure
+  t3l9 : [0..2] init 0; //1: success, 2: failure
+
+
+  // Transitions move
+  // worker1
+  [worker1movel1_l2] worker1Loc=1 & emptyl2 & turn=6 & !success-> 1.0 : (emptyl1'=true) & (emptyl2'=false) & (worker1Loc'=2);
+  [worker1movel2_l1] worker1Loc=2 & emptyl1 & turn=6 & !success -> 1.0 : (emptyl2'=true) & (emptyl1'=false) & (worker1Loc'=1);
+  [worker1movel1_l4] worker1Loc=1 & emptyl4 & turn=6 & !success-> 1.0 : (emptyl1'=true) & (emptyl4'=false) & (worker1Loc'=4);
+  [worker1movel4_l1] worker1Loc=4 & emptyl1 & turn=6 & !success -> 1.0 : (emptyl4'=true) & (emptyl1'=false) & (worker1Loc'=1);
+  [worker1movel2_l3] worker1Loc=2 & emptyl3 & turn=6 & !success-> 1.0 : (emptyl2'=true) & (emptyl3'=false) & (worker1Loc'=3);
+  [worker1movel3_l2] worker1Loc=3 & emptyl2 & turn=6 & !success -> 1.0 : (emptyl3'=true) & (emptyl2'=false) & (worker1Loc'=2);
+  [worker1movel2_l5] worker1Loc=2 & emptyl5 & turn=6 & !success-> 1.0 : (emptyl2'=true) & (emptyl5'=false) & (worker1Loc'=5);
+  [worker1movel5_l2] worker1Loc=5 & emptyl2 & turn=6 & !success -> 1.0 : (emptyl5'=true) & (emptyl2'=false) & (worker1Loc'=2);
+  [worker1movel3_l6] worker1Loc=3 & emptyl6 & turn=6 & !success-> 1.0 : (emptyl3'=true) & (emptyl6'=false) & (worker1Loc'=6);
+  [worker1movel6_l3] worker1Loc=6 & emptyl3 & turn=6 & !success -> 1.0 : (emptyl6'=true) & (emptyl3'=false) & (worker1Loc'=3);
+  [worker1movel4_l5] worker1Loc=4 & emptyl5 & turn=6 & !success-> 1.0 : (emptyl4'=true) & (emptyl5'=false) & (worker1Loc'=5);
+  [worker1movel5_l4] worker1Loc=5 & emptyl4 & turn=6 & !success -> 1.0 : (emptyl5'=true) & (emptyl4'=false) & (worker1Loc'=4);
+  [worker1movel4_l7] worker1Loc=4 & emptyl7 & turn=6 & !success-> 1.0 : (emptyl4'=true) & (emptyl7'=false) & (worker1Loc'=7);
+  [worker1movel7_l4] worker1Loc=7 & emptyl4 & turn=6 & !success -> 1.0 : (emptyl7'=true) & (emptyl4'=false) & (worker1Loc'=4);
+  [worker1movel5_l6] worker1Loc=5 & emptyl6 & turn=6 & !success-> 1.0 : (emptyl5'=true) & (emptyl6'=false) & (worker1Loc'=6);
+  [worker1movel6_l5] worker1Loc=6 & emptyl5 & turn=6 & !success -> 1.0 : (emptyl6'=true) & (emptyl5'=false) & (worker1Loc'=5);
+  [worker1movel5_l8] worker1Loc=5 & emptyl8 & turn=6 & !success-> 1.0 : (emptyl5'=true) & (emptyl8'=false) & (worker1Loc'=8);
+  [worker1movel8_l5] worker1Loc=8 & emptyl5 & turn=6 & !success -> 1.0 : (emptyl8'=true) & (emptyl5'=false) & (worker1Loc'=5);
+  [worker1movel6_l9] worker1Loc=6 & emptyl9 & turn=6 & !success-> 1.0 : (emptyl6'=true) & (emptyl9'=false) & (worker1Loc'=9);
+  [worker1movel9_l6] worker1Loc=9 & emptyl6 & turn=6 & !success -> 1.0 : (emptyl9'=true) & (emptyl6'=false) & (worker1Loc'=6);
+  [worker1movel7_l8] worker1Loc=7 & emptyl8 & turn=6 & !success-> 1.0 : (emptyl7'=true) & (emptyl8'=false) & (worker1Loc'=8);
+  [worker1movel8_l7] worker1Loc=8 & emptyl7 & turn=6 & !success -> 1.0 : (emptyl8'=true) & (emptyl7'=false) & (worker1Loc'=7);
+  [worker1movel8_l9] worker1Loc=8 & emptyl9 & turn=6 & !success-> 1.0 : (emptyl8'=true) & (emptyl9'=false) & (worker1Loc'=9);
+  [worker1movel9_l8] worker1Loc=9 & emptyl8 & turn=6 & !success -> 1.0 : (emptyl9'=true) & (emptyl8'=false) & (worker1Loc'=8);
+  // r1
+  [r1movel1_l2] r1Loc=1 & emptyl2 & turn=6 & !success-> 1.0 : (emptyl1'=true) & (emptyl2'=false) & (r1Loc'=2);
+  [r1movel2_l1] r1Loc=2 & emptyl1 & turn=6 & !success -> 1.0 : (emptyl2'=true) & (emptyl1'=false) & (r1Loc'=1);
+  [r1movel1_l4] r1Loc=1 & emptyl4 & turn=6 & !success-> 1.0 : (emptyl1'=true) & (emptyl4'=false) & (r1Loc'=4);
+  [r1movel4_l1] r1Loc=4 & emptyl1 & turn=6 & !success -> 1.0 : (emptyl4'=true) & (emptyl1'=false) & (r1Loc'=1);
+  [r1movel2_l3] r1Loc=2 & emptyl3 & turn=6 & !success-> 1.0 : (emptyl2'=true) & (emptyl3'=false) & (r1Loc'=3);
+  [r1movel3_l2] r1Loc=3 & emptyl2 & turn=6 & !success -> 1.0 : (emptyl3'=true) & (emptyl2'=false) & (r1Loc'=2);
+  [r1movel2_l5] r1Loc=2 & emptyl5 & turn=6 & !success-> 1.0 : (emptyl2'=true) & (emptyl5'=false) & (r1Loc'=5);
+  [r1movel5_l2] r1Loc=5 & emptyl2 & turn=6 & !success -> 1.0 : (emptyl5'=true) & (emptyl2'=false) & (r1Loc'=2);
+  [r1movel3_l6] r1Loc=3 & emptyl6 & turn=6 & !success-> 1.0 : (emptyl3'=true) & (emptyl6'=false) & (r1Loc'=6);
+  [r1movel6_l3] r1Loc=6 & emptyl3 & turn=6 & !success -> 1.0 : (emptyl6'=true) & (emptyl3'=false) & (r1Loc'=3);
+  [r1movel4_l5] r1Loc=4 & emptyl5 & turn=6 & !success-> 1.0 : (emptyl4'=true) & (emptyl5'=false) & (r1Loc'=5);
+  [r1movel5_l4] r1Loc=5 & emptyl4 & turn=6 & !success -> 1.0 : (emptyl5'=true) & (emptyl4'=false) & (r1Loc'=4);
+  [r1movel4_l7] r1Loc=4 & emptyl7 & turn=6 & !success-> 1.0 : (emptyl4'=true) & (emptyl7'=false) & (r1Loc'=7);
+  [r1movel7_l4] r1Loc=7 & emptyl4 & turn=6 & !success -> 1.0 : (emptyl7'=true) & (emptyl4'=false) & (r1Loc'=4);
+  [r1movel5_l6] r1Loc=5 & emptyl6 & turn=6 & !success-> 1.0 : (emptyl5'=true) & (emptyl6'=false) & (r1Loc'=6);
+  [r1movel6_l5] r1Loc=6 & emptyl5 & turn=6 & !success -> 1.0 : (emptyl6'=true) & (emptyl5'=false) & (r1Loc'=5);
+  [r1movel5_l8] r1Loc=5 & emptyl8 & turn=6 & !success-> 1.0 : (emptyl5'=true) & (emptyl8'=false) & (r1Loc'=8);
+  [r1movel8_l5] r1Loc=8 & emptyl5 & turn=6 & !success -> 1.0 : (emptyl8'=true) & (emptyl5'=false) & (r1Loc'=5);
+  [r1movel6_l9] r1Loc=6 & emptyl9 & turn=6 & !success-> 1.0 : (emptyl6'=true) & (emptyl9'=false) & (r1Loc'=9);
+  [r1movel9_l6] r1Loc=9 & emptyl6 & turn=6 & !success -> 1.0 : (emptyl9'=true) & (emptyl6'=false) & (r1Loc'=6);
+  [r1movel7_l8] r1Loc=7 & emptyl8 & turn=6 & !success-> 1.0 : (emptyl7'=true) & (emptyl8'=false) & (r1Loc'=8);
+  [r1movel8_l7] r1Loc=8 & emptyl7 & turn=6 & !success -> 1.0 : (emptyl8'=true) & (emptyl7'=false) & (r1Loc'=7);
+  [r1movel8_l9] r1Loc=8 & emptyl9 & turn=6 & !success-> 1.0 : (emptyl8'=true) & (emptyl9'=false) & (r1Loc'=9);
+  [r1movel9_l8] r1Loc=9 & emptyl8 & turn=6 & !success -> 1.0 : (emptyl9'=true) & (emptyl8'=false) & (r1Loc'=8);
+
+
+  // Transitions dotask
+  // worker1
+  [worker1dotask_t3l4] t3l4=0 & worker1Alloct3l4 & worker1Loc=4 & worker1retry_t3l4<worker1_maxRetry_t3l4  & turn=6 -> 0.99 : (t3l4'=1) + 0.01 : (worker1retry_t3l4'=worker1retry_t3l4+1);
+  [worker1dotask_t3l4] t3l4=0 & worker1Alloct3l4 & worker1Loc=4 & worker1retry_t3l4>=worker1_maxRetry_t3l4  & turn=6 -> 1 : (t3l4'=2);
+  [worker1dotask_t3l7] t3l7=0 & worker1Alloct3l7 & worker1Loc=7 & worker1retry_t3l7<worker1_maxRetry_t3l7  & turn=6 -> 0.99 : (t3l7'=1) + 0.01 : (worker1retry_t3l7'=worker1retry_t3l7+1);
+  [worker1dotask_t3l7] t3l7=0 & worker1Alloct3l7 & worker1Loc=7 & worker1retry_t3l7>=worker1_maxRetry_t3l7  & turn=6 -> 1 : (t3l7'=2);
+  [worker1dotask_t3l9] t3l9=0 & worker1Alloct3l9 & worker1Loc=9 & worker1retry_t3l9<worker1_maxRetry_t3l9  & turn=6 -> 0.99 : (t3l9'=1) + 0.01 : (worker1retry_t3l9'=worker1retry_t3l9+1);
+  [worker1dotask_t3l9] t3l9=0 & worker1Alloct3l9 & worker1Loc=9 & worker1retry_t3l9>=worker1_maxRetry_t3l9  & turn=6 -> 1 : (t3l9'=2);
+  // r1
+  [r1dotask_t3l4] t3l4=0 & r1Alloct3l4 & r1Loc=4 & r1retry_t3l4<r1_maxRetry_t3l4  & turn=6 -> 0.97 : (t3l4'=1) + 0.03 : (r1retry_t3l4'=r1retry_t3l4+1);
+  [r1dotask_t3l4] t3l4=0 & r1Alloct3l4 & r1Loc=4 & r1retry_t3l4>=r1_maxRetry_t3l4  & turn=6 -> 1 : (t3l4'=2);
+  [r1dotask_t3l7] t3l7=0 & r1Alloct3l7 & r1Loc=7 & r1retry_t3l7<r1_maxRetry_t3l7  & turn=6 -> 0.97 : (t3l7'=1) + 0.03 : (r1retry_t3l7'=r1retry_t3l7+1);
+  [r1dotask_t3l7] t3l7=0 & r1Alloct3l7 & r1Loc=7 & r1retry_t3l7>=r1_maxRetry_t3l7  & turn=6 -> 1 : (t3l7'=2);
+  [r1dotask_t3l9] t3l9=0 & r1Alloct3l9 & r1Loc=9 & r1retry_t3l9<r1_maxRetry_t3l9  & turn=6 -> 0.97 : (t3l9'=1) + 0.03 : (r1retry_t3l9'=r1retry_t3l9+1);
+  [r1dotask_t3l9] t3l9=0 & r1Alloct3l9 & r1Loc=9 & r1retry_t3l9>=r1_maxRetry_t3l9  & turn=6 -> 1 : (t3l9'=2);
+endmodule
+
+
+// Reward: cost
+rewards
+  // worker1 move
+  [worker1movel1_l2] true : 1;
+  [worker1movel2_l1] true : 1;
+  [worker1movel1_l4] true : 1;
+  [worker1movel4_l1] true : 1;
+  [worker1movel2_l3] true : 1;
+  [worker1movel3_l2] true : 1;
+  [worker1movel2_l5] true : 1;
+  [worker1movel5_l2] true : 1;
+  [worker1movel3_l6] true : 1;
+  [worker1movel6_l3] true : 1;
+  [worker1movel4_l5] true : 1;
+  [worker1movel5_l4] true : 1;
+  [worker1movel4_l7] true : 1;
+  [worker1movel7_l4] true : 1;
+  [worker1movel5_l6] true : 1;
+  [worker1movel6_l5] true : 1;
+  [worker1movel5_l8] true : 1;
+  [worker1movel8_l5] true : 1;
+  [worker1movel6_l9] true : 1;
+  [worker1movel9_l6] true : 1;
+  [worker1movel7_l8] true : 1;
+  [worker1movel8_l7] true : 1;
+  [worker1movel8_l9] true : 1;
+  [worker1movel9_l8] true : 1;
+  // worker1 dotask
+  [worker1dotask_t3l4] true : worker1_cost_t3l4;
+  [worker1dotask_t3l7] true : worker1_cost_t3l7;
+  [worker1dotask_t3l9] true : worker1_cost_t3l9;
+  // r1 move
+  [r1movel1_l2] true : 1;
+  [r1movel2_l1] true : 1;
+  [r1movel1_l4] true : 1;
+  [r1movel4_l1] true : 1;
+  [r1movel2_l3] true : 1;
+  [r1movel3_l2] true : 1;
+  [r1movel2_l5] true : 1;
+  [r1movel5_l2] true : 1;
+  [r1movel3_l6] true : 1;
+  [r1movel6_l3] true : 1;
+  [r1movel4_l5] true : 1;
+  [r1movel5_l4] true : 1;
+  [r1movel4_l7] true : 1;
+  [r1movel7_l4] true : 1;
+  [r1movel5_l6] true : 1;
+  [r1movel6_l5] true : 1;
+  [r1movel5_l8] true : 1;
+  [r1movel8_l5] true : 1;
+  [r1movel6_l9] true : 1;
+  [r1movel9_l6] true : 1;
+  [r1movel7_l8] true : 1;
+  [r1movel8_l7] true : 1;
+  [r1movel8_l9] true : 1;
+  [r1movel9_l8] true : 1;
+  // r1 dotask
+  [r1dotask_t3l4] true : r1_cost_t3l4;
+  [r1dotask_t3l7] true : r1_cost_t3l7;
+  [r1dotask_t3l9] true : r1_cost_t3l9;
+endrewards
