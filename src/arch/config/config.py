@@ -36,9 +36,9 @@ LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH = "LD_LIBRARY_PATH"
 if platform == "darwin":
     EVO_LIBRARY_PATH = f"{LIBS_PATH}/runtime-amd64"
     LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH = "DYLD_LIBRARY_PATH"
-    # print("[Config] Running on macOS")
-    # print(f"[Config] {LD_LIBRARY_PATH}")
-    # print(f"[Config] {LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH}")
+    print("[Config] Running on macOS")
+    print(f"[Config] {LD_LIBRARY_PATH}")
+    print(f"[Config] {LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH}")
 
 print(f"[LTA-API] Loaded configuration: HP_PATH={HP_PATH}, NUM_TIMED_RUNS={NUM_TIMED_RUNS}, VERBOSE={VERBOSE}, POPULATION_SIZE={POPULATION_SIZE}, MAX_EVALUATIONS={MAX_EVALUATIONS}")
 PYTHON_EXECUTABLE = os.path.join(HP_PATH, "prj-venv/bin/python3")
