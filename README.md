@@ -74,3 +74,24 @@ If requires hard reset, make copy of folder, then go back n commits, e.g., 1 com
 git reset --hard HEAD~1
 ```
 Go back to the last commit that was able to push
+
+
+## Errors
+
+### Error when installing the python environment.
+If the python environment initialisation fails, try replace ```src/requirements.txt``` content for:
+```
+fastapi==0.116.1
+fastapi-cli==0.0.8
+fastapi-cloud-cli==0.1.5
+unified-planning==1.2.0
+up-aries==0.4.0
+up-enhsp==0.0.27
+up-fmap==0.0.13
+up-pyperplan==1.1.0
+up-symk==1.3.1
+#up-tamer==1.1.4
+#up_fast_downward==0.5.0
+#up_lpg==0.1.2
+matplotlib==3.7.3
+```
