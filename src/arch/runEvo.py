@@ -47,7 +47,7 @@ def main(problem_id, json_file_path, evo_jar_file):
         try:
             # Command that runs the Java program
             command = (
-                f"LD_LIBRARY_PATH={LD_LIBRARY_PATH} "
+                f"{LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH}={EVO_LIBRARY_PATH} "
                 f"java -jar {evo_jar_file} {evo_config_file}")
             
             print(f"[RunEvo] Running command: {command}")

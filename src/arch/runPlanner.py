@@ -8,7 +8,9 @@ No other .json files should be present in the input directory.
 '''
 import sys
 import arch.aux.json2pddl as json2pddl
+
 import arch.aux.pddlplanner as pddlplanner
+# import arch.aux.pddlplannercopy as pddlplanner
 import arch.aux.plan2PMCfile as plan2PMCfile
 import arch.aux.auxiliary as auxiliary
 import os
@@ -20,10 +22,6 @@ def main(problem_id, json_file_path):
     Args:
         problem_id: Unique identifier for the planning problem.
         json_file_path: The path to the JSON file to be processed.
-        libs_dir: EvoChecker libraries.
-        evo: A boolean flag to determine whether to generate Evochecker files (True) or PRISM files (False).
-        num_runs: Number of runs to get different execution times (set to 1 if only one run required). In paper, for RQ1 and RQ3 n=31.
-        verbose: A boolean flag to determine whether to print additional information.
     Returns:
         None
     '''
@@ -41,8 +39,6 @@ def main(problem_id, json_file_path):
     population = POPULATION_SIZE
     max_evals = MAX_EVALUATIONS
     num_runs = NUM_TIMED_RUNS
-    libs_dir = LD_LIBRARY_PATH
-    
 
     if not os.path.isfile(json_file_path):
         raise FileNotFoundError(f"File not found: {json_file_path}")
@@ -81,10 +77,10 @@ def main(problem_id, json_file_path):
             
             # Generate PRISM/Evochecker file from PDDL plan with indexed filenames
             print(f"[RunPlanner]: Generating Evochecker files for {name_file}-{run}...")
-            evo_config_file = plan2PMCfile.createPRISMfile(output_dir, name_file, plan, json_data, libs_dir, evoChecker=True, population=population, max_evals=max_evals)
+            evo_config_file = plan2PMCfile.createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=True, population=population, max_evals=max_evals)
             print(f"[RunPlanner]: Generating PRISM file for {name_file}-{run}...")
-            evo_config_file = plan2PMCfile.createPRISMfile(output_dir, name_file, plan, json_data, libs_dir, evoChecker=False, population=population, max_evals=max_evals)
-            
+            evo_config_file = plan2PMCfile.createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, population=population, max_evals=max_evals)
+
             # Log with elapsed time (for the current run)
             end_time = time.time()
             elapsed_time = end_time - start_time

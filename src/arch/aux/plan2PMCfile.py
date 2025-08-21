@@ -6,6 +6,7 @@ import unified_planning.plans.sequential_plan as SequentialPlan
 import unified_planning.plans.plan as Plan
 import os
 import sys
+from arch.config.config import EVO_LIBRARY_PATH
 
 def get_agents_in_plan(plan:PlanGenerationResult):
     '''Get agents in plan'''
@@ -121,7 +122,7 @@ def _extract_uncertainty_data(data):
 
 
 
-def createPRISMfile(output_dir, name_file, plan, json_data, libs_dir, evoChecker=False, population=10, max_evals=100):
+def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, population=10, max_evals=100):
     '''
     Create EvoChecker or PRISM file from PDDL plan
         @param output_dir: output directory
@@ -255,7 +256,7 @@ def createPRISMfile(output_dir, name_file, plan, json_data, libs_dir, evoChecker
             _save_file(s_evoProps, output_dir, f'datamodelEvo.props')
             
             # Get and save evochecker config.properties file
-            s_configProps = _get_evochecker_config_file(output_dir,libs_dir,name_file,population,max_evals)
+            s_configProps = _get_evochecker_config_file(output_dir,name_file,population,max_evals)
             _save_file(s_configProps, output_dir, f'evo_config.properties')
         else:
             _save_file(s, output_dir, f'datamodelEvo.prism')
@@ -269,14 +270,13 @@ def createPRISMfile(output_dir, name_file, plan, json_data, libs_dir, evoChecker
     return os.path.join(output_dir, f'evo_config.properties') 
     
 
-def _get_evochecker_config_file(output_dir,libs_dir,name_file,population=100,max_evals=1000):
+def _get_evochecker_config_file(output_dir,name_file,population=100,max_evals=1000):
     '''Get Evochecker config file'''
     
     # Set parameters
     problem = f"CPHS-{name_file}-EvoChecker-output"
     model = os.path.join(output_dir, 'datamodelEvo.pm') #"models/models_n_props/datamodelEvo1.pm"
     properties = os.path.join(output_dir, 'datamodelEvo.props') #"models/models_n_props/datamodelEvo1.props"
-    #libs_dir = "libs/runtime"
     python_dir = "/usr/bin/python3"
     
     # Create config.properties file
@@ -303,7 +303,7 @@ def _get_evochecker_config_file(output_dir,libs_dir,name_file,population=100,max
     INIT_PORT = 8860
 
     # Step 6: Set the directories containing the libraries of the model checker
-    MODEL_CHECKING_ENGINE_LIBS_DIRECTORY = {libs_dir}
+    MODEL_CHECKING_ENGINE_LIBS_DIRECTORY = {EVO_LIBRARY_PATH}
     # MODEL_CHECKING_ENGINE_LIBS_DIRECTORY = libs/runtime-amd64
 
     # Step 7: Set plotting settings

@@ -1,5 +1,6 @@
 import configparser
 import os
+from sys import platform
 
 # ----- Read the configuration file config.ini------
 # Create a parser instance
@@ -26,7 +27,19 @@ MAX_EVALUATIONS = config.getint('PARAMS', 'MAX_EVALUATIONS')
 SOURCE = os.path.join(HP_PATH, "prj-venv/bin/activate")
 JAR_FILE = os.path.join(HP_PATH, "arch/apps/EvoChecker/EvoChecker-1.1.0.jar")
 LIBS_PATH = os.path.join(HP_PATH, "arch/apps/EvoChecker/libs")
-LD_LIBRARY_PATH = f"{LIBS_PATH}/runtime"
+
+# Set EvoChecker environment var
+# for linux or windows
+EVO_LIBRARY_PATH = f"{LIBS_PATH}/runtime"
+LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH = "LD_LIBRARY_PATH"
+# for mac
+if platform == "darwin":
+    EVO_LIBRARY_PATH = f"{LIBS_PATH}/runtime-amd64"
+    LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH = "DYLD_LIBRARY_PATH"
+    # print("[Config] Running on macOS")
+    # print(f"[Config] {LD_LIBRARY_PATH}")
+    # print(f"[Config] {LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH}")
+
 print(f"[LTA-API] Loaded configuration: HP_PATH={HP_PATH}, NUM_TIMED_RUNS={NUM_TIMED_RUNS}, VERBOSE={VERBOSE}, POPULATION_SIZE={POPULATION_SIZE}, MAX_EVALUATIONS={MAX_EVALUATIONS}")
 PYTHON_EXECUTABLE = os.path.join(HP_PATH, "prj-venv/bin/python3")
 
