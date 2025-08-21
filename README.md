@@ -94,3 +94,10 @@ up-symk==1.3.1
 #up_lpg==0.1.2
 matplotlib==3.7.3
 ```
+
+### When creating the virtual environment,ERROR: pip's dependencies
+This Error can be ignored:
+```ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+generate-parameter-library-py 0.4.0 requires jinja2, which is not installed.
+generate-parameter-library-py 0.4.0 requires typeguard, which is not installed.```
+
