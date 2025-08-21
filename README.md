@@ -10,18 +10,39 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 
 ## Running hybrid planner
 
-1) Download [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
+1) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
 ![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dirFiles.png)
 
-2) Modify ```run.sh``` and ```config.ini``` file with your installation paths.
+2) **Modify** ```run.sh``` and ```config.ini``` file with your installation paths.
 
-3) Run the hybrid planner in the terminal as
+3) Create a **python environment** from src/arch/requirements.txt file:
 ```
-./run.sh
+cd src/arch
+python3 -m venv prj-venv
 ```
-This will automatically activate the Python environment, FastAPI, and the web app.
+(or python)
 
-4) After running this script, the API and **web app** will be running locally at **```http://localhost:8001```** (port defined in run.sh).
+```
+source prj-venv/bin/activate
+pip install -r requirements.txt
+deactivate
+cd ..
+```
+(or pip3). For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-environments/
+
+3) **Run** one of the following from terminal.
+For arch--hybrid planner:
+```
+./run.sh arch
+```
+This will automatically activate the Python environment, FastAPI, and the web app. 
+
+For sharp:
+```
+./run.sh sharp
+```
+
+4) After running this script, the API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
 
 Note: To test and submit a planning problem directly throught the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
 
@@ -94,3 +115,10 @@ up-symk==1.3.1
 #up_lpg==0.1.2
 matplotlib==3.7.3
 ```
+
+### When creating the virtual environment,ERROR: pip's dependencies
+This Error can be ignored:
+```ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+generate-parameter-library-py 0.4.0 requires jinja2, which is not installed.
+generate-parameter-library-py 0.4.0 requires typeguard, which is not installed.```
+
