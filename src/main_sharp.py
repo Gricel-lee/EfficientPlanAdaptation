@@ -21,7 +21,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Assuming these are in a 'restapi' subfolder as per your code
 from arch.aux.auxiliary_api import run_hybrid_planner 
-from restapi.model import Problem, Problem2Create
+from restapi.models import Problem, Problem2Create
 import config.config as config 
 
 # --------------------------

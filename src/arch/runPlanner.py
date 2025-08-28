@@ -31,10 +31,10 @@ def main(problem_id, json_file_path):
     # Set variables
     name_file = os.path.splitext(os.path.basename(json_file_path))[0] # get file name without extension
     INPUT_DIR = os.path.dirname(json_file_path)
-    PROBLEM_OUTPUT_DIR[problem_id] = os.path.join(INPUT_DIR, f"output_{name_file}_{problem_id}") # save to global variable
-    
+    output_dir = os.path.join(INPUT_DIR, f"output_{name_file}_{problem_id}") # save to global variable
+    PROBLEM_OUTPUT_DIR[problem_id] = output_dir
+
     # Global variables
-    output_dir = PROBLEM_OUTPUT_DIR[problem_id]
     verbose = VERBOSE
     population = POPULATION_SIZE
     max_evals = MAX_EVALUATIONS
@@ -74,6 +74,8 @@ def main(problem_id, json_file_path):
             # Run PDDL planner
             print(f"[RunPlanner]: Running PDDL planner for {name_file}-{run}...")
             plan = pddlplanner.runPlanner(problem, output_dir)
+            
+            print(plan)
             
             # Generate PRISM/Evochecker file from PDDL plan with indexed filenames
             print(f"[RunPlanner]: Generating Evochecker files for {name_file}-{run}...")

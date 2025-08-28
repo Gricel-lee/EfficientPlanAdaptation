@@ -1,10 +1,13 @@
 #!/bin/bash
 
 #---- This script runs the hybrid planner.
-# --- First, set variables in config.ini file
-#---- Note: Remember to make this file (and evochecker.jar) executables by running:
+#---- Note: Remember to first read README in GitHub to download dependencies and create virtual environment.
+# Make this file (and evochecker.jar) executables by running:
 # chmod +x run_task.sh
 # chmod +x src/arch/apps/EvoChecker/EvoChecker-1.1.0.jar
+
+# ---- Instructions:
+# --- First, set variables in config.ini file
 #---- Note: If evochecker stops in iterations, restart terminal and any IDEs ----
 #---- Note: All .json files in INPUT_DIR must be planning problems
 #---- Note: No folder called "data" must be present from which this .sh file is called (EvoChecker creates one and it will be deleted)
@@ -71,13 +74,3 @@ else
     exit 1
 fi
 
-# cd src/arch
-# python3 -m venv prj-venv
-# source prj-venv/bin/activate
-# pip install -r requirements.txt
-# deactivate
-
-#./run.sh: line 35: /home/gnvf500/Gricel-Documents/GithubGris/EfficientPlanAdaptation/src/prj-venv/bin/activate: No such file or directory
-ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
-generate-parameter-library-py 0.4.0 requires jinja2, which is not installed.
-generate-parameter-library-py 0.4.0 requires typeguard, which is not installed.

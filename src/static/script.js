@@ -1,3 +1,9 @@
+// Developer: Gricel Vazquez
+// Last updated: 2025-08-28
+
+// Note: For quick tests, after modifying hard reset website with:
+// Ctrl+Shift+R (Windows/Linux) or Cmd+Shift+R (Mac)
+
 // --- DOM Elements ---
 const app = document.getElementById('app');
 const problemsListView = document.getElementById('problems-list-view');
@@ -85,30 +91,135 @@ async function fetchProblemById(problemId) {
 }
 
 
-async function fetchPlotData(problemId) {
-    try {
-        const response = await fetch(`/api/problems/${problemId}/results`);
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ detail: 'Could not parse error response.' }));
-            throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
-        }
-        const plotData = await response.json();
+// //@deprecated
+// async function fetchPlotData(problemId) {
+//     try {
+//         const response = await fetch(`/api/problems/${problemId}/results`);
+//         if (!response.ok) {
+//             const errorData = await response.json().catch(() => ({ detail: 'Could not parse error response.' }));
+//             throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+//         }
+//         const plotData = await response.json();
         
-        if (plotData.x_values && plotData.y_values && plotData.x_label && plotData.y_label) {
-            const scatterData = plotData.x_values.map((x, i) => ({ x: x, y: plotData.y_values[i] }));
-            renderPlot(scatterData, plotData.x_label, plotData.y_label);
-        } else {
-            throw new Error("Invalid plot data format from API.");
-        }
+//         if (plotData.x_values && plotData.y_values && plotData.x_label && plotData.y_label) {
+//             const scatterData = plotData.x_values.map((x, i) => ({ x: x, y: plotData.y_values[i] }));
+//             renderPlot(scatterData, plotData.x_label, plotData.y_label);
+//         } else {
+//             throw new Error("Invalid plot data format from API.");
+//         }
 
-    } catch (error) {
-        console.error("Failed to fetch or render plot data:", error);
-        plotChartView.classList.add('hidden');
-        plotErrorView.classList.remove('hidden');
-        plotErrorTitle.textContent = "Plotting Error";
-        plotErrorMessage.textContent = error.message;
-    }
-}
+//     } catch (error) {
+//         console.error("Failed to fetch or render plot data:", error);
+//         plotChartView.classList.add('hidden');
+//         plotErrorView.classList.remove('hidden');
+//         plotErrorTitle.textContent = "Plotting Error";
+//         plotErrorMessage.textContent = error.message;
+//     }
+// }
+
+
+
+// @deprecated
+// /**
+//  * Fetches the combined plot data (Pareto Set and Front) from the FastAPI backend.
+//  */
+// async function fetchPlotData(problemId) {
+//             try {
+//                 // In a real app, you would use a dynamic problemId.
+//                 // For this example, it's hardcoded to match the backend mock.
+//                 const response = await fetch(`/api/problems/${problemId}/results`);
+                
+//                 if (!response.ok) {
+//                     const errorData = await response.json().catch(() => ({ detail: 'Could not parse error response.' }));
+//                     throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+//                 }
+                
+//                 const plotData = await response.json();
+                
+//                 if (plotData.x_values && plotData.y_values && plotData.x_label && plotData.y_label) {
+//                     const scatterData = plotData.x_values.map((x, i) => ({ x: x, y: plotData.y_values[i] }));
+//                     renderPlot(scatterData, plotData.x_label, plotData.y_label, plotData.set_data);
+
+//                     // Ensure the correct view is visible
+//                     plotChartView.classList.remove('hidden');
+//                     plotErrorView.classList.add('hidden');
+
+//                 } else {
+//                     throw new Error("Invalid plot data format from API.");
+//                 }
+
+//             } catch (error) {
+//                 console.error("Failed to fetch or render plot data:", error);
+//                 plotChartView.classList.add('hidden');
+//                 plotErrorView.classList.remove('hidden');
+//                 plotErrorTitle.textContent = "Plotting Error";
+//                 plotErrorMessage.textContent = error.message;
+//             }
+//         }
+
+
+async function fetchPlotData(problemId) {
+            try {
+                const response = await fetch(`/api/problems/${problemId}/results`);
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ detail: 'Could not parse error response.' }));
+                    throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+                }
+                
+                const plotData = await response.json();
+                
+                // Validate the primary plot data
+                if (plotData.x_values && plotData.y_values && plotData.x_label && plotData.y_label) {
+                    
+                    const uniqueSignatures = new Set();
+                    const uniqueScatterData = [];
+                    const uniqueSetDataValues = [];
+                    const hasSetData = plotData.set_data && plotData.set_data.values && plotData.set_data.values.length > 0;
+
+                    // Iterate over all data points to filter for unique combinations
+                    plotData.x_values.forEach((x, i) => {
+                        const y = plotData.y_values[i];
+                        const setDataRow = hasSetData ? plotData.set_data.values[i] : null;
+
+                        // Create a unique signature string for the combination of x, y, and the setData row
+                        const signature = `${x}-${y}-${JSON.stringify(setDataRow)}`;
+
+                        // If we haven't seen this combination before, add it to our unique data arrays
+                        if (!uniqueSignatures.has(signature)) {
+                            uniqueSignatures.add(signature);
+                            uniqueScatterData.push({ x: x, y: y });
+                            if (hasSetData) {
+                                uniqueSetDataValues.push(setDataRow);
+                            }
+                        }
+                    });
+
+                    // Reconstruct the setData object with only the unique values
+                    const filteredSetData = hasSetData ? {
+                        labels: plotData.set_data.labels,
+                        values: uniqueSetDataValues
+                    } : null;
+                    
+                    // Pass the newly filtered unique data to the render function
+                    renderPlot(uniqueScatterData, plotData.x_label, plotData.y_label, filteredSetData);
+
+                    // Ensure the correct view is visible
+                    plotChartView.classList.remove('hidden');
+                    plotErrorView.classList.add('hidden');
+
+                } else {
+                    throw new Error("Invalid plot data format from API.");
+                }
+
+            } catch (error) {
+                console.error("Failed to fetch or render plot data:", error);
+                plotChartView.classList.add('hidden');
+                plotErrorView.classList.remove('hidden');
+                plotErrorTitle.textContent = "Plotting Error";
+                plotErrorMessage.textContent = error.message;
+            }
+        }
 
 async function handleConfirmDelete() {
     if (!problemIdToDelete) return;
@@ -197,41 +308,152 @@ function renderProblemDetail(problem) {
     }
 }
 
-function renderPlot(data, xLabel, yLabel) {
+//@deprecated
+// function renderPlot(data, xLabel, yLabel) {
+//     const ctx = document.getElementById('performance-chart').getContext('2d');
+//     if (chartInstance) chartInstance.destroy();
+//     chartInstance = new Chart(ctx, {
+//         type: 'scatter',
+//         data: {
+//             datasets: [{
+//                 label: 'Pareto Front Results',
+//                 data: data,
+//                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
+//                 borderColor: 'rgba(54, 162, 235, 1)',
+//             }]
+//         },
+//         options: {
+//             scales: {
+//                 x: {
+//                     type: 'linear',
+//                     position: 'bottom',
+//                     title: {
+//                         display: true,
+//                         text: xLabel || 'Objective 1'
+//                     }
+//                 },
+//                 y: {
+//                     title: {
+//                         display: true,
+//                         text: yLabel || 'Objective 2'
+//                     }
+//                 }
+//             },
+//             responsive: true,
+//             maintainAspectRatio: false
+//         }
+//     });
+// }
+
+
+/**
+ * Renders the scatter plot with interactive tooltips using Chart.js.
+ * @param {Array} scatterData - The data for the plot, e.g., [{x: 1, y: 10}, ...].
+ * @param {string} xLabel - The label for the X-axis.
+ * @param {string} yLabel - The label for the Y-axis.
+ * @param {Object|null} setData - The supplementary data for tooltips.
+ */
+function renderPlot(scatterData, xLabel, yLabel, setData) {
+
     const ctx = document.getElementById('performance-chart').getContext('2d');
-    if (chartInstance) chartInstance.destroy();
+
+    // If a chart instance already exists, destroy it to prevent conflicts
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
     chartInstance = new Chart(ctx, {
         type: 'scatter',
         data: {
             datasets: [{
-                label: 'Pareto Front Results',
-                data: data,
+                label: 'Problem Execution',
+                data: scatterData,
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
                 borderColor: 'rgba(54, 162, 235, 1)',
+                // borderWidth: 1,
+                // pointRadius: 5,
+                // pointHoverRadius: 7
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: true,
             scales: {
                 x: {
-                    type: 'linear',
-                    position: 'bottom',
                     title: {
                         display: true,
-                        text: xLabel || 'Objective 1'
+                        text: xLabel,
+                        font: {
+                            // size: 16,
+                            weight: 'bold'
+                        }
                     }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: yLabel || 'Objective 2'
+                        text: yLabel,
+                        font: {
+                            // size: 16,
+                            weight: 'bold'
+                        }
                     }
                 }
             },
-            responsive: true,
-            maintainAspectRatio: false
+            plugins: {
+                    legend: {
+                        display: false // Hide the legend as there's only one dataset
+                    },
+                    tooltip: {
+                        enabled: true,
+                        mode: 'nearest',
+                        intersect: true,
+                        padding: 29,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        // --- This is the core logic for custom tooltips ---
+                        callbacks: {
+                            // Disable the default title
+                            title: function() {
+                                return '';
+                            },
+                            // Use the 'label' callback to construct the entire tooltip.
+                            // It can return an array of strings for multi-line tooltips.
+                            label: function(tooltipItem) {
+                                const xValue = tooltipItem.raw.x;
+                                const yValue = tooltipItem.raw.y;
+
+                                // Start building the lines for the tooltip
+                                // creates an array called tooltipLines and puts the x and y values as the first two lines
+                                const tooltipLines = [
+                                    `${xValue}`,
+                                    `${yValue}`
+                                ];
+
+                                // Check if setData and its values are valid
+                                if (setData && setData.values) {
+                                    const dataIndex = tooltipItem.dataIndex;
+
+                                    // Check if the index is valid for setData values array
+                                    if (dataIndex >= 0 && dataIndex < setData.values.length) {
+                                        const pointSetData = setData.values[dataIndex];
+                                        
+                                        // Format the set data array as a string like "[val1, val2, ...]"
+                                        const setDataString = `[${pointSetData.join(', ')}]`;
+                                        tooltipLines.push(setDataString);
+                                    }
+                                }
+                                
+                                return tooltipLines;
+                            }
+                        }
+                    }
+                }
         }
     });
 }
+
+
+
 
 // --- View & Modal Switching Logic ---
 

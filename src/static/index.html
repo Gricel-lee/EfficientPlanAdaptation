@@ -38,6 +38,12 @@
                     <div class="mb-6">
                         <label for="problem-json-path" class="block text-gray-700 text-sm font-bold mb-2">JSON File Path:</label>
                         <input type="text" id="problem-json-path" name="json_file_path" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-mono" value="../assets/planningProblem/example.json" required>
+                        
+                        <input type="file" id="json-file-selector" class="hidden" accept=".json">
+                        
+                        <button type="button" id="browse-file-btn" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                            Select a Different File
+                        </button>
                     </div>
                     <div class="flex items-center justify-end">
                         <button type="submit" id="create-problem-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed">
@@ -47,7 +53,6 @@
                 </form>
             </div>
 
-            <!-- View for the list of all problems -->
             <div id="problems-list-view" class="view">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-4">All Problems</h2>
                 <div id="loading-spinner" class="text-center p-8">
@@ -55,11 +60,9 @@
                     <p class="mt-4 text-gray-600">Loading problems...</p>
                 </div>
                 <div id="problems-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Problems will be dynamically inserted here -->
-                </div>
+                    </div>
             </div>
 
-            <!-- View for a single problem's details -->
             <div id="problem-detail-view" class="view hidden">
                 <button id="back-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg mb-6 shadow-md transition-transform transform hover:scale-105">
                     &larr; Back to All Problems
@@ -74,9 +77,9 @@
                             <div id="plot-wrapper" class="w-full h-full">
                                 <!-- Spinner View -->
                                 <div id="plot-loading-view" class="h-full w-full flex flex-col items-center justify-center hidden">
-                                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-                                     <p class="mt-4 text-gray-600">Processing problem...</p>
-                                     <p id="plot-loading-status" class="text-sm text-gray-500"></p>
+                                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+                                    <p class="mt-4 text-gray-600">Processing problem...</p>
+                                    <p id="plot-loading-status" class="text-sm text-gray-500"></p>
                                 </div>
                                 <!-- Error View -->
                                 <div id="plot-error-view" class="h-full w-full flex flex-col items-center justify-center text-red-500 hidden">
@@ -95,9 +98,8 @@
                         <!-- Right side: Data Log -->
                         <div>
                             <h3 class="text-xl font-semibold text-gray-700 mb-4">Data Log</h3>
-                            <div id="detail-log" class="bg-gray-900 text-white font-mono text-sm p-4 rounded-lg overflow-x-auto h-96">
-                                <!-- Problem data will be inserted here -->
-                            </div>
+                            <div id="detail-log" class="border border-gray-300 bg-white text-gray-700 font-mono text-sm p-4 rounded-lg overflow-x-auto h-95">
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -134,6 +136,56 @@
     <!-- Link to the external JavaScript file -->
     <!-- The 'defer' attribute ensures the script runs after the HTML is fully parsed -->
     <script src="script.js" defer></script>
+    
+    <!-- @TODO: Inline script for handling file selection -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const browseButton = document.getElementById('browse-file-btn');
+            const fileSelector = document.getElementById('json-file-selector');
+            const pathDisplayInput = document.getElementById('problem-json-path');
+
+            // When the button is clicked, trigger the hidden file input.
+            browseButton.addEventListener('click', () => {
+                fileSelector.click();
+            });
+
+            // When a file is chosen, update the input and read the file's content.
+            fileSelector.addEventListener('change', (event) => {
+                // Get the selected file (the first one in the list)
+                const file = event.target.files[0];
+
+                if (file) {
+                    // 1. Update the text box with the filename for display
+                    pathDisplayInput.value = file.name;
+
+                    // 2. Read the content of the file
+                    const reader = new FileReader();
+
+                    // @TODO:
+                    // 3. Define what to do when the file is successfully read
+                    reader.onload = (e) => {
+                        const fileContent = e.target.result;
+                        console.log("Successfully read file content:");
+                        
+                        try {
+                            // @TODO:
+                            // You can now use the JSON content!
+                            const jsonData = JSON.parse(fileContent);
+                            console.log("Parsed JSON data:", jsonData);
+                            // @TODO: pass 'jsonData' to planner functions.
+                            // Example: plannerFunction(jsonData);
+                        } catch (error) {
+                            console.error("Error parsing JSON:", error);
+                            alert("The selected file is not valid JSON.");
+                        }
+                    };
+                    
+                    // 4. Start the reading process
+                    reader.readAsText(file);
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

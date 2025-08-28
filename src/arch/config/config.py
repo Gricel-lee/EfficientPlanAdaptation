@@ -46,6 +46,9 @@ PYTHON_EXECUTABLE = os.path.join(HP_PATH, "prj-venv/bin/python3")
 # Note: Currently only NSGAII is supported
 MOEA = "NSGAII"
 
+
+
+#---- Global variables (not in config)-----
 # Stores problem ID to output directory path
 PROBLEM_OUTPUT_DIR = {str: str} 
 
