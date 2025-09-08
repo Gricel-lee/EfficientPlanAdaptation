@@ -7,15 +7,27 @@ import traceback
 import os
 from fastapi import HTTPException, status
 import arch.config.config as config
-from arch.config.config import PROBLEM_OUTPUT_DIR, MOEA, LIBS_PATH, JAR_FILE
+from arch.config.config import PROBLEM_OUTPUT_DIR, MOEA, LIBS_PATH, JAR_FILE, PROBLEM_OUTPUT_JSON
 from restapi.models import Problem, Problem2Create
 from restapi.memory_db import PROBLEM_DATABASE
 import arch.runPlanner as runPlanner
 import arch.runEvo as runEvo
+import arch.aux.planandPareto2JSON as planandPareto2JSON
+import restapi.timeline as timeline
 
 # Import config variables
 print("[LTA-API] Loading configuration from config.ini")
 
+
+    
+
+def get_timeline_for_problem(problem_id: str):
+    problem = PROBLEM_DATABASE.get(problem_id)
+    plan_file = os.path.join(PROBLEM_OUTPUT_DIR[problem_id], "plan.txt")
+    print(f"[Service] Assembling timeline for problem {problem_id} from plan file: {plan_file}")
+    assemble_timeline = timeline.assemble_timeline(plan_file, problem.json_file)
+    return assemble_timeline
+    
 
 def create_and_start_problem(problem_in: Problem2Create) -> Problem:
     problem_id = uuid.uuid4().hex
@@ -239,7 +251,20 @@ def run_hybrid_planner(problem: Problem, PROBLEM_DATABASE: Dict[str, Problem]):
         print(f"[LTA-API] Running EvoChecker for {problem.id}...")
         _run_evochecker(problem)
         
-        # --- 5. If successful, update status to 'completed' ---
+        # --- 5. Save results as JSON ---
+        print(f"[LTA-API] Transforming plan and Pareto results to JSON for {problem.id}...")
+
+        output_dir = PROBLEM_OUTPUT_DIR[problem.id]
+
+        front_file = _get_pareto_results_filepath(problem.id, set_or_front="_Front")
+        set_file = _get_pareto_results_filepath(problem.id, set_or_front="_Set")
+        output_json_file = os.path.join(output_dir, "output_plan_results.json")
+        plan_file = os.path.join(output_dir, "plan.txt")
+        planandPareto2JSON.generate_combined_json(plan_file, front_file, set_file, output_json_file)
+        # Save variable
+        PROBLEM_OUTPUT_JSON[problem.id] = output_json_file
+
+        # --- 6. If successful, update status to 'completed' ---
         problem.status = "completed"
         PROBLEM_DATABASE[problem.id] = problem
         print(f"[LTA-API] Successfully completed problem {problem.id}")

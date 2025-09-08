@@ -44,6 +44,16 @@ def runPlanner(problem, data_output_dir):
     problem.clear_quality_metrics()  # remove previous optimization metric
     problem.add_quality_metric(MinimizeExpressionOnFinalState(travel_dist()))  # +++
     print(f"[pddlplanner] Quality metric set to minimize travel distance.")  # Debugging line for quality metric
+    
+    
+    # Solve suboptimally
+    with OneshotPlanner(problem_kind=problem.kind) as planner:
+        plan: PlanGenerationResult = planner.solve(problem)
+    file_name = 'plan_suboptimal.txt'
+    savePlan(data_output_dir, plan, file_name)
+    
+    # Print
+    print(f"[pddlplanner] Plan generated successfully. Saved in {file_name}")
 
     # Solve the problem optimally
     print(f"[pddlplanner] Solving the problem optimally...")
@@ -63,13 +73,13 @@ def runPlanner(problem, data_output_dir):
     return plan
 
 
-def savePlan(path, result, file_name='plan.txt'):
+def savePlan(path, result, file_name):
 
     # Debugging: Check the path used for saving
     print(f"[pddlplanner] Saving plan to file: {os.path.join(path, file_name)}")
     
     # Save plan to txt file
-    with open(os.path.join(path, 'plan.txt'), 'w') as f:
+    with open(os.path.join(path, file_name), 'w') as f:
         f.write(str(result.plan))
     
     print(f"[pddlplanner] Plan saved to file {path}")

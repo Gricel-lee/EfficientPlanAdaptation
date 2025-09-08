@@ -51,6 +51,7 @@ MOEA = "NSGAII"
 #---- Global variables (not in config)-----
 # Stores problem ID to output directory path
 PROBLEM_OUTPUT_DIR = {str: str} 
+PROBLEM_OUTPUT_JSON = {str: str}
 
 # PDDL file names
 FILE_DOMAIN_PDDL = 'cphs_domain.pddl'

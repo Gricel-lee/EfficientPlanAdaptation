@@ -1,4 +1,5 @@
 # api/router.py
+from arch.config.config import PROBLEM_OUTPUT_JSON
 from fastapi import APIRouter, HTTPException, status, BackgroundTasks
 from typing import List
 from restapi.models import Problem, Problem2Create
@@ -39,6 +40,15 @@ def get_problem(problem_id: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Problem with ID '{problem_id}' not found.")
     return problem
 
+@api_router.get("/problems/{problem_id}/output_json")
+def get_problem_output_json(problem_id: str):
+    output_json = PROBLEM_OUTPUT_JSON.get(problem_id)
+    if not output_json:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Output JSON for problem ID '{problem_id}' not found.")
+    # read the content of the file and return it as a string
+    with open(output_json, 'r') as f:
+        return f.read()
+
 @api_router.get("/problems/{problem_id}/results")
 def get_problem_results(problem_id: str):
     results = planner_service.get_results_for_problem(problem_id)
@@ -46,10 +56,16 @@ def get_problem_results(problem_id: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=PROBLEM_DATABASE[problem_id].error_message)
     return results
 
-
 @api_router.delete("/problems/{problem_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_problem(problem_id: str):
     success = planner_service.delete_problem_by_id(problem_id)
     if not success:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Problem with ID '{problem_id}' not found.")
     return
+
+@api_router.get("/problems/{problem_id}/timeline")
+def get_problem_timeline(problem_id: str):
+    timeline = planner_service.get_timeline_for_problem(problem_id)
+    if timeline is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Timeline for problem ID '{problem_id}' not found.")
+    return timeline

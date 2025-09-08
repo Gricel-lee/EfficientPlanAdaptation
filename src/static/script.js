@@ -91,6 +91,55 @@ async function fetchProblemById(problemId) {
 }
 
 
+/**
+ * Fetches and renders the detailed output JSON for a completed problem
+ * into the 'Additional Information' section.
+ * @param {string} problemId - The ID of the problem.
+ */
+async function fetchAndRenderJSONOutput(problemId) {
+    const additionalInfoContainer = document.getElementById('detail-additional');
+    const additionalInfoParent = additionalInfoContainer.parentElement;
+
+    try {
+        const response = await fetch(`/api/problems/${problemId}/output_json`);
+
+        if (response.status === 404) {
+            additionalInfoParent.classList.add('hidden');
+            return;
+        }
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        let data = await response.json();
+
+        // --- NEW: Fix for formatting ---
+        // If the fetched data is a string, it means we have a JSON string
+        // inside a JSON response. We need to parse it one more time.
+        if (typeof data === 'string') {
+            data = JSON.parse(data);
+        }
+        // --- End of fix ---
+
+        if (data && Object.keys(data).length > 0) {
+            // Now, stringify the true JSON object with pretty-printing (2 spaces for indentation)
+            const formattedJson = JSON.stringify(data, null, 2);
+            
+            // By placing the formatted text inside a <pre> tag, the browser
+            // will respect all the spaces and newlines, giving you a clean look.
+            additionalInfoContainer.innerHTML = `<pre>${formattedJson}</pre>`;
+            additionalInfoParent.classList.remove('hidden');
+        } else {
+            additionalInfoParent.classList.add('hidden');
+        }
+    } catch (error) {
+        console.error(`Failed to fetch additional data for ${problemId}:`, error);
+        additionalInfoContainer.innerHTML = `<p class="text-red-500">Failed to load additional output data.</p>`;
+        additionalInfoParent.classList.remove('hidden');
+    }
+}
+
+
 // //@deprecated
 // async function fetchPlotData(problemId) {
 //     try {
@@ -280,12 +329,16 @@ function renderProblemsList(problems) {
     });
 }
 
+/* Renders the problem detail view based on the problem's status.
+    Also initiates fetching of additional data and plot data as needed. */
 function renderProblemDetail(problem) {
     if (detailViewInterval) clearInterval(detailViewInterval);
     document.getElementById('detail-title').textContent = problem.description;
     document.getElementById('detail-id').textContent = `ID: ${problem.id}`;
     document.getElementById('detail-log').innerHTML = `<pre>${JSON.stringify(problem, null, 2)}</pre>`;
-    
+    // Hide the "Additional Information" section by default each time app renders
+    document.getElementById('detail-additional').parentElement.classList.add('hidden');
+
     plotLoadingView.classList.add('hidden');
     plotErrorView.classList.add('hidden');
     plotChartView.classList.add('hidden');
@@ -301,6 +354,8 @@ function renderProblemDetail(problem) {
     } else if (problem.status === 'completed') {
         plotChartView.classList.remove('hidden');
         fetchPlotData(problem.id);
+        fetchAndRenderJSONOutput(problem.id); // Fetch and display the final JSON
+        fetchTimelineData(problem.id); // Fetch and display the timeline data
     } else {
         plotErrorView.classList.remove('hidden');
         plotErrorTitle.textContent = 'Unknown Status';
@@ -486,6 +541,147 @@ function hideDeleteConfirmation() {
     problemIdToDelete = null;
     confirmationModal.classList.add('hidden');
 }
+
+
+
+
+
+
+// --- Timeline Functions ---
+async function fetchTimelineData(problemId) {
+    // Hide the timeline section by default until we confirm we have data
+    const timelineSection = document.getElementById('timeline-section');
+    timelineSection.classList.add('hidden');
+    try {
+        const response = await fetch(`/api/problems/${problemId}/timeline`, { cache: 'no-store' });
+        
+        // Silently exit if the timeline doesn't exist (e.g., 404 Not Found)
+        if (!response.ok) {
+            console.warn(`No timeline data available for problem ${problemId}. Status: ${response.status}`);
+            return;
+        }
+        const timelineData = await response.json();
+        // Only proceed if we received a valid array with at least one event
+        if (Array.isArray(timelineData) && timelineData.length > 0) {
+            timelineSection.classList.remove('hidden'); // Show the section
+            renderTimeline(timelineData);
+        } else {
+            console.warn(`Timeline data for problem ${problemId} is empty or invalid.`);
+        }
+
+    } catch (error) {
+        // Also ignore errors silently in the UI, but log for developers
+        console.error(`Failed to fetch or render timeline for problem ${problemId}:`, error);
+    }
+}
+
+/**
+ * Renders timeline visualization using Google Charts.
+ * Automatically replaces the <canvas> with a <div> for compatibility.
+ */
+function renderTimeline(timelineData) {
+    let container = document.getElementById('timeline-chart');
+    if (!container) {
+        console.error('Timeline container element not found!');
+        return;
+    }
+    // IMPORTANT: Google Timeline requires a DIV, not a CANVAS.
+    // This code replaces the canvas with a div to make it work without changing the HTML.
+    if (container.tagName.toUpperCase() === 'CANVAS') {
+        const div = document.createElement('div');
+        div.id = 'timeline-chart';
+        div.style.height = `${container.getAttribute('height') || 300}px`; // Preserve height
+        container.parentNode.replaceChild(div, container);
+        container = div; // Update reference to the new div
+    }
+
+    const dataTable = new google.visualization.DataTable();
+    dataTable.addColumn({ type: 'string', id: 'Agent' });
+    dataTable.addColumn({ type: 'string', id: 'Action' });
+    dataTable.addColumn({ type: 'string', role: 'tooltip', 'p': {'html': true} });
+    dataTable.addColumn({ type: 'number', id: 'Start' });
+    dataTable.addColumn({ type: 'number', id: 'End' });
+
+    let maxTime = 0;
+    const rows = timelineData.map(event => {
+        const { action, agent, start_time, end_time, duration, details } = event;
+        
+        if (end_time > maxTime) maxTime = end_time;
+        
+        const barLabel = action === 'move'
+            ? `Move: ${details.from} → ${details.to}`
+            : `Task: ${details.task_id}`;
+        
+        // HTML tooltip that appears on hover
+        const tooltipContent = `
+            <div class="p-2 text-sm" style="min-width: 160px;">
+                <div class="font-bold text-base mb-1">${agent} - ${action.charAt(0).toUpperCase() + action.slice(1)}</div>
+                <hr class="my-1">
+                <div><strong>Duration:</strong> ${duration.toFixed(1)} units</div>
+                <div><strong>Time:</strong> ${start_time.toFixed(1)} to ${end_time.toFixed(1)}</div>
+                ${action === 'move' ? `<div><strong>From:</strong> ${details.from}</div>` : ''}
+                ${action === 'move' ? `<div><strong>To:</strong> ${details.to}</div>` : '' }
+                ${action === 'dotask' ? `<div><strong>Location:</strong> ${details.location}</div>` : ''}
+                ${action === 'dotask' ? `<div><strong>Task ID:</strong> ${details.task_id}</div>` : ''}
+            </div>`;
+        
+        return [agent, barLabel, tooltipContent, start_time, end_time];
+    });
+
+    dataTable.addRows(rows);
+    
+    // Generate ticks for every 1 time step on the x-axis
+    // @TODO: check why not showing
+    const finalMaxTime = Math.ceil(maxTime * 1.05);
+    const ticks = Array.from({length: finalMaxTime + 1}, (_, i) => i);
+
+    // chart's appearance
+    const options = {
+        height: 300,
+        width: '100%',
+        timeline: {
+            colorByRowLabel: true,
+            barLabelStyle: { fontSize: 13 }, // Increased font size for bar labels
+            groupByRowLabel: true
+        },
+        hAxis: {
+            minValue: 0,
+            maxValue: finalMaxTime,
+            ticks: ticks,
+            textStyle: { // Style for the horizontal axis (time steps)
+                fontSize: 15
+            }
+        },
+        vAxis: { // Style for the vertical axis (agent names)
+            textStyle: {
+                fontSize: 14,
+                bold: true
+            }
+        },
+        tooltip: {
+            isHtml: true
+        },
+        avoidOverlappingGridLines: false,
+    };
+    
+    try {
+        const chart = new google.visualization.Timeline(container);
+        chart.draw(dataTable, options);
+    } catch (error) {
+        console.error("Error drawing Google Timeline chart:", error);
+        container.innerHTML = `<p class="text-red-500 p-4">Could not render the timeline chart.</p>`;
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 // --- Event Listeners ---
 backButton.addEventListener('click', showListView);
