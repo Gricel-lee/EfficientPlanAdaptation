@@ -676,13 +676,6 @@ function renderTimeline(timelineData) {
 
 
 
-
-
-
-
-
-
-
 // --- Event Listeners ---
 backButton.addEventListener('click', showListView);
 confirmDeleteBtn.addEventListener('click', handleConfirmDelete);
