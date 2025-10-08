@@ -1,0 +1,1336 @@
+{
+    "plan": [
+        {
+            "name": "dotask",
+            "agent": "h1",
+            "initialLocation": "l8",
+            "endLocation": null,
+            "taskId": "t2_ip2"
+        },
+        {
+            "name": "dotask",
+            "agent": "h1",
+            "initialLocation": "l8",
+            "endLocation": null,
+            "taskId": "t2_ip1"
+        },
+        {
+            "name": "move",
+            "agent": "h1",
+            "initialLocation": "l8",
+            "endLocation": "l4",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "h1",
+            "initialLocation": "l4",
+            "endLocation": null,
+            "taskId": "t3_bza"
+        },
+        {
+            "name": "move",
+            "agent": "r1",
+            "initialLocation": "l2",
+            "endLocation": "l6",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "r1",
+            "initialLocation": "l6",
+            "endLocation": null,
+            "taskId": "t1_msa"
+        },
+        {
+            "name": "dotask",
+            "agent": "r3",
+            "initialLocation": "l10",
+            "endLocation": null,
+            "taskId": "t4_se1"
+        },
+        {
+            "name": "move",
+            "agent": "r3",
+            "initialLocation": "l10",
+            "endLocation": "l7",
+            "taskId": null
+        },
+        {
+            "name": "move",
+            "agent": "r3",
+            "initialLocation": "l7",
+            "endLocation": "l9",
+            "taskId": null
+        },
+        {
+            "name": "move",
+            "agent": "r2",
+            "initialLocation": "l3",
+            "endLocation": "l7",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "r2",
+            "initialLocation": "l7",
+            "endLocation": null,
+            "taskId": "t1_msb"
+        },
+        {
+            "name": "dotask",
+            "agent": "r3",
+            "initialLocation": "l9",
+            "endLocation": null,
+            "taskId": "t4_wcp1"
+        },
+        {
+            "name": "move",
+            "agent": "h1",
+            "initialLocation": "l4",
+            "endLocation": "l8",
+            "taskId": null
+        },
+        {
+            "name": "move",
+            "agent": "h1",
+            "initialLocation": "l8",
+            "endLocation": "l5",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "h1",
+            "initialLocation": "l5",
+            "endLocation": null,
+            "taskId": "t3_bzb"
+        }
+    ],
+    "pareto": [
+        {
+            "paretoSolutionId": 1,
+            "QoS": {
+                "probabilitySucc": 0.959,
+                "cost": 49.682
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 2,
+            "QoS": {
+                "probabilitySucc": 0.895,
+                "cost": 48.071
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 3,
+            "QoS": {
+                "probabilitySucc": 0.895,
+                "cost": 48.071
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 4,
+            "QoS": {
+                "probabilitySucc": 0.959,
+                "cost": 49.682
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 5,
+            "QoS": {
+                "probabilitySucc": 0.949,
+                "cost": 49.652
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 6,
+            "QoS": {
+                "probabilitySucc": 0.931,
+                "cost": 48.762
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 7,
+            "QoS": {
+                "probabilitySucc": 0.921,
+                "cost": 48.732
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 8,
+            "QoS": {
+                "probabilitySucc": 0.904,
+                "cost": 48.101
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 9,
+            "QoS": {
+                "probabilitySucc": 0.931,
+                "cost": 48.762
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 10,
+            "QoS": {
+                "probabilitySucc": 0.949,
+                "cost": 49.652
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 11,
+            "QoS": {
+                "probabilitySucc": 0.904,
+                "cost": 48.101
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 12,
+            "QoS": {
+                "probabilitySucc": 0.921,
+                "cost": 48.732
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 13,
+            "QoS": {
+                "probabilitySucc": 0.959,
+                "cost": 49.682
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 14,
+            "QoS": {
+                "probabilitySucc": 0.895,
+                "cost": 48.071
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 15,
+            "QoS": {
+                "probabilitySucc": 0.931,
+                "cost": 48.762
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 16,
+            "QoS": {
+                "probabilitySucc": 0.949,
+                "cost": 49.652
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 17,
+            "QoS": {
+                "probabilitySucc": 0.904,
+                "cost": 48.101
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 18,
+            "QoS": {
+                "probabilitySucc": 0.921,
+                "cost": 48.732
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 19,
+            "QoS": {
+                "probabilitySucc": 0.959,
+                "cost": 49.682
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 20,
+            "QoS": {
+                "probabilitySucc": 0.931,
+                "cost": 48.762
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 21,
+            "QoS": {
+                "probabilitySucc": 0.949,
+                "cost": 49.652
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 22,
+            "QoS": {
+                "probabilitySucc": 0.904,
+                "cost": 48.101
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 23,
+            "QoS": {
+                "probabilitySucc": 0.921,
+                "cost": 48.732
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 24,
+            "QoS": {
+                "probabilitySucc": 0.959,
+                "cost": 49.682
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 25,
+            "QoS": {
+                "probabilitySucc": 0.931,
+                "cost": 48.762
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "ip2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "h1",
+                    "task": "ip1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bza"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "h1",
+                    "task": "bzb"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "r1",
+                    "task": "msa"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r2",
+                    "task": "msb"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r3",
+                    "task": "se1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "r3",
+                    "task": "wcp1"
+                }
+            ]
+        }
+    ]
+}

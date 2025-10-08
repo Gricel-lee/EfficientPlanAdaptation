@@ -1,0 +1,66 @@
+This scenario outlines a complex planning problem for a new multi-level office building construction project. The site has been cleared, and the initial phase of construction is ready to begin. The project involves a variety of tasks that require coordination between human workers and autonomous robots to ensure timely and successful completion. The site is divided into several distinct zones, each with a specific purpose, and connected by a network of paths for movement of personnel and equipment.
+
+## Locations
+
+The construction site is mapped into ten key locations:
+
+- l1: "Room A" at coordinates (5, 5).
+- l2: "Room B" at coordinates (1, 5).
+- l3: "Room C" at coordinates (9, 5).
+- l4: "Room D" at coordinates (3, 1).
+- l5: "Room E" at coordinates (7, 1).
+- l6: "Room F" at coordinates (1, 9).
+- l7: "Room G" at coordinates (9, 9).
+- l8: "Room H" at coordinates (5, 1).
+- l9: "Room I" at coordinates (5, 9).
+- l10: "Room J" at coordinates (9, 1).
+
+---
+
+## Paths
+
+For simplicity, all direct paths between connected locations have a uniform distance of 10. The site is connected via the following bidirectional paths:
+
+- A path connects Room B (l2) to Room A (l1).
+- A path connects Room A (l1) to Room C (l3).
+- A path connects Room D (l4) to Room H (l8).
+- A path connects Room H (l8) to Room E (l5).
+- A path connects Room E (l5) to Room J (l10).
+- A path connects Room F (l6) to Room I (l9).
+- A path connects Room I (l9) to Room G (l7).
+- Vertical connections link the sections: l2 to l6, l1 to l9, l8 to l9, l3 to l7, and l7 to l10.
+
+---
+
+## Tasks
+
+There are four types of construction tasks required for the project:
+
+- t1: "Foundation preparation," with a base duration of 15. There are two instances: t1_msa at Room F (l6) and t1_msb at Room G (l7).
+- t2: "Electrical installation," with a base duration of 30. There are two instances, t2_ip1 and t2_ip2, both at Room H (l8).
+- t3: "Plumbing installation," with a base duration of 45. It has two instances: t3_bza at Room D (l4) and t3_bzb at Room E (l5).
+- t4: "Finishing work," with a base duration of 20. It has two instances: t4_se1 at Room J (l10) and t4_wcp1 at Room I (l9).
+
+---
+
+## Agents
+
+The workforce consists of three autonomous robots and one human electrician.
+
+- Robot r1: Starts at Room B (l2).
+    - It is capable of performing "Foundation preparation" (t1) and "Plumbing installation" (t3).
+    - For t1, its success probability is 0.99, cost is 2, duration is 12, and it has 4 retries.
+    - For t3, its probability is 0.95, cost is 5, duration is 40, and it has 2 retries.
+- Robot r2: Starts at Room C (l3). It can also perform "Foundation preparation" (t1).
+    - Its stats for t1 are: 0.98 probability, cost of 2, duration of 13, and 4 retries.
+- Robot r3: Starts at Room J (l10). It is specialized in "Finishing work" (t4).
+    - It performs this task with a 0.99 probability of success, a cost of 1, a duration of 18, and has 5 retries.
+- Human h1: Starts at Room H (l8). This worker handles "Electrical installation" (t2) and can also assist with "Plumbing installation" (t3).
+    - For t2, the probability is 0.97, cost is 8, duration is 25, and they have 2 retries.
+    - For t3, the probability is 0.98, cost is 10, duration is 35, and they have 1 retry.
+
+---
+
+## Constraints
+
+The project plan requires a minimum overall probability of success of 0.95. Any individual task assignment within the plan must have a success probability of no less than 0.90.

@@ -1,0 +1,135 @@
+{
+  "locations": [
+    {
+      "id": "l1",
+      "description": "Warehouse Entrance",
+      "coordinates": {
+        "x": 10,
+        "y": 5
+      }
+    },
+    {
+      "id": "l2",
+      "description": "Loading Bay",
+      "coordinates": {
+        "x": 10,
+        "y": 20
+      }
+    },
+    {
+      "id": "l3",
+      "description": "Sorting Area",
+      "coordinates": {
+        "x": 30,
+        "y": 15
+      }
+    },
+    {
+      "id": "l4",
+      "description": "Storage Rack A",
+      "coordinates": {
+        "x": 40,
+        "y": 10
+      }
+    }
+  ],
+  "paths": [
+    {
+      "start_location": "l1",
+      "end_location": "l2",
+      "path_description": "Path from Warehouse Entrance to Loading Bay",
+      "distance": 15
+    },
+    {
+      "start_location": "l1",
+      "end_location": "l3",
+      "path_description": "Path from Warehouse Entrance to Sorting Area",
+      "distance": 25
+    },
+    {
+      "start_location": "l2",
+      "end_location": "l3",
+      "path_description": "Path from Loading Bay to Sorting Area",
+      "distance": 20
+    },
+    {
+      "start_location": "l3",
+      "end_location": "l4",
+      "path_description": "Path from Sorting Area to Storage Rack A",
+      "distance": 10
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Retrieve Package",
+      "duration": 10,
+      "instances": [
+        {
+          "id": "t1_lb",
+          "location": "l2"
+        },
+        {
+          "id": "t1_ra",
+          "location": "l4"
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "description": "Sort Package",
+      "duration": 15,
+      "instances": [
+        {
+          "id": "t2_sa1",
+          "location": "l3"
+        },
+        {
+          "id": "t2_sa2",
+          "location": "l3"
+        }
+      ]
+    }
+  ],
+  "agents": [
+    {
+      "id": "r1",
+      "type": "robot",
+      "initial_location": "l1",
+      "tasks": [
+        {
+          "type": "t1",
+          "probability_of_success": 0.98,
+          "cost": 2,
+          "duration": 8,
+          "number_of_retries": 5
+        }
+      ]
+    },
+    {
+      "id": "w1",
+      "type": "worker",
+      "initial_location": "l3",
+      "tasks": [
+        {
+          "type": "t1",
+          "probability_of_success": 0.95,
+          "cost": 5,
+          "duration": 12,
+          "number_of_retries": 2
+        },
+        {
+          "type": "t2",
+          "probability_of_success": 0.99,
+          "cost": 3,
+          "duration": 10,
+          "number_of_retries": 3
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "mission_probability_of_success": 0.9,
+    "min_assignment_probability": 0.85
+  }
+}

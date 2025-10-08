@@ -1,0 +1,243 @@
+{
+    "_comment": "Locations",
+    "locations": [
+      {
+        "id": "l1",
+        "description": "Initial location.",
+        "coordinates": { "x": 1, "y": 1 }
+      },
+      {
+        "id": "l2",
+        "description": "Location to the right of location.",
+        "coordinates": { "x": 1, "y": 2 }
+      },
+      {
+        "id": "l3",
+        "coordinates": { "x": 1, "y": 3 }
+      },
+      {
+        "id": "l4",
+        "coordinates": { "x": 2, "y": 1 }
+      },
+      {
+        "id": "l5",
+        "coordinates": { "x": 2, "y": 2 }
+      },
+      {
+        "id": "l6",
+        "coordinates": { "x": 2, "y": 3 }
+      },
+      {
+        "id": "l7",
+        "coordinates": { "x": 3, "y": 1 }
+      },
+      {
+        "id": "l8",
+        "coordinates": { "x": 3, "y": 2 }
+      },
+      {
+        "id": "l9",
+        "coordinates": { "x": 3, "y": 3 }
+      }
+    ],
+    "_comment": "Paths bidirectional",
+    "paths": [
+    {
+      "start_location": "l1",
+      "end_location": "l2",
+      "path_description": "Path from l1 to l2",
+      "distance": 1
+    },
+    {
+      "start_location": "l1",
+      "end_location": "l4",
+      "path_description": "Path from l1 to l4",
+      "distance": 5
+    },
+    {
+      "start_location": "l2",
+      "end_location": "l3",
+      "path_description": "Path from l2 to l3",
+      "distance": 1
+    },
+    {
+      "start_location": "l2",
+      "end_location": "l5",
+      "path_description": "Path from l2 to l5",
+      "distance": 1
+    },
+    {
+      "start_location": "l3",
+      "end_location": "l6",
+      "path_description": "Path from l3 to l6",
+      "distance": 1
+    },
+    {
+      "start_location": "l4",
+      "end_location": "l5",
+      "path_description": "Path from l4 to l5",
+      "distance": 1
+    },
+    {
+      "start_location": "l4",
+      "end_location": "l7",
+      "path_description": "Path from l4 to l7",
+      "distance": 1
+    },
+    {
+      "start_location": "l5",
+      "end_location": "l6",
+      "path_description": "Path from l5 to l6",
+      "distance": 1
+    },
+    {
+      "start_location": "l5",
+      "end_location": "l8",
+      "path_description": "Path from l5 to l8",
+      "distance": 1
+    },
+    {
+      "start_location": "l6",
+      "end_location": "l9",
+      "path_description": "Path from l6 to l9",
+      "distance": 1
+    },
+    {
+      "start_location": "l7",
+      "end_location": "l8",
+      "path_description": "Path from l7 to l8",
+      "distance": 1
+    },
+    {
+      "start_location": "l8",
+      "end_location": "l9",
+      "path_description": "Path from l8 to l9",
+      "distance": 1
+    }
+  ],
+  "_comment": "Tasks",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Task t1",
+      "duration": 1,
+      "instances": [
+        {
+          "id": "t1l4", "location": "l4"
+        },
+        {
+          "id": "t1l6a", "location": "l6"
+        },
+        {
+          "id": "t1l6b", "location": "l6"
+        },
+        {
+          "id": "t1l7", "location": "l7"
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "description": "Task t2",
+      "duration": 1,
+      "instances": [
+        {
+          "id": "t2l5",
+          "location": "l5"
+        },
+        {
+          "id": "t2l8a", "location": "l8"
+        },
+        {
+          "id": "t2l8b", "location": "l8"
+        }
+      ]
+    },
+    {
+      "id": "t3",
+      "description": "Task t3",
+      "duration": 1,
+      "instances": [
+        {
+          "id": "t3l4", "location": "l4"
+        },
+        {
+          "id": "t3l7", "location": "l7"
+        },
+        {
+          "id": "t3l9", "location": "l9"
+        }
+      ]
+    }
+  ],
+    "_comment": "Agents",
+    "agents": [
+      {
+        "id": "h1",
+        "type": "worker",
+        "initial_location": "l1",
+        "tasks": [
+          {
+            "type": "t1",
+            "probability_of_success": 0.98,
+            "cost": 4,
+            "duration": 6,
+            "number_of_retries": 3
+          }
+        ]
+      },
+      {
+        "id": "r1",
+        "type": "robot",
+        "initial_location": "l3",
+        "tasks": [
+          {
+            "type": "t1",
+            "probability_of_success": 0.95,
+            "cost": 1,
+            "duration": 4,
+            "number_of_retries": 10
+          }
+        ]
+      },
+      {
+        "id": "r2",
+        "type": "robot",
+        "initial_location": "l7",
+        "tasks": [
+          {
+            "type": "t2",
+            "probability_of_success": 0.99,
+            "cost": 1,
+            "duration": 5,
+            "number_of_retries": 10
+          },
+          {
+            "type": "t3",
+            "probability_of_success": 0.97,
+            "cost": 1,
+            "duration": 3,
+            "number_of_retries": 10
+          }
+        ]
+      },
+      {
+        "id": "r3",
+        "type": "robot",
+        "initial_location": "l9",
+        "tasks": [
+          {
+            "type": "t3",
+            "probability_of_success": 0.96,
+            "cost": 1,
+            "duration": 3,
+            "number_of_retries": 10
+          }
+        ]
+      }
+    ],
+    "constraints": {
+      "mission_probability_of_success": 0.95,
+      "min_assignment_probability": 0.5
+    }
+}

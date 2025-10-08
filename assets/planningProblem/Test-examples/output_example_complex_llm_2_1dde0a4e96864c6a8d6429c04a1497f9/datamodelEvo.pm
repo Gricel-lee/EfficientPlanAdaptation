@@ -1,0 +1,103 @@
+dtmc
+evolve int h1_maxRetry_t2_qc2 [1..2];
+evolve int h1_maxRetry_t2_qc1 [1..2];
+evolve int h1_maxRetry_t3_ala [1..1];
+evolve int h1_maxRetry_t3_alb [1..1];
+evolve int r2_maxRetry_t1_wsb [1..4];
+evolve int r1_maxRetry_t1_wsa [1..4];
+evolve int r3_maxRetry_t4_db1 [1..5];
+evolve int r3_maxRetry_t4_ps1 [1..5];
+
+const double p_h1_t2_qc2=0.97;
+const double p_h1_t2_qc1=0.97;
+const double p_h1_t3_ala=0.98;
+const double p_h1_t3_alb=0.98;
+const double p_r2_t1_wsb=0.98;
+const double p_r1_t1_wsa=0.99;
+const double p_r3_t4_db1=0.99;
+const double p_r3_t4_ps1=0.99;
+const int h1Final = 7;
+const int h1Fail = 8;
+const int r2Final = 2;
+const int r2Fail = 3;
+const int r1Final = 2;
+const int r1Fail = 3;
+const int r3Final = 4;
+const int r3Fail = 5;
+
+module _h1
+  h1 : [0..9];
+  h1retry_t2_qc2 : [0..h1_maxRetry_t2_qc2] init 0;
+  h1retry_t2_qc1 : [0..h1_maxRetry_t2_qc1] init 0;
+  h1retry_t3_ala : [0..h1_maxRetry_t3_ala] init 0;
+  h1retry_t3_alb : [0..h1_maxRetry_t3_alb] init 0;
+
+  [h1dot2_qc2Retry] h1=0 & h1retry_t2_qc2 < h1_maxRetry_t2_qc2 -> p_h1_t2_qc2 : (h1'=h1+1) + (1-p_h1_t2_qc2) : (h1'=h1) & (h1retry_t2_qc2' = h1retry_t2_qc2+1);
+  [h1dot2_qc2] h1=0 & h1retry_t2_qc2 >= h1_maxRetry_t2_qc2 -> 1:(h1'=h1Fail);
+  [h1dot2_qc1Retry] h1=1 & h1retry_t2_qc1 < h1_maxRetry_t2_qc1 -> p_h1_t2_qc1 : (h1'=h1+1) + (1-p_h1_t2_qc1) : (h1'=h1) & (h1retry_t2_qc1' = h1retry_t2_qc1+1);
+  [h1dot2_qc1] h1=1 & h1retry_t2_qc1 >= h1_maxRetry_t2_qc1 -> 1:(h1'=h1Fail);
+  [h1movel4] h1=2-> 1:(h1'=2+1);
+  [h1dot3_alaRetry] h1=3 & h1retry_t3_ala < h1_maxRetry_t3_ala -> p_h1_t3_ala : (h1'=h1+1) + (1-p_h1_t3_ala) : (h1'=h1) & (h1retry_t3_ala' = h1retry_t3_ala+1);
+  [h1dot3_ala] h1=3 & h1retry_t3_ala >= h1_maxRetry_t3_ala -> 1:(h1'=h1Fail);
+  [h1movel8] h1=4-> 1:(h1'=4+1);
+  [h1movel5] h1=5-> 1:(h1'=5+1);
+  [h1dot3_albRetry] h1=6 & h1retry_t3_alb < h1_maxRetry_t3_alb -> p_h1_t3_alb : (h1'=h1+1) + (1-p_h1_t3_alb) : (h1'=h1) & (h1retry_t3_alb' = h1retry_t3_alb+1);
+  [h1dot3_alb] h1=6 & h1retry_t3_alb >= h1_maxRetry_t3_alb -> 1:(h1'=h1Fail);
+endmodule
+
+module _r2
+  r2 : [0..4];
+  r2retry_t1_wsb : [0..r2_maxRetry_t1_wsb] init 0;
+
+  [r2movel7] r2=0-> 1:(r2'=0+1);
+  [r2dot1_wsbRetry] r2=1 & r2retry_t1_wsb < r2_maxRetry_t1_wsb -> p_r2_t1_wsb : (r2'=r2+1) + (1-p_r2_t1_wsb) : (r2'=r2) & (r2retry_t1_wsb' = r2retry_t1_wsb+1);
+  [r2dot1_wsb] r2=1 & r2retry_t1_wsb >= r2_maxRetry_t1_wsb -> 1:(r2'=r2Fail);
+endmodule
+
+module _r1
+  r1 : [0..4];
+  r1retry_t1_wsa : [0..r1_maxRetry_t1_wsa] init 0;
+
+  [r1movel6] r1=0-> 1:(r1'=0+1);
+  [r1dot1_wsaRetry] r1=1 & r1retry_t1_wsa < r1_maxRetry_t1_wsa -> p_r1_t1_wsa : (r1'=r1+1) + (1-p_r1_t1_wsa) : (r1'=r1) & (r1retry_t1_wsa' = r1retry_t1_wsa+1);
+  [r1dot1_wsa] r1=1 & r1retry_t1_wsa >= r1_maxRetry_t1_wsa -> 1:(r1'=r1Fail);
+endmodule
+
+module _r3
+  r3 : [0..6];
+  r3retry_t4_db1 : [0..r3_maxRetry_t4_db1] init 0;
+  r3retry_t4_ps1 : [0..r3_maxRetry_t4_ps1] init 0;
+
+  [r3dot4_db1Retry] r3=0 & r3retry_t4_db1 < r3_maxRetry_t4_db1 -> p_r3_t4_db1 : (r3'=r3+1) + (1-p_r3_t4_db1) : (r3'=r3) & (r3retry_t4_db1' = r3retry_t4_db1+1);
+  [r3dot4_db1] r3=0 & r3retry_t4_db1 >= r3_maxRetry_t4_db1 -> 1:(r3'=r3Fail);
+  [r3movel7] r3=1-> 1:(r3'=1+1);
+  [r3movel9] r3=2-> 1:(r3'=2+1);
+  [r3dot4_ps1Retry] r3=3 & r3retry_t4_ps1 < r3_maxRetry_t4_ps1 -> p_r3_t4_ps1 : (r3'=r3+1) + (1-p_r3_t4_ps1) : (r3'=r3) & (r3retry_t4_ps1' = r3retry_t4_ps1+1);
+  [r3dot4_ps1] r3=3 & r3retry_t4_ps1 >= r3_maxRetry_t4_ps1 -> 1:(r3'=r3Fail);
+endmodule
+
+rewards "cost"
+  [h1dot2_qc2] true:8;
+  [h1dot2_qc2Retry] true:8;
+  [h1dot2_qc1] true:8;
+  [h1dot2_qc1Retry] true:8;
+  [h1movel4] true:1;
+  [h1dot3_ala] true:10;
+  [h1dot3_alaRetry] true:10;
+  [h1movel8] true:1;
+  [h1movel5] true:1;
+  [h1dot3_alb] true:10;
+  [h1dot3_albRetry] true:10;
+  [r2movel7] true:1;
+  [r2dot1_wsb] true:2;
+  [r2dot1_wsbRetry] true:2;
+  [r1movel6] true:1;
+  [r1dot1_wsa] true:2;
+  [r1dot1_wsaRetry] true:2;
+  [r3dot4_db1] true:1;
+  [r3dot4_db1Retry] true:1;
+  [r3movel7] true:1;
+  [r3movel9] true:1;
+  [r3dot4_ps1] true:1;
+  [r3dot4_ps1Retry] true:1;
+endrewards

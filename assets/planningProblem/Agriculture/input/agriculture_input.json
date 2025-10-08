@@ -1,0 +1,291 @@
+{
+  "locations": [
+    {
+      "id": "l1",
+      "description": "The 'Initial location' at coordinates (1, 1).",
+      "coordinates": {
+        "x": 1,
+        "y": 1
+      }
+    },
+    {
+      "id": "l2",
+      "description": "The 'Location to the right of location' at coordinates (1, 2).",
+      "coordinates": {
+        "x": 1,
+        "y": 2
+      }
+    },
+    {
+      "id": "l3",
+      "description": "A location at coordinates (1, 3).",
+      "coordinates": {
+        "x": 1,
+        "y": 3
+      }
+    },
+    {
+      "id": "l4",
+      "description": "A location at coordinates (2, 1).",
+      "coordinates": {
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "id": "l5",
+      "description": "A location at coordinates (2, 2).",
+      "coordinates": {
+        "x": 2,
+        "y": 2
+      }
+    },
+    {
+      "id": "l6",
+      "description": "A location at coordinates (2, 3).",
+      "coordinates": {
+        "x": 2,
+        "y": 3
+      }
+    },
+    {
+      "id": "l7",
+      "description": "A location at coordinates (3, 1).",
+      "coordinates": {
+        "x": 3,
+        "y": 1
+      }
+    },
+    {
+      "id": "l8",
+      "description": "A location at coordinates (3, 2).",
+      "coordinates": {
+        "x": 3,
+        "y": 2
+      }
+    },
+    {
+      "id": "l9",
+      "description": "A location at coordinates (3, 3).",
+      "coordinates": {
+        "x": 3,
+        "y": 3
+      }
+    }
+  ],
+  "paths": [
+    {
+      "start_location": "l1",
+      "end_location": "l2",
+      "distance": 1
+    },
+    {
+      "start_location": "l1",
+      "end_location": "l4",
+      "distance": 5
+    },
+    {
+      "start_location": "l2",
+      "end_location": "l3",
+      "distance": 1
+    },
+    {
+      "start_location": "l2",
+      "end_location": "l5",
+      "distance": 1
+    },
+    {
+      "start_location": "l3",
+      "end_location": "l6",
+      "distance": 1
+    },
+    {
+      "start_location": "l4",
+      "end_location": "l5",
+      "distance": 1
+    },
+    {
+      "start_location": "l4",
+      "end_location": "l7",
+      "distance": 1
+    },
+    {
+      "start_location": "l5",
+      "end_location": "l6",
+      "distance": 1
+    },
+    {
+      "start_location": "l5",
+      "end_location": "l8",
+      "distance": 1
+    },
+    {
+      "start_location": "l6",
+      "end_location": "l9",
+      "distance": 1
+    },
+    {
+      "start_location": "l7",
+      "end_location": "l8",
+      "distance": 1
+    },
+    {
+      "start_location": "l8",
+      "end_location": "l9",
+      "distance": 1
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Harvesting: Grape harvesting is an extremely arduous and repetitive activity.",
+      "duration": 1,
+      "instances": [
+        {
+          "id": "t1l4",
+          "location": "l4"
+        },
+        {
+          "id": "t1l6a",
+          "location": "l6"
+        },
+        {
+          "id": "t1l6b",
+          "location": "l6"
+        },
+        {
+          "id": "t1l7",
+          "location": "l7"
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "description": "Vineyard monitoring: Continuous monitoring of vineyards includes monitoring the vines’ health, the vines’ state after a heatwave or heavy rainfall, and routine monitoring.",
+      "duration": 1,
+      "instances": [
+        {
+          "id": "t2l5",
+          "location": "l5"
+        },
+        {
+          "id": "t2l8a",
+          "location": "l8"
+        },
+        {
+          "id": "t2l8b",
+          "location": "l8"
+        }
+      ]
+    },
+    {
+      "id": "t3",
+      "description": "Grapevine identification: Grapevine varietal identification occurs during the observation period between the hot months of June and August.",
+      "duration": 1,
+      "instances": [
+        {
+          "id": "t3l4",
+          "location": "l4"
+        },
+        {
+          "id": "t3l7",
+          "location": "l7"
+        },
+        {
+          "id": "t3l9",
+          "location": "l9"
+        }
+      ]
+    }
+  ],
+  "agents": [
+    {
+      "id": "worker1",
+      "type": "worker",
+      "initial_location": "l1",
+      "tasks": [
+        {
+          "type": "t1",
+          "probability_of_success": 1.0,
+          "cost": 3,
+          "duration": 5,
+          "number_of_retries": 5
+        },
+        {
+          "type": "t3",
+          "probability_of_success": 0.99,
+          "cost": 5,
+          "duration": 3,
+          "number_of_retries": 5
+        }
+      ]
+    },
+    {
+      "id": "worker2",
+      "type": "worker",
+      "initial_location": "l1",
+      "tasks": [
+        {
+          "type": "t1",
+          "probability_of_success": 1.0,
+          "cost": 3,
+          "duration": 5,
+          "number_of_retries": 5
+        },
+        {
+          "type": "t3",
+          "probability_of_success": 0.99,
+          "cost": 5,
+          "duration": 3,
+          "number_of_retries": 5
+        }
+      ]
+    },
+    {
+      "id": "r1",
+      "type": "robot",
+      "initial_location": "l1",
+      "tasks": [
+        {
+          "type": "t2",
+          "probability_of_success": 0.99,
+          "cost": 1,
+          "duration": 5,
+          "number_of_retries": 10
+        },
+        {
+          "type": "t3",
+          "probability_of_success": 0.97,
+          "cost": 1,
+          "duration": 3,
+          "number_of_retries": 10
+        }
+      ]
+    },
+    {
+      "id": "r2",
+      "type": "robot",
+      "initial_location": "l1",
+      "tasks": [
+        {
+          "type": "t2",
+          "probability_of_success": 0.99,
+          "cost": 1,
+          "duration": 5,
+          "number_of_retries": 10
+        },
+        {
+          "type": "t3",
+          "probability_of_success": 0.97,
+          "cost": 1,
+          "duration": 3,
+          "number_of_retries": 10
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "mission_probability_of_success": 0.95,
+    "min_assignment_probability": 0.5
+  }
+}

@@ -1,0 +1,146 @@
+﻿## Instructions
+You are an expert AI assistant tasked with generating structured JSON files for a complex planning and scheduling system.
+
+
+You will be provided with two key inputs:
+1.  A single example of a valid JSON file that conforms to the required schema.
+2.  A natural language description of a new planning problem scenario.
+
+
+Your task is to generate a single, complete, and valid JSON file that accurately represents the new planning problem described in the natural language text. The generated JSON must strictly adhere to the structure and schema of the provided example.
+
+
+Additionally, generate an AI-feedback.txt file with explanatory feedback on critical decisions taken to generate such a file. This will be passed to non-domain experts to understand the generated JSON better.
+
+
+
+
+## JSON Schema Breakdown 
+The JSON file has five main top-level keys: `locations`, `paths`, `tasks`, `agents`, and `constraints`.
+
+
+---
+
+
+1. locations
+This is a list of all possible physical locations in the environment.
+-   `id`: A unique string identifier for the location (e.g., "l1", "l2").
+-   `description`: (Optional) A brief text description of the location.
+-   `coordinates`: An object with numerical `x` and `y` values.
+Example:
+```json
+{
+  "id": "l1",
+  "description": "Initial location.",
+  "coordinates": { "x": 1, "y": 1 }
+}
+
+
+2. paths
+This is a list defining the connections between locations. All paths are bidirectional by default.
+-   `start_location`: The id of the starting location.
+-   `end_location`: The id of the ending location.
+-   `path_description`: (Optional) A brief text description of the path.
+-   `distance`: A numerical value representing the cost or length to travel between the locations.
+Example:
+JSON
+{
+"start_location": "l1",
+"end_location": "l2",
+"path_description": "Path from l1 to l2",
+"distance": 1
+}
+
+
+3. tasks
+This is a list defining the types of tasks that need to be completed. Each task type can have multiple instances at various locations.
+-   `id`: A unique string identifier for the task type (e.g., "t1", "t2").
+-   `description`: A text description of the task type.
+-   `duration`: A numerical value for the base time required to complete one instance of this task.
+-   `instances`: A list of specific occurrences of this task.
+-   `id`: A unique string identifier for the task instance (e.g., "t1l4").
+-   `location`: The id of the location where this task instance must be performed.
+Example:
+JSON
+{
+"id": "t1",
+"description": "Task t1",
+"duration": 1,
+"instances": [
+{ "id": "t1l4", "location": "l4" },
+{ "id": "t1l6a", "location": "l6" }
+]
+}
+
+
+4. agents
+This is a list of all available agents (e.g., workers, robots) that can perform tasks.
+-   `id`: A unique string identifier for the agent (e.g., "worker1", "r1").
+-   `type`: A string indicating the agent's type (e.g., "worker", "robot").
+-   `initial_location`: The starting location id for the agent.
+-   `tasks`: A list of the task types this agent is capable of performing, along with agent-specific parameters for each task.
+-   `type`: The id of the task type (e.g., "t1").
+-   `probability_of_success`: A float between 0.0 and 1.0.
+-   `cost`: The numerical cost for this agent to perform this task type.
+-   `duration`: The time it takes for this specific agent to perform this task type.
+-   `number_of_retries`: The maximum number of times the agent can retry the task upon failure.
+Example`:
+JSON
+{
+"id": "worker1",
+"type": "worker",
+"initial_location": "l1",
+"tasks": [
+{
+"type": "t1",
+"probability_of_success": 1.00,
+"cost": 3,
+"duration": 5,
+"number_of_retries": 5
+}
+]
+}
+
+
+5. constraints
+An object containing global constraints for the entire mission plan.
+-   `mission_probability_of_success`: The minimum acceptable overall probability of success for the mission plan.
+-   `min_assignment_probability`: The minimum probability of success required for any single task assignment to be considered valid.
+Example:
+JSON
+"constraints": {
+"mission_probability_of_success": 0.95,
+"min_assignment_probability": 0.5
+}
+---
+
+
+## Additional Rules:
+
+
+For constraints:
+1. If the description of a new planning problem scenario does not contain any mission probability of success , assign this to 0.0 `"mission_probability_of_success": 0.0`.
+2.  If the description of a new planning problem scenario does not contain any minimum mission probability of assignment,  assign this to 0.0 `""min_assignment_probability": 0.0`.
+
+
+For paths:
+3. If the description of a new planning problem scenario does not contain any paths, define a path between all given locations (paths are automatically bidirectional, e.g., if loc1 to loc2 is added, loc2 to loc1 is omitted).
+4. If the description of a new planning problem scenario does not contain any distances between the paths, assign a distance of 1 ("distance": 1).
+5. If the coordinates of the locations are not defined, assign 0,0 coordinates ("coordinates": { "x": 0, "y": 0 }).
+6. If the description of a new planning problem scenario does not contain the agent’s probability of success, define this a 1 ("probability_of_success": 1.00,).
+
+
+
+
+
+
+
+
+## ERRORS 
+If one of the following errors is identified in the description of a new planning problem scenario, do not create a JSON file nor an AI-feedback.txt file. Instead create a new `Error.txt` file with feedback on the problem.
+
+
+1. The description does not contain any locations.
+2. The description does not contain any agents.
+3. The description does not contain any tasks.
+4. There are tasks that cannot be performed by any agent.

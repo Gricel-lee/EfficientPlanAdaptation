@@ -1,0 +1,284 @@
+{
+  "locations": [
+    {
+      "id": "l1",
+      "description": "Main Hub",
+      "coordinates": {
+        "x": 5,
+        "y": 5
+      }
+    },
+    {
+      "id": "l2",
+      "description": "Charging Bay 1",
+      "coordinates": {
+        "x": 1,
+        "y": 5
+      }
+    },
+    {
+      "id": "l3",
+      "description": "Charging Bay 2",
+      "coordinates": {
+        "x": 9,
+        "y": 5
+      }
+    },
+    {
+      "id": "l4",
+      "description": "Assembly Line A",
+      "coordinates": {
+        "x": 3,
+        "y": 1
+      }
+    },
+    {
+      "id": "l5",
+      "description": "Assembly Line B",
+      "coordinates": {
+        "x": 7,
+        "y": 1
+      }
+    },
+    {
+      "id": "l6",
+      "description": "Warehouse Section A",
+      "coordinates": {
+        "x": 1,
+        "y": 9
+      }
+    },
+    {
+      "id": "l7",
+      "description": "Warehouse Section B",
+      "coordinates": {
+        "x": 9,
+        "y": 9
+      }
+    },
+    {
+      "id": "l8",
+      "description": "Quality Control",
+      "coordinates": {
+        "x": 5,
+        "y": 1
+      }
+    },
+    {
+      "id": "l9",
+      "description": "Packing Station",
+      "coordinates": {
+        "x": 5,
+        "y": 9
+      }
+    },
+    {
+      "id": "l10",
+      "description": "Dispatch Bay",
+      "coordinates": {
+        "x": 9,
+        "y": 1
+      }
+    }
+  ],
+  "paths": [
+    {
+      "start_location": "l2",
+      "end_location": "l1",
+      "distance": 10
+    },
+    {
+      "start_location": "l1",
+      "end_location": "l3",
+      "distance": 10
+    },
+    {
+      "start_location": "l4",
+      "end_location": "l8",
+      "distance": 10
+    },
+    {
+      "start_location": "l8",
+      "end_location": "l5",
+      "distance": 10
+    },
+    {
+      "start_location": "l5",
+      "end_location": "l10",
+      "distance": 10
+    },
+    {
+      "start_location": "l6",
+      "end_location": "l9",
+      "distance": 10
+    },
+    {
+      "start_location": "l9",
+      "end_location": "l7",
+      "distance": 10
+    },
+    {
+      "start_location": "l2",
+      "end_location": "l6",
+      "distance": 10
+    },
+    {
+      "start_location": "l1",
+      "end_location": "l9",
+      "distance": 10
+    },
+    {
+      "start_location": "l8",
+      "end_location": "l9",
+      "distance": 10
+    },
+    {
+      "start_location": "l3",
+      "end_location": "l7",
+      "distance": 10
+    },
+    {
+      "start_location": "l7",
+      "end_location": "l10",
+      "distance": 10
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Component Fetch",
+      "duration": 15,
+      "instances": [
+        {
+          "id": "t1_wsa",
+          "location": "l6"
+        },
+        {
+          "id": "t1_wsb",
+          "location": "l7"
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "description": "Final Inspection",
+      "duration": 30,
+      "instances": [
+        {
+          "id": "t2_qc1",
+          "location": "l8"
+        },
+        {
+          "id": "t2_qc2",
+          "location": "l8"
+        }
+      ]
+    },
+    {
+      "id": "t3",
+      "description": "Product Assembly",
+      "duration": 45,
+      "instances": [
+        {
+          "id": "t3_ala",
+          "location": "l4"
+        },
+        {
+          "id": "t3_alb",
+          "location": "l5"
+        }
+      ]
+    },
+    {
+      "id": "t4",
+      "description": "Load for Dispatch",
+      "duration": 20,
+      "instances": [
+        {
+          "id": "t4_db1",
+          "location": "l10"
+        },
+        {
+          "id": "t4_ps1",
+          "location": "l9"
+        }
+      ]
+    }
+  ],
+  "agents": [
+    {
+      "id": "r1",
+      "type": "robot",
+      "initial_location": "l2",
+      "tasks": [
+        {
+          "type": "t1",
+          "probability_of_success": 0.99,
+          "cost": 2,
+          "duration": 12,
+          "number_of_retries": 4
+        },
+        {
+          "type": "t3",
+          "probability_of_success": 0.95,
+          "cost": 5,
+          "duration": 40,
+          "number_of_retries": 2
+        }
+      ]
+    },
+    {
+      "id": "r2",
+      "type": "robot",
+      "initial_location": "l3",
+      "tasks": [
+        {
+          "type": "t1",
+          "probability_of_success": 0.98,
+          "cost": 2,
+          "duration": 13,
+          "number_of_retries": 4
+        }
+      ]
+    },
+    {
+      "id": "r3",
+      "type": "robot",
+      "initial_location": "l10",
+      "tasks": [
+        {
+          "type": "t4",
+          "probability_of_success": 0.99,
+          "cost": 1,
+          "duration": 18,
+          "number_of_retries": 5
+        }
+      ]
+    },
+    {
+      "id": "h1",
+      "type": "human",
+      "initial_location": "l8",
+      "tasks": [
+        {
+          "type": "t2",
+          "probability_of_success": 0.97,
+          "cost": 8,
+          "duration": 25,
+          "number_of_retries": 2
+        },
+        {
+          "type": "t3",
+          "probability_of_success": 0.98,
+          "cost": 10,
+          "duration": 35,
+          "number_of_retries": 1
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "mission_probability_of_success": 0.95,
+    "min_assignment_probability": 0.9
+  }
+}
