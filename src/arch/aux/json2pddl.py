@@ -115,14 +115,11 @@ def generate_pddl_problem(data):
 
 def main(json_file_path,
         output_dir = '',
-        fdomain='mrmh_planning_domain.pddl',
-        fproblem='mrmh_planning_problem.pddl',
+        fdomain='planning_domain.pddl',
+        fproblem='planning_problem.pddl',
+        headless=False
         ):
     ''' Generate PDDL domain and problem files from the JSON data.'''
-    
-    # Set output directory
-    if output_dir=='':    
-        output_dir = os.path.join(os.path.dirname(json_file_path), "data")
     
     # Debug: Check the input JSON file path
     print(f"[JSON2PDDL] Input JSON file path: {json_file_path}")
@@ -141,9 +138,10 @@ def main(json_file_path,
     domain_content = generate_pddl_domain(data)
     problem_content = generate_pddl_problem(data)
     
-    # # Create folder for output if it doesn't exist
-    # print(f"[JSON2PDDL] Creating folder (if needed) at: {output_dir}")
-    # auxiliary.createFolder(output_dir)
+    # Create folder for output if it doesn't exist (headless mode)
+    if headless:
+        print(f"[JSON2PDDL] Creating folder at: {output_dir}")
+        auxiliary.createFolder(output_dir)
     
     # Save the files
     print(f"[JSON2PDDL] Saving domain file to: {os.path.join(output_dir, fdomain)}")

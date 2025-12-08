@@ -75,7 +75,7 @@ def main(problem_id, json_file_path):
             print(f"[RunPlanner]: Running PDDL planner for {name_file}-{run}...")
             plan = pddlplanner.runPlanner(problem, output_dir)
             
-            print(plan)
+            # print(plan)
             
             # Generate PRISM/Evochecker file from PDDL plan with indexed filenames
             print(f"[RunPlanner]: Generating Evochecker files for {name_file}-{run}...")

@@ -1,9 +1,13 @@
+# Authors: Gricel Vazquez, Alessandros Valentini
+
 import os
 from unified_planning.shortcuts import *
 from unified_planning.engines import PlanGenerationResultStatus 
 from unified_planning.io import PDDLReader  # PDDLReader class to read PDDL files
 from unified_planning.engines.results import PlanGenerationResult
 
+from unified_planning.shortcuts import get_environment, AnytimePlanner
+    
 def importPDDLproblem(data_output_dir, f_domain, f_problem):  
     print(f"[pddlplanner] Processing PDDL problem: {f_domain} and {f_problem}")  # Debugging line to show file names
     data_output_dir# = os.path.join(data_output_dir, "data")  # Correct path concatenation
@@ -15,7 +19,7 @@ def importPDDLproblem(data_output_dir, f_domain, f_problem):
     
     # Initialise the PDDLReader
     reader = PDDLReader()
-    
+
     # Debugging: Check the paths used for parsing
     print(f"[pddlplanner] Reading domain file: {os.path.join(data_output_dir, f_domain)}")
     print(f"[pddlplanner] Reading problem file: {os.path.join(data_output_dir, f_problem)}")
@@ -27,8 +31,43 @@ def importPDDLproblem(data_output_dir, f_domain, f_problem):
     print(f"[pddlplanner] PDDL problem successfully parsed")
     return problem
 
-def printImportedPDDLproblem(problem):
+def printImportedPDDLproblem(problem:PDDLReader):
     print(f"[pddlplanner] Imported PDDL problem")
+    # Print problem details
+    print("Problem Name:", problem.name)
+    print("Objects:", problem.all_objects)
+    print("Goals:", problem.goals)
+    print("Actions:", problem.actions)
+    # print("\nInitial Values:", problem.initial_value)
+    
+
+# Generating multiple plans 
+def generate_plans(f_domain, f_problem, output_directory, timeout):
+    env = get_environment()
+    env.factory.add_engine("tempest", "tempest.engine", "TempestEngine")
+    env.credits_stream = None
+
+    r = PDDLReader()
+    
+    problem = r.parse_problem(os.path.join(output_directory, f_domain),
+                                os.path.join(output_directory, f_problem))
+    problem.clear_quality_metrics()
+
+    plans_found = set()
+    plans_obj_found = []
+    # 'incremental': True is faster but may generate more similar plans
+    with AnytimePlanner(name="tempest", params={'incremental': False}) as p:
+        for i, res in enumerate(p.get_solutions(problem, timeout=timeout)):
+            if res.plan and res.plan not in plans_found:
+                plans_found.add(res.plan)
+                plans_obj_found.append(res)
+                print(res.plan)
+                with open(f"{output_directory}/plan_{i+1}.txt", "w") as f:
+                    f.write(str(res.plan))
+
+    return plans_obj_found
+
+
 
 def runPlanner(problem, data_output_dir):
     '''

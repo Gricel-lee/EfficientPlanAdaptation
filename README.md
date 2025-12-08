@@ -8,12 +8,15 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 
 
 
-## Running hybrid planner
+## Installing ARCH hybrid planner
 
 1) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
 ![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dirFiles.png)
 
 2) **Modify** ```run.sh``` and ```config.ini``` file with your installation paths.
+
+**Modify** also the path to the tempest solver in the ```requirements.txt``` file, line: ```tempest @ file:///home/<your_path>/EfficientPlanAdaptation/src/arch/apps/tempest```
+
 
 3) Create a **python environment** from src/arch/requirements.txt file:
 ```
@@ -30,7 +33,13 @@ cd ..
 ```
 (or pip3). For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-environments/
 
-3) **Run** one of the following from terminal.
+
+4) Continue with Running ARCH UI instructions. This will run the run.sh file and finish the installation moving the EvoChecker files.
+
+
+## Running ARCH UI
+
+1) **Run** one of the following from terminal.
 For arch--hybrid planner:
 ```
 ./run.sh arch
@@ -42,7 +51,7 @@ For sharp:
 ./run.sh sharp
 ```
 
-4) After running this script, the API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
+2) After running this script, the API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
 
 Note: To test and submit a planning problem directly throught the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
 
@@ -68,6 +77,24 @@ Note: When a new planning problem is added, the Hybrid planner is started under-
  At completion, the hybrid planner should create a folder in the input .JSON file directory, with the generated data:
 - Data from numerical planner: PDDL files, plan, EvoChecker files, execution times per run
 - Data from uncertainty augmentation: Pareto front and set obtained per run, execution times per run
+
+## Running ARCH from headless 
+
+1) Activate the python environment:
+```
+source src/arch/prj-venv/bin/activate
+```
+
+2) Change paths to your problem in ```arch/runHeadLess.py```, then run:
+```
+cd src
+python3 run_SHARP_headless.py
+```
+
+*Note: To avoid Java errors, before running the python file, run from terminal or add to .bashrc in Linux:*
+*for NIX/AMD64 systems*```export LD_LIBRARY_PATH="/<path to ultimate>/ULTIMATE_MODEL_MANAGER/libs/runtime"```; 
+*for macOS/ARM: ```export DYLD_LIBRARY_PATH="/<path to ultimate>/ULTIMATE_MODEL_MANAGER/libs/runtime```*.
+
 
 
 **Enjoy!**
@@ -122,3 +149,49 @@ This Error can be ignored:
 generate-parameter-library-py 0.4.0 requires jinja2, which is not installed.
 generate-parameter-library-py 0.4.0 requires typeguard, which is not installed.```
 
+
+### Error: ModuleNotFoundError: No module named 'tempest'
+
+The TempEST solver library has not been installed (or the python environment has not been configured properly). To add it to the python environment, first activate it:
+```
+source src/arch/prj-venv/bin/activate
+```
+
+TemPEST relies on [PySMT](https://github.com/pysmt/pysmt) to interface with SMT/OMT solvers. You must install PySMT and at least one solver (e.g., Z3):
+```
+pip3 install --pre pysmt
+pysmt-install --z3
+```
+Then install TemPEST
+```
+cd src/arch/apps/tempest/
+pip install .
+```
+Try running ARCH again, e.g., headless:
+```
+cd ../../../
+python3 run_SHARP_headless.py
+```
+
+### Error: ModuleNotFoundError: No module named 'tempest'
+
+The TempEST solver library has not been installed (or the python environment has not been configured properly). To install the TempEST solver library, first activate the python environment:
+```
+source src/arch/prj-venv/bin/activate
+```
+TemPEST relies on [PySMT](https://github.com/pysmt/pysmt) to interface with SMT/OMT solvers. You must install PySMT and at least one solver (e.g., Z3):
+```
+pip3 install --pre pysmt
+pysmt-install --z3
+```
+Then install TemPEST from the following directory:
+```
+cd src/arch/apps/tempest/
+pip install .
+```
+Finally, either deactivate the python env.:
+```deactivate``` or try running ARCH again, e.g., headless: 
+```
+cd ../../../
+python3 run_SHARP_headless.py
+```

@@ -10,13 +10,14 @@ import arch.aux.plot as p
 import traceback
 from arch.config.config import * 
 
-def main(problem_id, json_file_path, evo_jar_file):
+def main(problem_id, json_file_path, evo_jar_file, evo_config_file="evo_config.properties"):
     '''
     Args:
         problem_id: Unique identifier for the planning problem.
         json_file_path: The path to the JSON file to be processed.
         evo_jar_file: The path to the EvoChecker JAR file.
-            
+        evo_config_file: The path to the EvoChecker configuration file (different for multi-plans).
+
     Returns:
         None    
     '''
@@ -28,12 +29,12 @@ def main(problem_id, json_file_path, evo_jar_file):
     output_dir = PROBLEM_OUTPUT_DIR[problem_id]
     verbose = VERBOSE
     num_runs = NUM_TIMED_RUNS
-        
+    
     # Process each JSON file in the input directory
     print("\n----Starting EvoChecker generation...")
     
     # Get config file
-    evo_config_file = os.path.join(output_dir, "evo_config.properties")
+    evo_config_file = os.path.join(output_dir, evo_config_file)
     print(f"[RunEvo] Config EvoChecker file: {evo_config_file}")
 
     # Create log file for elapsed time

@@ -1,0 +1,17 @@
+\begin{table}[h!]
+\centering
+\begin{tabular}{lccc}
+\hline
+Plan & HV & GD & IGD \\
+\hline
+plan 1–20 & 0.182100 $\pm$ 0.000614 & 0.110049 $\pm$ 0.021350 & 0.075597 $\pm$ 0.006297 \\
+plan 21–40 & 0.171903 $\pm$ 0.000666 & 0.097518 $\pm$ 0.018840 & 0.174617 $\pm$ 0.002083 \\
+plan 41–60 & 0.081435 $\pm$ 0.003639 & 0.492636 $\pm$ 0.121427 & 0.758086 $\pm$ 0.009458 \\
+plan 61–80 & 0.182724 $\pm$ 0.000209 & 0.131493 $\pm$ 0.025613 & 0.114815 $\pm$ 0.000776 \\
+plan 81–100 & 0.181754 $\pm$ 0.000790 & 0.109927 $\pm$ 0.020893 & 0.076847 $\pm$ 0.007054 \\
+all plans & 0.195498 $\pm$ 0.0000109 & 0.000000 & 0.000000 \
+\hline
+\end{tabular}
+\caption{Summary of experimental results}
+\label{tab:summary}
+\end{table}

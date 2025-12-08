@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: tempest
+Version: 0.0.1
+Summary: Temporal Planner via Encoding into Satisfiability Testing
+Home-page: UNKNOWN
+Author: FBK PSO Unit
+Author-email: tamer@fbk.eu
+License: LGPLv3
+Platform: UNKNOWN
+Classifier: License :: GNU Lesser General Public License v3.0
+Requires-Python: >=3.10
+License-File: LICENSE
+
+UNKNOWN
+

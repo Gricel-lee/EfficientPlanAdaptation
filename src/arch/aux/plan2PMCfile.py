@@ -1,12 +1,16 @@
+import os
+import sys
+from typing import Union
 from typing import List
+import traceback
 from unified_planning.engines.results import PlanGenerationResult
 import unified_planning.plans as plans
 import unified_planning.plans as sequential_plan
 import unified_planning.plans.sequential_plan as SequentialPlan
 import unified_planning.plans.plan as Plan
-import os
-import sys
+
 from arch.config.config import EVO_LIBRARY_PATH
+
 
 def get_agents_in_plan(plan:PlanGenerationResult):
     '''Get agents in plan'''
@@ -122,7 +126,7 @@ def _extract_uncertainty_data(data):
 
 
 
-def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, population=10, max_evals=100):
+def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, population=10, max_evals=100, planNumber=""):
     '''
     Create EvoChecker or PRISM file from PDDL plan
         @param output_dir: output directory
@@ -133,6 +137,12 @@ def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, po
     
     
     '''
+    # File names (with plan number if multiple plans)
+    fname_model = f'datamodelEvo{planNumber}.pm'
+    fname_props = f'datamodelEvo{planNumber}.props'
+    fname_config_props = f'evo_config{planNumber}.properties'
+    fname_prism = f'datamodelEvo{planNumber}.prism'
+
     try:
         '''Generate PRISM or Evochecker files'''
         # Info from plan
@@ -252,31 +262,32 @@ def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, po
         # Save .pm and .props files
         if evoChecker:
             # Save .pm and .props files
-            _save_file(s, output_dir, f'datamodelEvo.pm')
-            _save_file(s_evoProps, output_dir, f'datamodelEvo.props')
-            
+            _save_file(s, output_dir, fname_model)
+            _save_file(s_evoProps, output_dir, fname_props)
+
             # Get and save evochecker config.properties file
-            s_configProps = _get_evochecker_config_file(output_dir,name_file,population,max_evals)
-            _save_file(s_configProps, output_dir, f'evo_config.properties')
+            s_configProps = _get_evochecker_config_file(output_dir,name_file,fname_model,fname_props,population,max_evals)
+            _save_file(s_configProps, output_dir, fname_config_props)
         else:
-            _save_file(s, output_dir, f'datamodelEvo.prism')
-            
+            _save_file(s, output_dir, fname_prism)
             
     except Exception as e:
         print(f"Error creating PRISM file: {e}")
+        #print the traceback.print_exc()
+        traceback.print_exc()
         sys.exit(1)
     
     # Return path to config.props file (only needed for EvoChecker)
-    return os.path.join(output_dir, f'evo_config.properties') 
-    
+    return os.path.join(output_dir, fname_config_props)
 
-def _get_evochecker_config_file(output_dir,name_file,population=100,max_evals=1000):
+
+def _get_evochecker_config_file(output_dir,name_file,fname_model,fname_props,population=100,max_evals=1000):
     '''Get Evochecker config file'''
     
     # Set parameters
     problem = f"CPHS-{name_file}-EvoChecker-output"
-    model = os.path.join(output_dir, 'datamodelEvo.pm') #"models/models_n_props/datamodelEvo1.pm"
-    properties = os.path.join(output_dir, 'datamodelEvo.props') #"models/models_n_props/datamodelEvo1.props"
+    model = os.path.join(output_dir, fname_model) #"/datamodelEvo1.pm"
+    properties = os.path.join(output_dir, fname_props) #"/datamodelEvo1.props"
     python_dir = "/usr/bin/python3"
     
     # Create config.properties file
