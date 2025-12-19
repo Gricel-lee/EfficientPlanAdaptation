@@ -1,0 +1,1177 @@
+mdp
+// Labels & formulae 
+label "success" = t1l4=1 & t1l6a=1 & t1l6b=1 & t1l7=1 & t2l5=1 & t2l8a=1 & t2l8b=1 & t2l8c=1 & t2l8d=1 & t3l4=1 & t3l7=1 & t3l9=1 & t3l9b=1 & t3l8=1 & t3l8b=1;
+label "done" = !(t1l4=0) & !(t1l6a=0) & !(t1l6b=0) & !(t1l7=0) & !(t2l5=0) & !(t2l8a=0) & !(t2l8b=0) & !(t2l8c=0) & !(t2l8d=0) & !(t3l4=0) & !(t3l7=0) & !(t3l9=0) & !(t3l9b=0) & !(t3l8=0) & !(t3l8b=0);
+formula success = t1l4=1 & t1l6a=1 & t1l6b=1 & t1l7=1 & t2l5=1 & t2l8a=1 & t2l8b=1 & t2l8c=1 & t2l8d=1 & t3l4=1 & t3l7=1 & t3l9=1 & t3l9b=1 & t3l8=1 & t3l8b=1;
+// Retries
+const int worker1_maxRetry_t1l4_SET = 5;
+const int worker1_maxRetry_t1l6a_SET = 5;
+const int worker1_maxRetry_t1l6b_SET = 5;
+const int worker1_maxRetry_t1l7_SET = 5;
+const int worker1_maxRetry_t3l4_SET = 5;
+const int worker1_maxRetry_t3l7_SET = 5;
+const int worker1_maxRetry_t3l9_SET = 5;
+const int worker1_maxRetry_t3l9b_SET = 5;
+const int worker1_maxRetry_t3l8_SET = 5;
+const int worker1_maxRetry_t3l8b_SET = 5;
+const int worker2_maxRetry_t1l4_SET = 5;
+const int worker2_maxRetry_t1l6a_SET = 5;
+const int worker2_maxRetry_t1l6b_SET = 5;
+const int worker2_maxRetry_t1l7_SET = 5;
+const int worker2_maxRetry_t3l4_SET = 5;
+const int worker2_maxRetry_t3l7_SET = 5;
+const int worker2_maxRetry_t3l9_SET = 5;
+const int worker2_maxRetry_t3l9b_SET = 5;
+const int worker2_maxRetry_t3l8_SET = 5;
+const int worker2_maxRetry_t3l8b_SET = 5;
+const int r3_maxRetry_t2l5_SET = 10;
+const int r3_maxRetry_t2l8a_SET = 10;
+const int r3_maxRetry_t2l8b_SET = 10;
+const int r3_maxRetry_t2l8c_SET = 10;
+const int r3_maxRetry_t2l8d_SET = 10;
+const int r3_maxRetry_t3l4_SET = 10;
+const int r3_maxRetry_t3l7_SET = 10;
+const int r3_maxRetry_t3l9_SET = 10;
+const int r3_maxRetry_t3l9b_SET = 10;
+const int r3_maxRetry_t3l8_SET = 10;
+const int r3_maxRetry_t3l8b_SET = 10;
+const int r4_maxRetry_t2l5_SET = 10;
+const int r4_maxRetry_t2l8a_SET = 10;
+const int r4_maxRetry_t2l8b_SET = 10;
+const int r4_maxRetry_t2l8c_SET = 10;
+const int r4_maxRetry_t2l8d_SET = 10;
+const int r4_maxRetry_t3l4_SET = 10;
+const int r4_maxRetry_t3l7_SET = 10;
+const int r4_maxRetry_t3l9_SET = 10;
+const int r4_maxRetry_t3l9b_SET = 10;
+const int r4_maxRetry_t3l8_SET = 10;
+const int r4_maxRetry_t3l8b_SET = 10;
+const int r5_maxRetry_t2l5_SET = 10;
+const int r5_maxRetry_t2l8a_SET = 10;
+const int r5_maxRetry_t2l8b_SET = 10;
+const int r5_maxRetry_t2l8c_SET = 10;
+const int r5_maxRetry_t2l8d_SET = 10;
+const int r5_maxRetry_t3l4_SET = 10;
+const int r5_maxRetry_t3l7_SET = 10;
+const int r5_maxRetry_t3l9_SET = 10;
+const int r5_maxRetry_t3l9b_SET = 10;
+const int r5_maxRetry_t3l8_SET = 10;
+const int r5_maxRetry_t3l8b_SET = 10;
+// Cost
+const int worker1_cost_t1l4 = 3;
+const int worker1_cost_t1l6a = 3;
+const int worker1_cost_t1l6b = 3;
+const int worker1_cost_t1l7 = 3;
+const int worker1_cost_t3l4 = 5;
+const int worker1_cost_t3l7 = 5;
+const int worker1_cost_t3l9 = 5;
+const int worker1_cost_t3l9b = 5;
+const int worker1_cost_t3l8 = 5;
+const int worker1_cost_t3l8b = 5;
+const int worker2_cost_t1l4 = 3;
+const int worker2_cost_t1l6a = 3;
+const int worker2_cost_t1l6b = 3;
+const int worker2_cost_t1l7 = 3;
+const int worker2_cost_t3l4 = 5;
+const int worker2_cost_t3l7 = 5;
+const int worker2_cost_t3l9 = 5;
+const int worker2_cost_t3l9b = 5;
+const int worker2_cost_t3l8 = 5;
+const int worker2_cost_t3l8b = 5;
+const int r3_cost_t2l5 = 1;
+const int r3_cost_t2l8a = 1;
+const int r3_cost_t2l8b = 1;
+const int r3_cost_t2l8c = 1;
+const int r3_cost_t2l8d = 1;
+const int r3_cost_t3l4 = 1;
+const int r3_cost_t3l7 = 1;
+const int r3_cost_t3l9 = 1;
+const int r3_cost_t3l9b = 1;
+const int r3_cost_t3l8 = 1;
+const int r3_cost_t3l8b = 1;
+const int r4_cost_t2l5 = 1;
+const int r4_cost_t2l8a = 1;
+const int r4_cost_t2l8b = 1;
+const int r4_cost_t2l8c = 1;
+const int r4_cost_t2l8d = 1;
+const int r4_cost_t3l4 = 1;
+const int r4_cost_t3l7 = 1;
+const int r4_cost_t3l9 = 1;
+const int r4_cost_t3l9b = 1;
+const int r4_cost_t3l8 = 1;
+const int r4_cost_t3l8b = 1;
+const int r5_cost_t2l5 = 1;
+const int r5_cost_t2l8a = 1;
+const int r5_cost_t2l8b = 1;
+const int r5_cost_t2l8c = 1;
+const int r5_cost_t2l8d = 1;
+const int r5_cost_t3l4 = 1;
+const int r5_cost_t3l7 = 1;
+const int r5_cost_t3l9 = 1;
+const int r5_cost_t3l9b = 1;
+const int r5_cost_t3l8 = 1;
+const int r5_cost_t3l8b = 1;
+// Turn and retry selection
+module selectRetries
+  turn : [0..75] init 1; // turn =0 to 75: retry selection, turn=75: planning
+  worker1_maxRetry_t1l4 : [0..worker1_maxRetry_t1l4_SET] init 0;
+  worker1_maxRetry_t1l6a : [0..worker1_maxRetry_t1l6a_SET] init 0;
+  worker1_maxRetry_t1l6b : [0..worker1_maxRetry_t1l6b_SET] init 0;
+  worker1_maxRetry_t1l7 : [0..worker1_maxRetry_t1l7_SET] init 0;
+  worker1_maxRetry_t3l4 : [0..worker1_maxRetry_t3l4_SET] init 0;
+  worker1_maxRetry_t3l7 : [0..worker1_maxRetry_t3l7_SET] init 0;
+  worker1_maxRetry_t3l9 : [0..worker1_maxRetry_t3l9_SET] init 0;
+  worker1_maxRetry_t3l9b : [0..worker1_maxRetry_t3l9b_SET] init 0;
+  worker1_maxRetry_t3l8 : [0..worker1_maxRetry_t3l8_SET] init 0;
+  worker1_maxRetry_t3l8b : [0..worker1_maxRetry_t3l8b_SET] init 0;
+  worker2_maxRetry_t1l4 : [0..worker2_maxRetry_t1l4_SET] init 0;
+  worker2_maxRetry_t1l6a : [0..worker2_maxRetry_t1l6a_SET] init 0;
+  worker2_maxRetry_t1l6b : [0..worker2_maxRetry_t1l6b_SET] init 0;
+  worker2_maxRetry_t1l7 : [0..worker2_maxRetry_t1l7_SET] init 0;
+  worker2_maxRetry_t3l4 : [0..worker2_maxRetry_t3l4_SET] init 0;
+  worker2_maxRetry_t3l7 : [0..worker2_maxRetry_t3l7_SET] init 0;
+  worker2_maxRetry_t3l9 : [0..worker2_maxRetry_t3l9_SET] init 0;
+  worker2_maxRetry_t3l9b : [0..worker2_maxRetry_t3l9b_SET] init 0;
+  worker2_maxRetry_t3l8 : [0..worker2_maxRetry_t3l8_SET] init 0;
+  worker2_maxRetry_t3l8b : [0..worker2_maxRetry_t3l8b_SET] init 0;
+  r3_maxRetry_t2l5 : [0..r3_maxRetry_t2l5_SET] init 0;
+  r3_maxRetry_t2l8a : [0..r3_maxRetry_t2l8a_SET] init 0;
+  r3_maxRetry_t2l8b : [0..r3_maxRetry_t2l8b_SET] init 0;
+  r3_maxRetry_t2l8c : [0..r3_maxRetry_t2l8c_SET] init 0;
+  r3_maxRetry_t2l8d : [0..r3_maxRetry_t2l8d_SET] init 0;
+  r3_maxRetry_t3l4 : [0..r3_maxRetry_t3l4_SET] init 0;
+  r3_maxRetry_t3l7 : [0..r3_maxRetry_t3l7_SET] init 0;
+  r3_maxRetry_t3l9 : [0..r3_maxRetry_t3l9_SET] init 0;
+  r3_maxRetry_t3l9b : [0..r3_maxRetry_t3l9b_SET] init 0;
+  r3_maxRetry_t3l8 : [0..r3_maxRetry_t3l8_SET] init 0;
+  r3_maxRetry_t3l8b : [0..r3_maxRetry_t3l8b_SET] init 0;
+  r4_maxRetry_t2l5 : [0..r4_maxRetry_t2l5_SET] init 0;
+  r4_maxRetry_t2l8a : [0..r4_maxRetry_t2l8a_SET] init 0;
+  r4_maxRetry_t2l8b : [0..r4_maxRetry_t2l8b_SET] init 0;
+  r4_maxRetry_t2l8c : [0..r4_maxRetry_t2l8c_SET] init 0;
+  r4_maxRetry_t2l8d : [0..r4_maxRetry_t2l8d_SET] init 0;
+  r4_maxRetry_t3l4 : [0..r4_maxRetry_t3l4_SET] init 0;
+  r4_maxRetry_t3l7 : [0..r4_maxRetry_t3l7_SET] init 0;
+  r4_maxRetry_t3l9 : [0..r4_maxRetry_t3l9_SET] init 0;
+  r4_maxRetry_t3l9b : [0..r4_maxRetry_t3l9b_SET] init 0;
+  r4_maxRetry_t3l8 : [0..r4_maxRetry_t3l8_SET] init 0;
+  r4_maxRetry_t3l8b : [0..r4_maxRetry_t3l8b_SET] init 0;
+  r5_maxRetry_t2l5 : [0..r5_maxRetry_t2l5_SET] init 0;
+  r5_maxRetry_t2l8a : [0..r5_maxRetry_t2l8a_SET] init 0;
+  r5_maxRetry_t2l8b : [0..r5_maxRetry_t2l8b_SET] init 0;
+  r5_maxRetry_t2l8c : [0..r5_maxRetry_t2l8c_SET] init 0;
+  r5_maxRetry_t2l8d : [0..r5_maxRetry_t2l8d_SET] init 0;
+  r5_maxRetry_t3l4 : [0..r5_maxRetry_t3l4_SET] init 0;
+  r5_maxRetry_t3l7 : [0..r5_maxRetry_t3l7_SET] init 0;
+  r5_maxRetry_t3l9 : [0..r5_maxRetry_t3l9_SET] init 0;
+  r5_maxRetry_t3l9b : [0..r5_maxRetry_t3l9b_SET] init 0;
+  r5_maxRetry_t3l8 : [0..r5_maxRetry_t3l8_SET] init 0;
+  r5_maxRetry_t3l8b : [0..r5_maxRetry_t3l8b_SET] init 0;
+  worker1Alloct1l4:bool init false;
+  worker1Alloct1l6a:bool init false;
+  worker1Alloct1l6b:bool init false;
+  worker1Alloct1l7:bool init false;
+  worker1Alloct3l4:bool init false;
+  worker1Alloct3l7:bool init false;
+  worker1Alloct3l9:bool init false;
+  worker1Alloct3l9b:bool init false;
+  worker1Alloct3l8:bool init false;
+  worker1Alloct3l8b:bool init false;
+  worker2Alloct1l4:bool init false;
+  worker2Alloct1l6a:bool init false;
+  worker2Alloct1l6b:bool init false;
+  worker2Alloct1l7:bool init false;
+  worker2Alloct3l4:bool init false;
+  worker2Alloct3l7:bool init false;
+  worker2Alloct3l9:bool init false;
+  worker2Alloct3l9b:bool init false;
+  worker2Alloct3l8:bool init false;
+  worker2Alloct3l8b:bool init false;
+  r3Alloct2l5:bool init false;
+  r3Alloct2l8a:bool init false;
+  r3Alloct2l8b:bool init false;
+  r3Alloct2l8c:bool init false;
+  r3Alloct2l8d:bool init false;
+  r3Alloct3l4:bool init false;
+  r3Alloct3l7:bool init false;
+  r3Alloct3l9:bool init false;
+  r3Alloct3l9b:bool init false;
+  r3Alloct3l8:bool init false;
+  r3Alloct3l8b:bool init false;
+  r4Alloct2l5:bool init false;
+  r4Alloct2l8a:bool init false;
+  r4Alloct2l8b:bool init false;
+  r4Alloct2l8c:bool init false;
+  r4Alloct2l8d:bool init false;
+  r4Alloct3l4:bool init false;
+  r4Alloct3l7:bool init false;
+  r4Alloct3l9:bool init false;
+  r4Alloct3l9b:bool init false;
+  r4Alloct3l8:bool init false;
+  r4Alloct3l8b:bool init false;
+  r5Alloct2l5:bool init false;
+  r5Alloct2l8a:bool init false;
+  r5Alloct2l8b:bool init false;
+  r5Alloct2l8c:bool init false;
+  r5Alloct2l8d:bool init false;
+  r5Alloct3l4:bool init false;
+  r5Alloct3l7:bool init false;
+  r5Alloct3l9:bool init false;
+  r5Alloct3l9b:bool init false;
+  r5Alloct3l8:bool init false;
+  r5Alloct3l8b:bool init false;
+  [selectRetriesworker1t1l4_1] turn=0 -> 1:(worker1_maxRetry_t1l4'= 1) & (worker1Alloct1l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l4_2] turn=0 -> 1:(worker1_maxRetry_t1l4'= 2) & (worker1Alloct1l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l4_3] turn=0 -> 1:(worker1_maxRetry_t1l4'= 3) & (worker1Alloct1l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l4_4] turn=0 -> 1:(worker1_maxRetry_t1l4'= 4) & (worker1Alloct1l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l4_5] turn=0 -> 1:(worker1_maxRetry_t1l4'= 5) & (worker1Alloct1l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l6a_1] turn=1 -> 1:(worker1_maxRetry_t1l6a'= 1) & (worker1Alloct1l6a'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l6a_2] turn=1 -> 1:(worker1_maxRetry_t1l6a'= 2) & (worker1Alloct1l6a'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l6a_3] turn=1 -> 1:(worker1_maxRetry_t1l6a'= 3) & (worker1Alloct1l6a'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l6a_4] turn=1 -> 1:(worker1_maxRetry_t1l6a'= 4) & (worker1Alloct1l6a'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l6a_5] turn=1 -> 1:(worker1_maxRetry_t1l6a'= 5) & (worker1Alloct1l6a'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l6b_1] turn=2 -> 1:(worker1_maxRetry_t1l6b'= 1) & (worker1Alloct1l6b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l6b_2] turn=2 -> 1:(worker1_maxRetry_t1l6b'= 2) & (worker1Alloct1l6b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l6b_3] turn=2 -> 1:(worker1_maxRetry_t1l6b'= 3) & (worker1Alloct1l6b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l6b_4] turn=2 -> 1:(worker1_maxRetry_t1l6b'= 4) & (worker1Alloct1l6b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l6b_5] turn=2 -> 1:(worker1_maxRetry_t1l6b'= 5) & (worker1Alloct1l6b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l7_1] turn=3 -> 1:(worker1_maxRetry_t1l7'= 1) & (worker1Alloct1l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l7_2] turn=3 -> 1:(worker1_maxRetry_t1l7'= 2) & (worker1Alloct1l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l7_3] turn=3 -> 1:(worker1_maxRetry_t1l7'= 3) & (worker1Alloct1l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l7_4] turn=3 -> 1:(worker1_maxRetry_t1l7'= 4) & (worker1Alloct1l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t1l7_5] turn=3 -> 1:(worker1_maxRetry_t1l7'= 5) & (worker1Alloct1l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l4_1] turn=4 -> 1:(worker1_maxRetry_t3l4'= 1) & (worker1Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l4_2] turn=4 -> 1:(worker1_maxRetry_t3l4'= 2) & (worker1Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l4_3] turn=4 -> 1:(worker1_maxRetry_t3l4'= 3) & (worker1Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l4_4] turn=4 -> 1:(worker1_maxRetry_t3l4'= 4) & (worker1Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l4_5] turn=4 -> 1:(worker1_maxRetry_t3l4'= 5) & (worker1Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l7_1] turn=5 -> 1:(worker1_maxRetry_t3l7'= 1) & (worker1Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l7_2] turn=5 -> 1:(worker1_maxRetry_t3l7'= 2) & (worker1Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l7_3] turn=5 -> 1:(worker1_maxRetry_t3l7'= 3) & (worker1Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l7_4] turn=5 -> 1:(worker1_maxRetry_t3l7'= 4) & (worker1Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l7_5] turn=5 -> 1:(worker1_maxRetry_t3l7'= 5) & (worker1Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9_1] turn=6 -> 1:(worker1_maxRetry_t3l9'= 1) & (worker1Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9_2] turn=6 -> 1:(worker1_maxRetry_t3l9'= 2) & (worker1Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9_3] turn=6 -> 1:(worker1_maxRetry_t3l9'= 3) & (worker1Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9_4] turn=6 -> 1:(worker1_maxRetry_t3l9'= 4) & (worker1Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9_5] turn=6 -> 1:(worker1_maxRetry_t3l9'= 5) & (worker1Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9b_1] turn=7 -> 1:(worker1_maxRetry_t3l9b'= 1) & (worker1Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9b_2] turn=7 -> 1:(worker1_maxRetry_t3l9b'= 2) & (worker1Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9b_3] turn=7 -> 1:(worker1_maxRetry_t3l9b'= 3) & (worker1Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9b_4] turn=7 -> 1:(worker1_maxRetry_t3l9b'= 4) & (worker1Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l9b_5] turn=7 -> 1:(worker1_maxRetry_t3l9b'= 5) & (worker1Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l8_1] turn=8 -> 1:(worker1_maxRetry_t3l8'= 1) & (worker1Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l8_2] turn=8 -> 1:(worker1_maxRetry_t3l8'= 2) & (worker1Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l8_3] turn=8 -> 1:(worker1_maxRetry_t3l8'= 3) & (worker1Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l8_4] turn=8 -> 1:(worker1_maxRetry_t3l8'= 4) & (worker1Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l8_5] turn=8 -> 1:(worker1_maxRetry_t3l8'= 5) & (worker1Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l8b_1] turn=9 -> 1:(worker1_maxRetry_t3l8b'= 1) & (worker1Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l8b_2] turn=9 -> 1:(worker1_maxRetry_t3l8b'= 2) & (worker1Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l8b_3] turn=9 -> 1:(worker1_maxRetry_t3l8b'= 3) & (worker1Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l8b_4] turn=9 -> 1:(worker1_maxRetry_t3l8b'= 4) & (worker1Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesworker1t3l8b_5] turn=9 -> 1:(worker1_maxRetry_t3l8b'= 5) & (worker1Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l4_1] turn=10 -> 1:(worker2_maxRetry_t1l4'= 1) & (worker2Alloct1l4'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l4_2] turn=10 -> 1:(worker2_maxRetry_t1l4'= 2) & (worker2Alloct1l4'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l4_3] turn=10 -> 1:(worker2_maxRetry_t1l4'= 3) & (worker2Alloct1l4'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l4_4] turn=10 -> 1:(worker2_maxRetry_t1l4'= 4) & (worker2Alloct1l4'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l4_5] turn=10 -> 1:(worker2_maxRetry_t1l4'= 5) & (worker2Alloct1l4'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l6a_1] turn=11 -> 1:(worker2_maxRetry_t1l6a'= 1) & (worker2Alloct1l6a'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l6a_2] turn=11 -> 1:(worker2_maxRetry_t1l6a'= 2) & (worker2Alloct1l6a'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l6a_3] turn=11 -> 1:(worker2_maxRetry_t1l6a'= 3) & (worker2Alloct1l6a'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l6a_4] turn=11 -> 1:(worker2_maxRetry_t1l6a'= 4) & (worker2Alloct1l6a'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l6a_5] turn=11 -> 1:(worker2_maxRetry_t1l6a'= 5) & (worker2Alloct1l6a'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l6b_1] turn=12 -> 1:(worker2_maxRetry_t1l6b'= 1) & (worker2Alloct1l6b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l6b_2] turn=12 -> 1:(worker2_maxRetry_t1l6b'= 2) & (worker2Alloct1l6b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l6b_3] turn=12 -> 1:(worker2_maxRetry_t1l6b'= 3) & (worker2Alloct1l6b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l6b_4] turn=12 -> 1:(worker2_maxRetry_t1l6b'= 4) & (worker2Alloct1l6b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l6b_5] turn=12 -> 1:(worker2_maxRetry_t1l6b'= 5) & (worker2Alloct1l6b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l7_1] turn=13 -> 1:(worker2_maxRetry_t1l7'= 1) & (worker2Alloct1l7'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l7_2] turn=13 -> 1:(worker2_maxRetry_t1l7'= 2) & (worker2Alloct1l7'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l7_3] turn=13 -> 1:(worker2_maxRetry_t1l7'= 3) & (worker2Alloct1l7'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l7_4] turn=13 -> 1:(worker2_maxRetry_t1l7'= 4) & (worker2Alloct1l7'=true) & (turn'=turn+1);
+  [selectRetriesworker2t1l7_5] turn=13 -> 1:(worker2_maxRetry_t1l7'= 5) & (worker2Alloct1l7'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l4_1] turn=14 -> 1:(worker2_maxRetry_t3l4'= 1) & (worker2Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l4_2] turn=14 -> 1:(worker2_maxRetry_t3l4'= 2) & (worker2Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l4_3] turn=14 -> 1:(worker2_maxRetry_t3l4'= 3) & (worker2Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l4_4] turn=14 -> 1:(worker2_maxRetry_t3l4'= 4) & (worker2Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l4_5] turn=14 -> 1:(worker2_maxRetry_t3l4'= 5) & (worker2Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l7_1] turn=15 -> 1:(worker2_maxRetry_t3l7'= 1) & (worker2Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l7_2] turn=15 -> 1:(worker2_maxRetry_t3l7'= 2) & (worker2Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l7_3] turn=15 -> 1:(worker2_maxRetry_t3l7'= 3) & (worker2Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l7_4] turn=15 -> 1:(worker2_maxRetry_t3l7'= 4) & (worker2Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l7_5] turn=15 -> 1:(worker2_maxRetry_t3l7'= 5) & (worker2Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l9_1] turn=16 -> 1:(worker2_maxRetry_t3l9'= 1) & (worker2Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l9_2] turn=16 -> 1:(worker2_maxRetry_t3l9'= 2) & (worker2Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l9_3] turn=16 -> 1:(worker2_maxRetry_t3l9'= 3) & (worker2Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l9_4] turn=16 -> 1:(worker2_maxRetry_t3l9'= 4) & (worker2Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l9_5] turn=16 -> 1:(worker2_maxRetry_t3l9'= 5) & (worker2Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l9b_1] turn=17 -> 1:(worker2_maxRetry_t3l9b'= 1) & (worker2Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l9b_2] turn=17 -> 1:(worker2_maxRetry_t3l9b'= 2) & (worker2Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l9b_3] turn=17 -> 1:(worker2_maxRetry_t3l9b'= 3) & (worker2Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l9b_4] turn=17 -> 1:(worker2_maxRetry_t3l9b'= 4) & (worker2Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l9b_5] turn=17 -> 1:(worker2_maxRetry_t3l9b'= 5) & (worker2Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l8_1] turn=18 -> 1:(worker2_maxRetry_t3l8'= 1) & (worker2Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l8_2] turn=18 -> 1:(worker2_maxRetry_t3l8'= 2) & (worker2Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l8_3] turn=18 -> 1:(worker2_maxRetry_t3l8'= 3) & (worker2Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l8_4] turn=18 -> 1:(worker2_maxRetry_t3l8'= 4) & (worker2Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l8_5] turn=18 -> 1:(worker2_maxRetry_t3l8'= 5) & (worker2Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l8b_1] turn=19 -> 1:(worker2_maxRetry_t3l8b'= 1) & (worker2Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l8b_2] turn=19 -> 1:(worker2_maxRetry_t3l8b'= 2) & (worker2Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l8b_3] turn=19 -> 1:(worker2_maxRetry_t3l8b'= 3) & (worker2Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l8b_4] turn=19 -> 1:(worker2_maxRetry_t3l8b'= 4) & (worker2Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesworker2t3l8b_5] turn=19 -> 1:(worker2_maxRetry_t3l8b'= 5) & (worker2Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l5_1] turn=20 -> 1:(r3_maxRetry_t2l5'= 1) & (r3Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l5_2] turn=20 -> 1:(r3_maxRetry_t2l5'= 2) & (r3Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l5_3] turn=20 -> 1:(r3_maxRetry_t2l5'= 3) & (r3Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l5_4] turn=20 -> 1:(r3_maxRetry_t2l5'= 4) & (r3Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l5_5] turn=20 -> 1:(r3_maxRetry_t2l5'= 5) & (r3Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l5_6] turn=20 -> 1:(r3_maxRetry_t2l5'= 6) & (r3Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l5_7] turn=20 -> 1:(r3_maxRetry_t2l5'= 7) & (r3Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l5_8] turn=20 -> 1:(r3_maxRetry_t2l5'= 8) & (r3Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l5_9] turn=20 -> 1:(r3_maxRetry_t2l5'= 9) & (r3Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l5_10] turn=20 -> 1:(r3_maxRetry_t2l5'= 10) & (r3Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8a_1] turn=21 -> 1:(r3_maxRetry_t2l8a'= 1) & (r3Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8a_2] turn=21 -> 1:(r3_maxRetry_t2l8a'= 2) & (r3Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8a_3] turn=21 -> 1:(r3_maxRetry_t2l8a'= 3) & (r3Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8a_4] turn=21 -> 1:(r3_maxRetry_t2l8a'= 4) & (r3Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8a_5] turn=21 -> 1:(r3_maxRetry_t2l8a'= 5) & (r3Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8a_6] turn=21 -> 1:(r3_maxRetry_t2l8a'= 6) & (r3Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8a_7] turn=21 -> 1:(r3_maxRetry_t2l8a'= 7) & (r3Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8a_8] turn=21 -> 1:(r3_maxRetry_t2l8a'= 8) & (r3Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8a_9] turn=21 -> 1:(r3_maxRetry_t2l8a'= 9) & (r3Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8a_10] turn=21 -> 1:(r3_maxRetry_t2l8a'= 10) & (r3Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8b_1] turn=22 -> 1:(r3_maxRetry_t2l8b'= 1) & (r3Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8b_2] turn=22 -> 1:(r3_maxRetry_t2l8b'= 2) & (r3Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8b_3] turn=22 -> 1:(r3_maxRetry_t2l8b'= 3) & (r3Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8b_4] turn=22 -> 1:(r3_maxRetry_t2l8b'= 4) & (r3Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8b_5] turn=22 -> 1:(r3_maxRetry_t2l8b'= 5) & (r3Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8b_6] turn=22 -> 1:(r3_maxRetry_t2l8b'= 6) & (r3Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8b_7] turn=22 -> 1:(r3_maxRetry_t2l8b'= 7) & (r3Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8b_8] turn=22 -> 1:(r3_maxRetry_t2l8b'= 8) & (r3Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8b_9] turn=22 -> 1:(r3_maxRetry_t2l8b'= 9) & (r3Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8b_10] turn=22 -> 1:(r3_maxRetry_t2l8b'= 10) & (r3Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8c_1] turn=23 -> 1:(r3_maxRetry_t2l8c'= 1) & (r3Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8c_2] turn=23 -> 1:(r3_maxRetry_t2l8c'= 2) & (r3Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8c_3] turn=23 -> 1:(r3_maxRetry_t2l8c'= 3) & (r3Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8c_4] turn=23 -> 1:(r3_maxRetry_t2l8c'= 4) & (r3Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8c_5] turn=23 -> 1:(r3_maxRetry_t2l8c'= 5) & (r3Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8c_6] turn=23 -> 1:(r3_maxRetry_t2l8c'= 6) & (r3Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8c_7] turn=23 -> 1:(r3_maxRetry_t2l8c'= 7) & (r3Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8c_8] turn=23 -> 1:(r3_maxRetry_t2l8c'= 8) & (r3Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8c_9] turn=23 -> 1:(r3_maxRetry_t2l8c'= 9) & (r3Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8c_10] turn=23 -> 1:(r3_maxRetry_t2l8c'= 10) & (r3Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8d_1] turn=24 -> 1:(r3_maxRetry_t2l8d'= 1) & (r3Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8d_2] turn=24 -> 1:(r3_maxRetry_t2l8d'= 2) & (r3Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8d_3] turn=24 -> 1:(r3_maxRetry_t2l8d'= 3) & (r3Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8d_4] turn=24 -> 1:(r3_maxRetry_t2l8d'= 4) & (r3Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8d_5] turn=24 -> 1:(r3_maxRetry_t2l8d'= 5) & (r3Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8d_6] turn=24 -> 1:(r3_maxRetry_t2l8d'= 6) & (r3Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8d_7] turn=24 -> 1:(r3_maxRetry_t2l8d'= 7) & (r3Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8d_8] turn=24 -> 1:(r3_maxRetry_t2l8d'= 8) & (r3Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8d_9] turn=24 -> 1:(r3_maxRetry_t2l8d'= 9) & (r3Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr3t2l8d_10] turn=24 -> 1:(r3_maxRetry_t2l8d'= 10) & (r3Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l4_1] turn=25 -> 1:(r3_maxRetry_t3l4'= 1) & (r3Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l4_2] turn=25 -> 1:(r3_maxRetry_t3l4'= 2) & (r3Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l4_3] turn=25 -> 1:(r3_maxRetry_t3l4'= 3) & (r3Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l4_4] turn=25 -> 1:(r3_maxRetry_t3l4'= 4) & (r3Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l4_5] turn=25 -> 1:(r3_maxRetry_t3l4'= 5) & (r3Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l4_6] turn=25 -> 1:(r3_maxRetry_t3l4'= 6) & (r3Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l4_7] turn=25 -> 1:(r3_maxRetry_t3l4'= 7) & (r3Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l4_8] turn=25 -> 1:(r3_maxRetry_t3l4'= 8) & (r3Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l4_9] turn=25 -> 1:(r3_maxRetry_t3l4'= 9) & (r3Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l4_10] turn=25 -> 1:(r3_maxRetry_t3l4'= 10) & (r3Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l7_1] turn=26 -> 1:(r3_maxRetry_t3l7'= 1) & (r3Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l7_2] turn=26 -> 1:(r3_maxRetry_t3l7'= 2) & (r3Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l7_3] turn=26 -> 1:(r3_maxRetry_t3l7'= 3) & (r3Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l7_4] turn=26 -> 1:(r3_maxRetry_t3l7'= 4) & (r3Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l7_5] turn=26 -> 1:(r3_maxRetry_t3l7'= 5) & (r3Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l7_6] turn=26 -> 1:(r3_maxRetry_t3l7'= 6) & (r3Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l7_7] turn=26 -> 1:(r3_maxRetry_t3l7'= 7) & (r3Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l7_8] turn=26 -> 1:(r3_maxRetry_t3l7'= 8) & (r3Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l7_9] turn=26 -> 1:(r3_maxRetry_t3l7'= 9) & (r3Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l7_10] turn=26 -> 1:(r3_maxRetry_t3l7'= 10) & (r3Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9_1] turn=27 -> 1:(r3_maxRetry_t3l9'= 1) & (r3Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9_2] turn=27 -> 1:(r3_maxRetry_t3l9'= 2) & (r3Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9_3] turn=27 -> 1:(r3_maxRetry_t3l9'= 3) & (r3Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9_4] turn=27 -> 1:(r3_maxRetry_t3l9'= 4) & (r3Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9_5] turn=27 -> 1:(r3_maxRetry_t3l9'= 5) & (r3Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9_6] turn=27 -> 1:(r3_maxRetry_t3l9'= 6) & (r3Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9_7] turn=27 -> 1:(r3_maxRetry_t3l9'= 7) & (r3Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9_8] turn=27 -> 1:(r3_maxRetry_t3l9'= 8) & (r3Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9_9] turn=27 -> 1:(r3_maxRetry_t3l9'= 9) & (r3Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9_10] turn=27 -> 1:(r3_maxRetry_t3l9'= 10) & (r3Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9b_1] turn=28 -> 1:(r3_maxRetry_t3l9b'= 1) & (r3Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9b_2] turn=28 -> 1:(r3_maxRetry_t3l9b'= 2) & (r3Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9b_3] turn=28 -> 1:(r3_maxRetry_t3l9b'= 3) & (r3Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9b_4] turn=28 -> 1:(r3_maxRetry_t3l9b'= 4) & (r3Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9b_5] turn=28 -> 1:(r3_maxRetry_t3l9b'= 5) & (r3Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9b_6] turn=28 -> 1:(r3_maxRetry_t3l9b'= 6) & (r3Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9b_7] turn=28 -> 1:(r3_maxRetry_t3l9b'= 7) & (r3Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9b_8] turn=28 -> 1:(r3_maxRetry_t3l9b'= 8) & (r3Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9b_9] turn=28 -> 1:(r3_maxRetry_t3l9b'= 9) & (r3Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l9b_10] turn=28 -> 1:(r3_maxRetry_t3l9b'= 10) & (r3Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8_1] turn=29 -> 1:(r3_maxRetry_t3l8'= 1) & (r3Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8_2] turn=29 -> 1:(r3_maxRetry_t3l8'= 2) & (r3Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8_3] turn=29 -> 1:(r3_maxRetry_t3l8'= 3) & (r3Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8_4] turn=29 -> 1:(r3_maxRetry_t3l8'= 4) & (r3Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8_5] turn=29 -> 1:(r3_maxRetry_t3l8'= 5) & (r3Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8_6] turn=29 -> 1:(r3_maxRetry_t3l8'= 6) & (r3Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8_7] turn=29 -> 1:(r3_maxRetry_t3l8'= 7) & (r3Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8_8] turn=29 -> 1:(r3_maxRetry_t3l8'= 8) & (r3Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8_9] turn=29 -> 1:(r3_maxRetry_t3l8'= 9) & (r3Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8_10] turn=29 -> 1:(r3_maxRetry_t3l8'= 10) & (r3Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8b_1] turn=30 -> 1:(r3_maxRetry_t3l8b'= 1) & (r3Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8b_2] turn=30 -> 1:(r3_maxRetry_t3l8b'= 2) & (r3Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8b_3] turn=30 -> 1:(r3_maxRetry_t3l8b'= 3) & (r3Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8b_4] turn=30 -> 1:(r3_maxRetry_t3l8b'= 4) & (r3Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8b_5] turn=30 -> 1:(r3_maxRetry_t3l8b'= 5) & (r3Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8b_6] turn=30 -> 1:(r3_maxRetry_t3l8b'= 6) & (r3Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8b_7] turn=30 -> 1:(r3_maxRetry_t3l8b'= 7) & (r3Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8b_8] turn=30 -> 1:(r3_maxRetry_t3l8b'= 8) & (r3Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8b_9] turn=30 -> 1:(r3_maxRetry_t3l8b'= 9) & (r3Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr3t3l8b_10] turn=30 -> 1:(r3_maxRetry_t3l8b'= 10) & (r3Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l5_1] turn=31 -> 1:(r4_maxRetry_t2l5'= 1) & (r4Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l5_2] turn=31 -> 1:(r4_maxRetry_t2l5'= 2) & (r4Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l5_3] turn=31 -> 1:(r4_maxRetry_t2l5'= 3) & (r4Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l5_4] turn=31 -> 1:(r4_maxRetry_t2l5'= 4) & (r4Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l5_5] turn=31 -> 1:(r4_maxRetry_t2l5'= 5) & (r4Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l5_6] turn=31 -> 1:(r4_maxRetry_t2l5'= 6) & (r4Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l5_7] turn=31 -> 1:(r4_maxRetry_t2l5'= 7) & (r4Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l5_8] turn=31 -> 1:(r4_maxRetry_t2l5'= 8) & (r4Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l5_9] turn=31 -> 1:(r4_maxRetry_t2l5'= 9) & (r4Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l5_10] turn=31 -> 1:(r4_maxRetry_t2l5'= 10) & (r4Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8a_1] turn=32 -> 1:(r4_maxRetry_t2l8a'= 1) & (r4Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8a_2] turn=32 -> 1:(r4_maxRetry_t2l8a'= 2) & (r4Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8a_3] turn=32 -> 1:(r4_maxRetry_t2l8a'= 3) & (r4Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8a_4] turn=32 -> 1:(r4_maxRetry_t2l8a'= 4) & (r4Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8a_5] turn=32 -> 1:(r4_maxRetry_t2l8a'= 5) & (r4Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8a_6] turn=32 -> 1:(r4_maxRetry_t2l8a'= 6) & (r4Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8a_7] turn=32 -> 1:(r4_maxRetry_t2l8a'= 7) & (r4Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8a_8] turn=32 -> 1:(r4_maxRetry_t2l8a'= 8) & (r4Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8a_9] turn=32 -> 1:(r4_maxRetry_t2l8a'= 9) & (r4Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8a_10] turn=32 -> 1:(r4_maxRetry_t2l8a'= 10) & (r4Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8b_1] turn=33 -> 1:(r4_maxRetry_t2l8b'= 1) & (r4Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8b_2] turn=33 -> 1:(r4_maxRetry_t2l8b'= 2) & (r4Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8b_3] turn=33 -> 1:(r4_maxRetry_t2l8b'= 3) & (r4Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8b_4] turn=33 -> 1:(r4_maxRetry_t2l8b'= 4) & (r4Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8b_5] turn=33 -> 1:(r4_maxRetry_t2l8b'= 5) & (r4Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8b_6] turn=33 -> 1:(r4_maxRetry_t2l8b'= 6) & (r4Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8b_7] turn=33 -> 1:(r4_maxRetry_t2l8b'= 7) & (r4Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8b_8] turn=33 -> 1:(r4_maxRetry_t2l8b'= 8) & (r4Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8b_9] turn=33 -> 1:(r4_maxRetry_t2l8b'= 9) & (r4Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8b_10] turn=33 -> 1:(r4_maxRetry_t2l8b'= 10) & (r4Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8c_1] turn=34 -> 1:(r4_maxRetry_t2l8c'= 1) & (r4Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8c_2] turn=34 -> 1:(r4_maxRetry_t2l8c'= 2) & (r4Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8c_3] turn=34 -> 1:(r4_maxRetry_t2l8c'= 3) & (r4Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8c_4] turn=34 -> 1:(r4_maxRetry_t2l8c'= 4) & (r4Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8c_5] turn=34 -> 1:(r4_maxRetry_t2l8c'= 5) & (r4Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8c_6] turn=34 -> 1:(r4_maxRetry_t2l8c'= 6) & (r4Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8c_7] turn=34 -> 1:(r4_maxRetry_t2l8c'= 7) & (r4Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8c_8] turn=34 -> 1:(r4_maxRetry_t2l8c'= 8) & (r4Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8c_9] turn=34 -> 1:(r4_maxRetry_t2l8c'= 9) & (r4Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8c_10] turn=34 -> 1:(r4_maxRetry_t2l8c'= 10) & (r4Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8d_1] turn=35 -> 1:(r4_maxRetry_t2l8d'= 1) & (r4Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8d_2] turn=35 -> 1:(r4_maxRetry_t2l8d'= 2) & (r4Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8d_3] turn=35 -> 1:(r4_maxRetry_t2l8d'= 3) & (r4Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8d_4] turn=35 -> 1:(r4_maxRetry_t2l8d'= 4) & (r4Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8d_5] turn=35 -> 1:(r4_maxRetry_t2l8d'= 5) & (r4Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8d_6] turn=35 -> 1:(r4_maxRetry_t2l8d'= 6) & (r4Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8d_7] turn=35 -> 1:(r4_maxRetry_t2l8d'= 7) & (r4Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8d_8] turn=35 -> 1:(r4_maxRetry_t2l8d'= 8) & (r4Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8d_9] turn=35 -> 1:(r4_maxRetry_t2l8d'= 9) & (r4Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr4t2l8d_10] turn=35 -> 1:(r4_maxRetry_t2l8d'= 10) & (r4Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l4_1] turn=36 -> 1:(r4_maxRetry_t3l4'= 1) & (r4Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l4_2] turn=36 -> 1:(r4_maxRetry_t3l4'= 2) & (r4Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l4_3] turn=36 -> 1:(r4_maxRetry_t3l4'= 3) & (r4Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l4_4] turn=36 -> 1:(r4_maxRetry_t3l4'= 4) & (r4Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l4_5] turn=36 -> 1:(r4_maxRetry_t3l4'= 5) & (r4Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l4_6] turn=36 -> 1:(r4_maxRetry_t3l4'= 6) & (r4Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l4_7] turn=36 -> 1:(r4_maxRetry_t3l4'= 7) & (r4Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l4_8] turn=36 -> 1:(r4_maxRetry_t3l4'= 8) & (r4Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l4_9] turn=36 -> 1:(r4_maxRetry_t3l4'= 9) & (r4Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l4_10] turn=36 -> 1:(r4_maxRetry_t3l4'= 10) & (r4Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l7_1] turn=37 -> 1:(r4_maxRetry_t3l7'= 1) & (r4Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l7_2] turn=37 -> 1:(r4_maxRetry_t3l7'= 2) & (r4Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l7_3] turn=37 -> 1:(r4_maxRetry_t3l7'= 3) & (r4Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l7_4] turn=37 -> 1:(r4_maxRetry_t3l7'= 4) & (r4Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l7_5] turn=37 -> 1:(r4_maxRetry_t3l7'= 5) & (r4Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l7_6] turn=37 -> 1:(r4_maxRetry_t3l7'= 6) & (r4Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l7_7] turn=37 -> 1:(r4_maxRetry_t3l7'= 7) & (r4Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l7_8] turn=37 -> 1:(r4_maxRetry_t3l7'= 8) & (r4Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l7_9] turn=37 -> 1:(r4_maxRetry_t3l7'= 9) & (r4Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l7_10] turn=37 -> 1:(r4_maxRetry_t3l7'= 10) & (r4Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9_1] turn=38 -> 1:(r4_maxRetry_t3l9'= 1) & (r4Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9_2] turn=38 -> 1:(r4_maxRetry_t3l9'= 2) & (r4Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9_3] turn=38 -> 1:(r4_maxRetry_t3l9'= 3) & (r4Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9_4] turn=38 -> 1:(r4_maxRetry_t3l9'= 4) & (r4Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9_5] turn=38 -> 1:(r4_maxRetry_t3l9'= 5) & (r4Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9_6] turn=38 -> 1:(r4_maxRetry_t3l9'= 6) & (r4Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9_7] turn=38 -> 1:(r4_maxRetry_t3l9'= 7) & (r4Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9_8] turn=38 -> 1:(r4_maxRetry_t3l9'= 8) & (r4Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9_9] turn=38 -> 1:(r4_maxRetry_t3l9'= 9) & (r4Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9_10] turn=38 -> 1:(r4_maxRetry_t3l9'= 10) & (r4Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9b_1] turn=39 -> 1:(r4_maxRetry_t3l9b'= 1) & (r4Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9b_2] turn=39 -> 1:(r4_maxRetry_t3l9b'= 2) & (r4Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9b_3] turn=39 -> 1:(r4_maxRetry_t3l9b'= 3) & (r4Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9b_4] turn=39 -> 1:(r4_maxRetry_t3l9b'= 4) & (r4Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9b_5] turn=39 -> 1:(r4_maxRetry_t3l9b'= 5) & (r4Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9b_6] turn=39 -> 1:(r4_maxRetry_t3l9b'= 6) & (r4Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9b_7] turn=39 -> 1:(r4_maxRetry_t3l9b'= 7) & (r4Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9b_8] turn=39 -> 1:(r4_maxRetry_t3l9b'= 8) & (r4Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9b_9] turn=39 -> 1:(r4_maxRetry_t3l9b'= 9) & (r4Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l9b_10] turn=39 -> 1:(r4_maxRetry_t3l9b'= 10) & (r4Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8_1] turn=40 -> 1:(r4_maxRetry_t3l8'= 1) & (r4Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8_2] turn=40 -> 1:(r4_maxRetry_t3l8'= 2) & (r4Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8_3] turn=40 -> 1:(r4_maxRetry_t3l8'= 3) & (r4Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8_4] turn=40 -> 1:(r4_maxRetry_t3l8'= 4) & (r4Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8_5] turn=40 -> 1:(r4_maxRetry_t3l8'= 5) & (r4Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8_6] turn=40 -> 1:(r4_maxRetry_t3l8'= 6) & (r4Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8_7] turn=40 -> 1:(r4_maxRetry_t3l8'= 7) & (r4Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8_8] turn=40 -> 1:(r4_maxRetry_t3l8'= 8) & (r4Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8_9] turn=40 -> 1:(r4_maxRetry_t3l8'= 9) & (r4Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8_10] turn=40 -> 1:(r4_maxRetry_t3l8'= 10) & (r4Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8b_1] turn=41 -> 1:(r4_maxRetry_t3l8b'= 1) & (r4Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8b_2] turn=41 -> 1:(r4_maxRetry_t3l8b'= 2) & (r4Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8b_3] turn=41 -> 1:(r4_maxRetry_t3l8b'= 3) & (r4Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8b_4] turn=41 -> 1:(r4_maxRetry_t3l8b'= 4) & (r4Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8b_5] turn=41 -> 1:(r4_maxRetry_t3l8b'= 5) & (r4Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8b_6] turn=41 -> 1:(r4_maxRetry_t3l8b'= 6) & (r4Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8b_7] turn=41 -> 1:(r4_maxRetry_t3l8b'= 7) & (r4Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8b_8] turn=41 -> 1:(r4_maxRetry_t3l8b'= 8) & (r4Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8b_9] turn=41 -> 1:(r4_maxRetry_t3l8b'= 9) & (r4Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr4t3l8b_10] turn=41 -> 1:(r4_maxRetry_t3l8b'= 10) & (r4Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l5_1] turn=42 -> 1:(r5_maxRetry_t2l5'= 1) & (r5Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l5_2] turn=42 -> 1:(r5_maxRetry_t2l5'= 2) & (r5Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l5_3] turn=42 -> 1:(r5_maxRetry_t2l5'= 3) & (r5Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l5_4] turn=42 -> 1:(r5_maxRetry_t2l5'= 4) & (r5Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l5_5] turn=42 -> 1:(r5_maxRetry_t2l5'= 5) & (r5Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l5_6] turn=42 -> 1:(r5_maxRetry_t2l5'= 6) & (r5Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l5_7] turn=42 -> 1:(r5_maxRetry_t2l5'= 7) & (r5Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l5_8] turn=42 -> 1:(r5_maxRetry_t2l5'= 8) & (r5Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l5_9] turn=42 -> 1:(r5_maxRetry_t2l5'= 9) & (r5Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l5_10] turn=42 -> 1:(r5_maxRetry_t2l5'= 10) & (r5Alloct2l5'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8a_1] turn=43 -> 1:(r5_maxRetry_t2l8a'= 1) & (r5Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8a_2] turn=43 -> 1:(r5_maxRetry_t2l8a'= 2) & (r5Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8a_3] turn=43 -> 1:(r5_maxRetry_t2l8a'= 3) & (r5Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8a_4] turn=43 -> 1:(r5_maxRetry_t2l8a'= 4) & (r5Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8a_5] turn=43 -> 1:(r5_maxRetry_t2l8a'= 5) & (r5Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8a_6] turn=43 -> 1:(r5_maxRetry_t2l8a'= 6) & (r5Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8a_7] turn=43 -> 1:(r5_maxRetry_t2l8a'= 7) & (r5Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8a_8] turn=43 -> 1:(r5_maxRetry_t2l8a'= 8) & (r5Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8a_9] turn=43 -> 1:(r5_maxRetry_t2l8a'= 9) & (r5Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8a_10] turn=43 -> 1:(r5_maxRetry_t2l8a'= 10) & (r5Alloct2l8a'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8b_1] turn=44 -> 1:(r5_maxRetry_t2l8b'= 1) & (r5Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8b_2] turn=44 -> 1:(r5_maxRetry_t2l8b'= 2) & (r5Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8b_3] turn=44 -> 1:(r5_maxRetry_t2l8b'= 3) & (r5Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8b_4] turn=44 -> 1:(r5_maxRetry_t2l8b'= 4) & (r5Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8b_5] turn=44 -> 1:(r5_maxRetry_t2l8b'= 5) & (r5Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8b_6] turn=44 -> 1:(r5_maxRetry_t2l8b'= 6) & (r5Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8b_7] turn=44 -> 1:(r5_maxRetry_t2l8b'= 7) & (r5Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8b_8] turn=44 -> 1:(r5_maxRetry_t2l8b'= 8) & (r5Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8b_9] turn=44 -> 1:(r5_maxRetry_t2l8b'= 9) & (r5Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8b_10] turn=44 -> 1:(r5_maxRetry_t2l8b'= 10) & (r5Alloct2l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8c_1] turn=45 -> 1:(r5_maxRetry_t2l8c'= 1) & (r5Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8c_2] turn=45 -> 1:(r5_maxRetry_t2l8c'= 2) & (r5Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8c_3] turn=45 -> 1:(r5_maxRetry_t2l8c'= 3) & (r5Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8c_4] turn=45 -> 1:(r5_maxRetry_t2l8c'= 4) & (r5Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8c_5] turn=45 -> 1:(r5_maxRetry_t2l8c'= 5) & (r5Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8c_6] turn=45 -> 1:(r5_maxRetry_t2l8c'= 6) & (r5Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8c_7] turn=45 -> 1:(r5_maxRetry_t2l8c'= 7) & (r5Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8c_8] turn=45 -> 1:(r5_maxRetry_t2l8c'= 8) & (r5Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8c_9] turn=45 -> 1:(r5_maxRetry_t2l8c'= 9) & (r5Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8c_10] turn=45 -> 1:(r5_maxRetry_t2l8c'= 10) & (r5Alloct2l8c'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8d_1] turn=46 -> 1:(r5_maxRetry_t2l8d'= 1) & (r5Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8d_2] turn=46 -> 1:(r5_maxRetry_t2l8d'= 2) & (r5Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8d_3] turn=46 -> 1:(r5_maxRetry_t2l8d'= 3) & (r5Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8d_4] turn=46 -> 1:(r5_maxRetry_t2l8d'= 4) & (r5Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8d_5] turn=46 -> 1:(r5_maxRetry_t2l8d'= 5) & (r5Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8d_6] turn=46 -> 1:(r5_maxRetry_t2l8d'= 6) & (r5Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8d_7] turn=46 -> 1:(r5_maxRetry_t2l8d'= 7) & (r5Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8d_8] turn=46 -> 1:(r5_maxRetry_t2l8d'= 8) & (r5Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8d_9] turn=46 -> 1:(r5_maxRetry_t2l8d'= 9) & (r5Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr5t2l8d_10] turn=46 -> 1:(r5_maxRetry_t2l8d'= 10) & (r5Alloct2l8d'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l4_1] turn=47 -> 1:(r5_maxRetry_t3l4'= 1) & (r5Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l4_2] turn=47 -> 1:(r5_maxRetry_t3l4'= 2) & (r5Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l4_3] turn=47 -> 1:(r5_maxRetry_t3l4'= 3) & (r5Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l4_4] turn=47 -> 1:(r5_maxRetry_t3l4'= 4) & (r5Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l4_5] turn=47 -> 1:(r5_maxRetry_t3l4'= 5) & (r5Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l4_6] turn=47 -> 1:(r5_maxRetry_t3l4'= 6) & (r5Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l4_7] turn=47 -> 1:(r5_maxRetry_t3l4'= 7) & (r5Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l4_8] turn=47 -> 1:(r5_maxRetry_t3l4'= 8) & (r5Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l4_9] turn=47 -> 1:(r5_maxRetry_t3l4'= 9) & (r5Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l4_10] turn=47 -> 1:(r5_maxRetry_t3l4'= 10) & (r5Alloct3l4'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l7_1] turn=48 -> 1:(r5_maxRetry_t3l7'= 1) & (r5Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l7_2] turn=48 -> 1:(r5_maxRetry_t3l7'= 2) & (r5Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l7_3] turn=48 -> 1:(r5_maxRetry_t3l7'= 3) & (r5Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l7_4] turn=48 -> 1:(r5_maxRetry_t3l7'= 4) & (r5Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l7_5] turn=48 -> 1:(r5_maxRetry_t3l7'= 5) & (r5Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l7_6] turn=48 -> 1:(r5_maxRetry_t3l7'= 6) & (r5Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l7_7] turn=48 -> 1:(r5_maxRetry_t3l7'= 7) & (r5Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l7_8] turn=48 -> 1:(r5_maxRetry_t3l7'= 8) & (r5Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l7_9] turn=48 -> 1:(r5_maxRetry_t3l7'= 9) & (r5Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l7_10] turn=48 -> 1:(r5_maxRetry_t3l7'= 10) & (r5Alloct3l7'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9_1] turn=49 -> 1:(r5_maxRetry_t3l9'= 1) & (r5Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9_2] turn=49 -> 1:(r5_maxRetry_t3l9'= 2) & (r5Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9_3] turn=49 -> 1:(r5_maxRetry_t3l9'= 3) & (r5Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9_4] turn=49 -> 1:(r5_maxRetry_t3l9'= 4) & (r5Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9_5] turn=49 -> 1:(r5_maxRetry_t3l9'= 5) & (r5Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9_6] turn=49 -> 1:(r5_maxRetry_t3l9'= 6) & (r5Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9_7] turn=49 -> 1:(r5_maxRetry_t3l9'= 7) & (r5Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9_8] turn=49 -> 1:(r5_maxRetry_t3l9'= 8) & (r5Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9_9] turn=49 -> 1:(r5_maxRetry_t3l9'= 9) & (r5Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9_10] turn=49 -> 1:(r5_maxRetry_t3l9'= 10) & (r5Alloct3l9'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9b_1] turn=50 -> 1:(r5_maxRetry_t3l9b'= 1) & (r5Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9b_2] turn=50 -> 1:(r5_maxRetry_t3l9b'= 2) & (r5Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9b_3] turn=50 -> 1:(r5_maxRetry_t3l9b'= 3) & (r5Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9b_4] turn=50 -> 1:(r5_maxRetry_t3l9b'= 4) & (r5Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9b_5] turn=50 -> 1:(r5_maxRetry_t3l9b'= 5) & (r5Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9b_6] turn=50 -> 1:(r5_maxRetry_t3l9b'= 6) & (r5Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9b_7] turn=50 -> 1:(r5_maxRetry_t3l9b'= 7) & (r5Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9b_8] turn=50 -> 1:(r5_maxRetry_t3l9b'= 8) & (r5Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9b_9] turn=50 -> 1:(r5_maxRetry_t3l9b'= 9) & (r5Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l9b_10] turn=50 -> 1:(r5_maxRetry_t3l9b'= 10) & (r5Alloct3l9b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8_1] turn=51 -> 1:(r5_maxRetry_t3l8'= 1) & (r5Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8_2] turn=51 -> 1:(r5_maxRetry_t3l8'= 2) & (r5Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8_3] turn=51 -> 1:(r5_maxRetry_t3l8'= 3) & (r5Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8_4] turn=51 -> 1:(r5_maxRetry_t3l8'= 4) & (r5Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8_5] turn=51 -> 1:(r5_maxRetry_t3l8'= 5) & (r5Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8_6] turn=51 -> 1:(r5_maxRetry_t3l8'= 6) & (r5Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8_7] turn=51 -> 1:(r5_maxRetry_t3l8'= 7) & (r5Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8_8] turn=51 -> 1:(r5_maxRetry_t3l8'= 8) & (r5Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8_9] turn=51 -> 1:(r5_maxRetry_t3l8'= 9) & (r5Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8_10] turn=51 -> 1:(r5_maxRetry_t3l8'= 10) & (r5Alloct3l8'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8b_1] turn=52 -> 1:(r5_maxRetry_t3l8b'= 1) & (r5Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8b_2] turn=52 -> 1:(r5_maxRetry_t3l8b'= 2) & (r5Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8b_3] turn=52 -> 1:(r5_maxRetry_t3l8b'= 3) & (r5Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8b_4] turn=52 -> 1:(r5_maxRetry_t3l8b'= 4) & (r5Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8b_5] turn=52 -> 1:(r5_maxRetry_t3l8b'= 5) & (r5Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8b_6] turn=52 -> 1:(r5_maxRetry_t3l8b'= 6) & (r5Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8b_7] turn=52 -> 1:(r5_maxRetry_t3l8b'= 7) & (r5Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8b_8] turn=52 -> 1:(r5_maxRetry_t3l8b'= 8) & (r5Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8b_9] turn=52 -> 1:(r5_maxRetry_t3l8b'= 9) & (r5Alloct3l8b'=true) & (turn'=turn+1);
+  [selectRetriesr5t3l8b_10] turn=52 -> 1:(r5_maxRetry_t3l8b'= 10) & (r5Alloct3l8b'=true) & (turn'=turn+1);
+
+endmodule
+
+
+module agents
+  //  worker1 state vars
+  worker1Loc : [0..9] init 1; //location
+  worker1retry_t1l4 : [0..1000] init 0; //retry
+  worker1retry_t1l6a : [0..1000] init 0; //retry
+  worker1retry_t1l6b : [0..1000] init 0; //retry
+  worker1retry_t1l7 : [0..1000] init 0; //retry
+  worker1retry_t3l4 : [0..1000] init 0; //retry
+  worker1retry_t3l7 : [0..1000] init 0; //retry
+  worker1retry_t3l9 : [0..1000] init 0; //retry
+  worker1retry_t3l9b : [0..1000] init 0; //retry
+  worker1retry_t3l8 : [0..1000] init 0; //retry
+  worker1retry_t3l8b : [0..1000] init 0; //retry
+  //  worker2 state vars
+  worker2Loc : [0..9] init 1; //location
+  worker2retry_t1l4 : [0..1000] init 0; //retry
+  worker2retry_t1l6a : [0..1000] init 0; //retry
+  worker2retry_t1l6b : [0..1000] init 0; //retry
+  worker2retry_t1l7 : [0..1000] init 0; //retry
+  worker2retry_t3l4 : [0..1000] init 0; //retry
+  worker2retry_t3l7 : [0..1000] init 0; //retry
+  worker2retry_t3l9 : [0..1000] init 0; //retry
+  worker2retry_t3l9b : [0..1000] init 0; //retry
+  worker2retry_t3l8 : [0..1000] init 0; //retry
+  worker2retry_t3l8b : [0..1000] init 0; //retry
+  //  r3 state vars
+  r3Loc : [0..9] init 1; //location
+  r3retry_t2l5 : [0..1000] init 0; //retry
+  r3retry_t2l8a : [0..1000] init 0; //retry
+  r3retry_t2l8b : [0..1000] init 0; //retry
+  r3retry_t2l8c : [0..1000] init 0; //retry
+  r3retry_t2l8d : [0..1000] init 0; //retry
+  r3retry_t3l4 : [0..1000] init 0; //retry
+  r3retry_t3l7 : [0..1000] init 0; //retry
+  r3retry_t3l9 : [0..1000] init 0; //retry
+  r3retry_t3l9b : [0..1000] init 0; //retry
+  r3retry_t3l8 : [0..1000] init 0; //retry
+  r3retry_t3l8b : [0..1000] init 0; //retry
+  //  r4 state vars
+  r4Loc : [0..9] init 1; //location
+  r4retry_t2l5 : [0..1000] init 0; //retry
+  r4retry_t2l8a : [0..1000] init 0; //retry
+  r4retry_t2l8b : [0..1000] init 0; //retry
+  r4retry_t2l8c : [0..1000] init 0; //retry
+  r4retry_t2l8d : [0..1000] init 0; //retry
+  r4retry_t3l4 : [0..1000] init 0; //retry
+  r4retry_t3l7 : [0..1000] init 0; //retry
+  r4retry_t3l9 : [0..1000] init 0; //retry
+  r4retry_t3l9b : [0..1000] init 0; //retry
+  r4retry_t3l8 : [0..1000] init 0; //retry
+  r4retry_t3l8b : [0..1000] init 0; //retry
+  //  r5 state vars
+  r5Loc : [0..9] init 1; //location
+  r5retry_t2l5 : [0..1000] init 0; //retry
+  r5retry_t2l8a : [0..1000] init 0; //retry
+  r5retry_t2l8b : [0..1000] init 0; //retry
+  r5retry_t2l8c : [0..1000] init 0; //retry
+  r5retry_t2l8d : [0..1000] init 0; //retry
+  r5retry_t3l4 : [0..1000] init 0; //retry
+  r5retry_t3l7 : [0..1000] init 0; //retry
+  r5retry_t3l9 : [0..1000] init 0; //retry
+  r5retry_t3l9b : [0..1000] init 0; //retry
+  r5retry_t3l8 : [0..1000] init 0; //retry
+  r5retry_t3l8b : [0..1000] init 0; //retry
+  // empty locations
+  emptyl1 : bool init false;
+  emptyl2 : bool init true;
+  emptyl3 : bool init true;
+  emptyl4 : bool init true;
+  emptyl5 : bool init true;
+  emptyl6 : bool init true;
+  emptyl7 : bool init true;
+  emptyl8 : bool init true;
+  emptyl9 : bool init true;
+  // tasks
+  t1l4 : [0..2] init 0; //1: success, 2: failure
+  t1l6a : [0..2] init 0; //1: success, 2: failure
+  t1l6b : [0..2] init 0; //1: success, 2: failure
+  t1l7 : [0..2] init 0; //1: success, 2: failure
+  t2l5 : [0..2] init 0; //1: success, 2: failure
+  t2l8a : [0..2] init 0; //1: success, 2: failure
+  t2l8b : [0..2] init 0; //1: success, 2: failure
+  t2l8c : [0..2] init 0; //1: success, 2: failure
+  t2l8d : [0..2] init 0; //1: success, 2: failure
+  t3l4 : [0..2] init 0; //1: success, 2: failure
+  t3l7 : [0..2] init 0; //1: success, 2: failure
+  t3l9 : [0..2] init 0; //1: success, 2: failure
+  t3l9b : [0..2] init 0; //1: success, 2: failure
+  t3l8 : [0..2] init 0; //1: success, 2: failure
+  t3l8b : [0..2] init 0; //1: success, 2: failure
+
+
+  // Transitions move
+  // worker1
+  [worker1movel1_l2] worker1Loc=1 & emptyl2 & turn=53 & !success-> 1.0 : (emptyl1'=true) & (emptyl2'=false) & (worker1Loc'=2);
+  [worker1movel2_l1] worker1Loc=2 & emptyl1 & turn=53 & !success -> 1.0 : (emptyl2'=true) & (emptyl1'=false) & (worker1Loc'=1);
+  [worker1movel1_l4] worker1Loc=1 & emptyl4 & turn=53 & !success-> 1.0 : (emptyl1'=true) & (emptyl4'=false) & (worker1Loc'=4);
+  [worker1movel4_l1] worker1Loc=4 & emptyl1 & turn=53 & !success -> 1.0 : (emptyl4'=true) & (emptyl1'=false) & (worker1Loc'=1);
+  [worker1movel2_l3] worker1Loc=2 & emptyl3 & turn=53 & !success-> 1.0 : (emptyl2'=true) & (emptyl3'=false) & (worker1Loc'=3);
+  [worker1movel3_l2] worker1Loc=3 & emptyl2 & turn=53 & !success -> 1.0 : (emptyl3'=true) & (emptyl2'=false) & (worker1Loc'=2);
+  [worker1movel2_l5] worker1Loc=2 & emptyl5 & turn=53 & !success-> 1.0 : (emptyl2'=true) & (emptyl5'=false) & (worker1Loc'=5);
+  [worker1movel5_l2] worker1Loc=5 & emptyl2 & turn=53 & !success -> 1.0 : (emptyl5'=true) & (emptyl2'=false) & (worker1Loc'=2);
+  [worker1movel3_l6] worker1Loc=3 & emptyl6 & turn=53 & !success-> 1.0 : (emptyl3'=true) & (emptyl6'=false) & (worker1Loc'=6);
+  [worker1movel6_l3] worker1Loc=6 & emptyl3 & turn=53 & !success -> 1.0 : (emptyl6'=true) & (emptyl3'=false) & (worker1Loc'=3);
+  [worker1movel4_l5] worker1Loc=4 & emptyl5 & turn=53 & !success-> 1.0 : (emptyl4'=true) & (emptyl5'=false) & (worker1Loc'=5);
+  [worker1movel5_l4] worker1Loc=5 & emptyl4 & turn=53 & !success -> 1.0 : (emptyl5'=true) & (emptyl4'=false) & (worker1Loc'=4);
+  [worker1movel4_l7] worker1Loc=4 & emptyl7 & turn=53 & !success-> 1.0 : (emptyl4'=true) & (emptyl7'=false) & (worker1Loc'=7);
+  [worker1movel7_l4] worker1Loc=7 & emptyl4 & turn=53 & !success -> 1.0 : (emptyl7'=true) & (emptyl4'=false) & (worker1Loc'=4);
+  [worker1movel5_l6] worker1Loc=5 & emptyl6 & turn=53 & !success-> 1.0 : (emptyl5'=true) & (emptyl6'=false) & (worker1Loc'=6);
+  [worker1movel6_l5] worker1Loc=6 & emptyl5 & turn=53 & !success -> 1.0 : (emptyl6'=true) & (emptyl5'=false) & (worker1Loc'=5);
+  [worker1movel5_l8] worker1Loc=5 & emptyl8 & turn=53 & !success-> 1.0 : (emptyl5'=true) & (emptyl8'=false) & (worker1Loc'=8);
+  [worker1movel8_l5] worker1Loc=8 & emptyl5 & turn=53 & !success -> 1.0 : (emptyl8'=true) & (emptyl5'=false) & (worker1Loc'=5);
+  [worker1movel6_l9] worker1Loc=6 & emptyl9 & turn=53 & !success-> 1.0 : (emptyl6'=true) & (emptyl9'=false) & (worker1Loc'=9);
+  [worker1movel9_l6] worker1Loc=9 & emptyl6 & turn=53 & !success -> 1.0 : (emptyl9'=true) & (emptyl6'=false) & (worker1Loc'=6);
+  [worker1movel7_l8] worker1Loc=7 & emptyl8 & turn=53 & !success-> 1.0 : (emptyl7'=true) & (emptyl8'=false) & (worker1Loc'=8);
+  [worker1movel8_l7] worker1Loc=8 & emptyl7 & turn=53 & !success -> 1.0 : (emptyl8'=true) & (emptyl7'=false) & (worker1Loc'=7);
+  [worker1movel8_l9] worker1Loc=8 & emptyl9 & turn=53 & !success-> 1.0 : (emptyl8'=true) & (emptyl9'=false) & (worker1Loc'=9);
+  [worker1movel9_l8] worker1Loc=9 & emptyl8 & turn=53 & !success -> 1.0 : (emptyl9'=true) & (emptyl8'=false) & (worker1Loc'=8);
+  // worker2
+  [worker2movel1_l2] worker2Loc=1 & emptyl2 & turn=53 & !success-> 1.0 : (emptyl1'=true) & (emptyl2'=false) & (worker2Loc'=2);
+  [worker2movel2_l1] worker2Loc=2 & emptyl1 & turn=53 & !success -> 1.0 : (emptyl2'=true) & (emptyl1'=false) & (worker2Loc'=1);
+  [worker2movel1_l4] worker2Loc=1 & emptyl4 & turn=53 & !success-> 1.0 : (emptyl1'=true) & (emptyl4'=false) & (worker2Loc'=4);
+  [worker2movel4_l1] worker2Loc=4 & emptyl1 & turn=53 & !success -> 1.0 : (emptyl4'=true) & (emptyl1'=false) & (worker2Loc'=1);
+  [worker2movel2_l3] worker2Loc=2 & emptyl3 & turn=53 & !success-> 1.0 : (emptyl2'=true) & (emptyl3'=false) & (worker2Loc'=3);
+  [worker2movel3_l2] worker2Loc=3 & emptyl2 & turn=53 & !success -> 1.0 : (emptyl3'=true) & (emptyl2'=false) & (worker2Loc'=2);
+  [worker2movel2_l5] worker2Loc=2 & emptyl5 & turn=53 & !success-> 1.0 : (emptyl2'=true) & (emptyl5'=false) & (worker2Loc'=5);
+  [worker2movel5_l2] worker2Loc=5 & emptyl2 & turn=53 & !success -> 1.0 : (emptyl5'=true) & (emptyl2'=false) & (worker2Loc'=2);
+  [worker2movel3_l6] worker2Loc=3 & emptyl6 & turn=53 & !success-> 1.0 : (emptyl3'=true) & (emptyl6'=false) & (worker2Loc'=6);
+  [worker2movel6_l3] worker2Loc=6 & emptyl3 & turn=53 & !success -> 1.0 : (emptyl6'=true) & (emptyl3'=false) & (worker2Loc'=3);
+  [worker2movel4_l5] worker2Loc=4 & emptyl5 & turn=53 & !success-> 1.0 : (emptyl4'=true) & (emptyl5'=false) & (worker2Loc'=5);
+  [worker2movel5_l4] worker2Loc=5 & emptyl4 & turn=53 & !success -> 1.0 : (emptyl5'=true) & (emptyl4'=false) & (worker2Loc'=4);
+  [worker2movel4_l7] worker2Loc=4 & emptyl7 & turn=53 & !success-> 1.0 : (emptyl4'=true) & (emptyl7'=false) & (worker2Loc'=7);
+  [worker2movel7_l4] worker2Loc=7 & emptyl4 & turn=53 & !success -> 1.0 : (emptyl7'=true) & (emptyl4'=false) & (worker2Loc'=4);
+  [worker2movel5_l6] worker2Loc=5 & emptyl6 & turn=53 & !success-> 1.0 : (emptyl5'=true) & (emptyl6'=false) & (worker2Loc'=6);
+  [worker2movel6_l5] worker2Loc=6 & emptyl5 & turn=53 & !success -> 1.0 : (emptyl6'=true) & (emptyl5'=false) & (worker2Loc'=5);
+  [worker2movel5_l8] worker2Loc=5 & emptyl8 & turn=53 & !success-> 1.0 : (emptyl5'=true) & (emptyl8'=false) & (worker2Loc'=8);
+  [worker2movel8_l5] worker2Loc=8 & emptyl5 & turn=53 & !success -> 1.0 : (emptyl8'=true) & (emptyl5'=false) & (worker2Loc'=5);
+  [worker2movel6_l9] worker2Loc=6 & emptyl9 & turn=53 & !success-> 1.0 : (emptyl6'=true) & (emptyl9'=false) & (worker2Loc'=9);
+  [worker2movel9_l6] worker2Loc=9 & emptyl6 & turn=53 & !success -> 1.0 : (emptyl9'=true) & (emptyl6'=false) & (worker2Loc'=6);
+  [worker2movel7_l8] worker2Loc=7 & emptyl8 & turn=53 & !success-> 1.0 : (emptyl7'=true) & (emptyl8'=false) & (worker2Loc'=8);
+  [worker2movel8_l7] worker2Loc=8 & emptyl7 & turn=53 & !success -> 1.0 : (emptyl8'=true) & (emptyl7'=false) & (worker2Loc'=7);
+  [worker2movel8_l9] worker2Loc=8 & emptyl9 & turn=53 & !success-> 1.0 : (emptyl8'=true) & (emptyl9'=false) & (worker2Loc'=9);
+  [worker2movel9_l8] worker2Loc=9 & emptyl8 & turn=53 & !success -> 1.0 : (emptyl9'=true) & (emptyl8'=false) & (worker2Loc'=8);
+  // r3
+  [r3movel1_l2] r3Loc=1 & emptyl2 & turn=53 & !success-> 1.0 : (emptyl1'=true) & (emptyl2'=false) & (r3Loc'=2);
+  [r3movel2_l1] r3Loc=2 & emptyl1 & turn=53 & !success -> 1.0 : (emptyl2'=true) & (emptyl1'=false) & (r3Loc'=1);
+  [r3movel1_l4] r3Loc=1 & emptyl4 & turn=53 & !success-> 1.0 : (emptyl1'=true) & (emptyl4'=false) & (r3Loc'=4);
+  [r3movel4_l1] r3Loc=4 & emptyl1 & turn=53 & !success -> 1.0 : (emptyl4'=true) & (emptyl1'=false) & (r3Loc'=1);
+  [r3movel2_l3] r3Loc=2 & emptyl3 & turn=53 & !success-> 1.0 : (emptyl2'=true) & (emptyl3'=false) & (r3Loc'=3);
+  [r3movel3_l2] r3Loc=3 & emptyl2 & turn=53 & !success -> 1.0 : (emptyl3'=true) & (emptyl2'=false) & (r3Loc'=2);
+  [r3movel2_l5] r3Loc=2 & emptyl5 & turn=53 & !success-> 1.0 : (emptyl2'=true) & (emptyl5'=false) & (r3Loc'=5);
+  [r3movel5_l2] r3Loc=5 & emptyl2 & turn=53 & !success -> 1.0 : (emptyl5'=true) & (emptyl2'=false) & (r3Loc'=2);
+  [r3movel3_l6] r3Loc=3 & emptyl6 & turn=53 & !success-> 1.0 : (emptyl3'=true) & (emptyl6'=false) & (r3Loc'=6);
+  [r3movel6_l3] r3Loc=6 & emptyl3 & turn=53 & !success -> 1.0 : (emptyl6'=true) & (emptyl3'=false) & (r3Loc'=3);
+  [r3movel4_l5] r3Loc=4 & emptyl5 & turn=53 & !success-> 1.0 : (emptyl4'=true) & (emptyl5'=false) & (r3Loc'=5);
+  [r3movel5_l4] r3Loc=5 & emptyl4 & turn=53 & !success -> 1.0 : (emptyl5'=true) & (emptyl4'=false) & (r3Loc'=4);
+  [r3movel4_l7] r3Loc=4 & emptyl7 & turn=53 & !success-> 1.0 : (emptyl4'=true) & (emptyl7'=false) & (r3Loc'=7);
+  [r3movel7_l4] r3Loc=7 & emptyl4 & turn=53 & !success -> 1.0 : (emptyl7'=true) & (emptyl4'=false) & (r3Loc'=4);
+  [r3movel5_l6] r3Loc=5 & emptyl6 & turn=53 & !success-> 1.0 : (emptyl5'=true) & (emptyl6'=false) & (r3Loc'=6);
+  [r3movel6_l5] r3Loc=6 & emptyl5 & turn=53 & !success -> 1.0 : (emptyl6'=true) & (emptyl5'=false) & (r3Loc'=5);
+  [r3movel5_l8] r3Loc=5 & emptyl8 & turn=53 & !success-> 1.0 : (emptyl5'=true) & (emptyl8'=false) & (r3Loc'=8);
+  [r3movel8_l5] r3Loc=8 & emptyl5 & turn=53 & !success -> 1.0 : (emptyl8'=true) & (emptyl5'=false) & (r3Loc'=5);
+  [r3movel6_l9] r3Loc=6 & emptyl9 & turn=53 & !success-> 1.0 : (emptyl6'=true) & (emptyl9'=false) & (r3Loc'=9);
+  [r3movel9_l6] r3Loc=9 & emptyl6 & turn=53 & !success -> 1.0 : (emptyl9'=true) & (emptyl6'=false) & (r3Loc'=6);
+  [r3movel7_l8] r3Loc=7 & emptyl8 & turn=53 & !success-> 1.0 : (emptyl7'=true) & (emptyl8'=false) & (r3Loc'=8);
+  [r3movel8_l7] r3Loc=8 & emptyl7 & turn=53 & !success -> 1.0 : (emptyl8'=true) & (emptyl7'=false) & (r3Loc'=7);
+  [r3movel8_l9] r3Loc=8 & emptyl9 & turn=53 & !success-> 1.0 : (emptyl8'=true) & (emptyl9'=false) & (r3Loc'=9);
+  [r3movel9_l8] r3Loc=9 & emptyl8 & turn=53 & !success -> 1.0 : (emptyl9'=true) & (emptyl8'=false) & (r3Loc'=8);
+  // r4
+  [r4movel1_l2] r4Loc=1 & emptyl2 & turn=53 & !success-> 1.0 : (emptyl1'=true) & (emptyl2'=false) & (r4Loc'=2);
+  [r4movel2_l1] r4Loc=2 & emptyl1 & turn=53 & !success -> 1.0 : (emptyl2'=true) & (emptyl1'=false) & (r4Loc'=1);
+  [r4movel1_l4] r4Loc=1 & emptyl4 & turn=53 & !success-> 1.0 : (emptyl1'=true) & (emptyl4'=false) & (r4Loc'=4);
+  [r4movel4_l1] r4Loc=4 & emptyl1 & turn=53 & !success -> 1.0 : (emptyl4'=true) & (emptyl1'=false) & (r4Loc'=1);
+  [r4movel2_l3] r4Loc=2 & emptyl3 & turn=53 & !success-> 1.0 : (emptyl2'=true) & (emptyl3'=false) & (r4Loc'=3);
+  [r4movel3_l2] r4Loc=3 & emptyl2 & turn=53 & !success -> 1.0 : (emptyl3'=true) & (emptyl2'=false) & (r4Loc'=2);
+  [r4movel2_l5] r4Loc=2 & emptyl5 & turn=53 & !success-> 1.0 : (emptyl2'=true) & (emptyl5'=false) & (r4Loc'=5);
+  [r4movel5_l2] r4Loc=5 & emptyl2 & turn=53 & !success -> 1.0 : (emptyl5'=true) & (emptyl2'=false) & (r4Loc'=2);
+  [r4movel3_l6] r4Loc=3 & emptyl6 & turn=53 & !success-> 1.0 : (emptyl3'=true) & (emptyl6'=false) & (r4Loc'=6);
+  [r4movel6_l3] r4Loc=6 & emptyl3 & turn=53 & !success -> 1.0 : (emptyl6'=true) & (emptyl3'=false) & (r4Loc'=3);
+  [r4movel4_l5] r4Loc=4 & emptyl5 & turn=53 & !success-> 1.0 : (emptyl4'=true) & (emptyl5'=false) & (r4Loc'=5);
+  [r4movel5_l4] r4Loc=5 & emptyl4 & turn=53 & !success -> 1.0 : (emptyl5'=true) & (emptyl4'=false) & (r4Loc'=4);
+  [r4movel4_l7] r4Loc=4 & emptyl7 & turn=53 & !success-> 1.0 : (emptyl4'=true) & (emptyl7'=false) & (r4Loc'=7);
+  [r4movel7_l4] r4Loc=7 & emptyl4 & turn=53 & !success -> 1.0 : (emptyl7'=true) & (emptyl4'=false) & (r4Loc'=4);
+  [r4movel5_l6] r4Loc=5 & emptyl6 & turn=53 & !success-> 1.0 : (emptyl5'=true) & (emptyl6'=false) & (r4Loc'=6);
+  [r4movel6_l5] r4Loc=6 & emptyl5 & turn=53 & !success -> 1.0 : (emptyl6'=true) & (emptyl5'=false) & (r4Loc'=5);
+  [r4movel5_l8] r4Loc=5 & emptyl8 & turn=53 & !success-> 1.0 : (emptyl5'=true) & (emptyl8'=false) & (r4Loc'=8);
+  [r4movel8_l5] r4Loc=8 & emptyl5 & turn=53 & !success -> 1.0 : (emptyl8'=true) & (emptyl5'=false) & (r4Loc'=5);
+  [r4movel6_l9] r4Loc=6 & emptyl9 & turn=53 & !success-> 1.0 : (emptyl6'=true) & (emptyl9'=false) & (r4Loc'=9);
+  [r4movel9_l6] r4Loc=9 & emptyl6 & turn=53 & !success -> 1.0 : (emptyl9'=true) & (emptyl6'=false) & (r4Loc'=6);
+  [r4movel7_l8] r4Loc=7 & emptyl8 & turn=53 & !success-> 1.0 : (emptyl7'=true) & (emptyl8'=false) & (r4Loc'=8);
+  [r4movel8_l7] r4Loc=8 & emptyl7 & turn=53 & !success -> 1.0 : (emptyl8'=true) & (emptyl7'=false) & (r4Loc'=7);
+  [r4movel8_l9] r4Loc=8 & emptyl9 & turn=53 & !success-> 1.0 : (emptyl8'=true) & (emptyl9'=false) & (r4Loc'=9);
+  [r4movel9_l8] r4Loc=9 & emptyl8 & turn=53 & !success -> 1.0 : (emptyl9'=true) & (emptyl8'=false) & (r4Loc'=8);
+  // r5
+  [r5movel1_l2] r5Loc=1 & emptyl2 & turn=53 & !success-> 1.0 : (emptyl1'=true) & (emptyl2'=false) & (r5Loc'=2);
+  [r5movel2_l1] r5Loc=2 & emptyl1 & turn=53 & !success -> 1.0 : (emptyl2'=true) & (emptyl1'=false) & (r5Loc'=1);
+  [r5movel1_l4] r5Loc=1 & emptyl4 & turn=53 & !success-> 1.0 : (emptyl1'=true) & (emptyl4'=false) & (r5Loc'=4);
+  [r5movel4_l1] r5Loc=4 & emptyl1 & turn=53 & !success -> 1.0 : (emptyl4'=true) & (emptyl1'=false) & (r5Loc'=1);
+  [r5movel2_l3] r5Loc=2 & emptyl3 & turn=53 & !success-> 1.0 : (emptyl2'=true) & (emptyl3'=false) & (r5Loc'=3);
+  [r5movel3_l2] r5Loc=3 & emptyl2 & turn=53 & !success -> 1.0 : (emptyl3'=true) & (emptyl2'=false) & (r5Loc'=2);
+  [r5movel2_l5] r5Loc=2 & emptyl5 & turn=53 & !success-> 1.0 : (emptyl2'=true) & (emptyl5'=false) & (r5Loc'=5);
+  [r5movel5_l2] r5Loc=5 & emptyl2 & turn=53 & !success -> 1.0 : (emptyl5'=true) & (emptyl2'=false) & (r5Loc'=2);
+  [r5movel3_l6] r5Loc=3 & emptyl6 & turn=53 & !success-> 1.0 : (emptyl3'=true) & (emptyl6'=false) & (r5Loc'=6);
+  [r5movel6_l3] r5Loc=6 & emptyl3 & turn=53 & !success -> 1.0 : (emptyl6'=true) & (emptyl3'=false) & (r5Loc'=3);
+  [r5movel4_l5] r5Loc=4 & emptyl5 & turn=53 & !success-> 1.0 : (emptyl4'=true) & (emptyl5'=false) & (r5Loc'=5);
+  [r5movel5_l4] r5Loc=5 & emptyl4 & turn=53 & !success -> 1.0 : (emptyl5'=true) & (emptyl4'=false) & (r5Loc'=4);
+  [r5movel4_l7] r5Loc=4 & emptyl7 & turn=53 & !success-> 1.0 : (emptyl4'=true) & (emptyl7'=false) & (r5Loc'=7);
+  [r5movel7_l4] r5Loc=7 & emptyl4 & turn=53 & !success -> 1.0 : (emptyl7'=true) & (emptyl4'=false) & (r5Loc'=4);
+  [r5movel5_l6] r5Loc=5 & emptyl6 & turn=53 & !success-> 1.0 : (emptyl5'=true) & (emptyl6'=false) & (r5Loc'=6);
+  [r5movel6_l5] r5Loc=6 & emptyl5 & turn=53 & !success -> 1.0 : (emptyl6'=true) & (emptyl5'=false) & (r5Loc'=5);
+  [r5movel5_l8] r5Loc=5 & emptyl8 & turn=53 & !success-> 1.0 : (emptyl5'=true) & (emptyl8'=false) & (r5Loc'=8);
+  [r5movel8_l5] r5Loc=8 & emptyl5 & turn=53 & !success -> 1.0 : (emptyl8'=true) & (emptyl5'=false) & (r5Loc'=5);
+  [r5movel6_l9] r5Loc=6 & emptyl9 & turn=53 & !success-> 1.0 : (emptyl6'=true) & (emptyl9'=false) & (r5Loc'=9);
+  [r5movel9_l6] r5Loc=9 & emptyl6 & turn=53 & !success -> 1.0 : (emptyl9'=true) & (emptyl6'=false) & (r5Loc'=6);
+  [r5movel7_l8] r5Loc=7 & emptyl8 & turn=53 & !success-> 1.0 : (emptyl7'=true) & (emptyl8'=false) & (r5Loc'=8);
+  [r5movel8_l7] r5Loc=8 & emptyl7 & turn=53 & !success -> 1.0 : (emptyl8'=true) & (emptyl7'=false) & (r5Loc'=7);
+  [r5movel8_l9] r5Loc=8 & emptyl9 & turn=53 & !success-> 1.0 : (emptyl8'=true) & (emptyl9'=false) & (r5Loc'=9);
+  [r5movel9_l8] r5Loc=9 & emptyl8 & turn=53 & !success -> 1.0 : (emptyl9'=true) & (emptyl8'=false) & (r5Loc'=8);
+
+
+  // Transitions dotask
+  // worker1
+  [worker1dotask_t1l4] t1l4=0 & worker1Alloct1l4 & worker1Loc=4 & worker1retry_t1l4<worker1_maxRetry_t1l4  & turn=53 -> 1.0 : (t1l4'=1) + 0.0 : (worker1retry_t1l4'=worker1retry_t1l4+1);
+  [worker1dotask_t1l4] t1l4=0 & worker1Alloct1l4 & worker1Loc=4 & worker1retry_t1l4>=worker1_maxRetry_t1l4  & turn=53 -> 1 : (t1l4'=2);
+  [worker1dotask_t1l6a] t1l6a=0 & worker1Alloct1l6a & worker1Loc=6 & worker1retry_t1l6a<worker1_maxRetry_t1l6a  & turn=53 -> 1.0 : (t1l6a'=1) + 0.0 : (worker1retry_t1l6a'=worker1retry_t1l6a+1);
+  [worker1dotask_t1l6a] t1l6a=0 & worker1Alloct1l6a & worker1Loc=6 & worker1retry_t1l6a>=worker1_maxRetry_t1l6a  & turn=53 -> 1 : (t1l6a'=2);
+  [worker1dotask_t1l6b] t1l6b=0 & worker1Alloct1l6b & worker1Loc=6 & worker1retry_t1l6b<worker1_maxRetry_t1l6b  & turn=53 -> 1.0 : (t1l6b'=1) + 0.0 : (worker1retry_t1l6b'=worker1retry_t1l6b+1);
+  [worker1dotask_t1l6b] t1l6b=0 & worker1Alloct1l6b & worker1Loc=6 & worker1retry_t1l6b>=worker1_maxRetry_t1l6b  & turn=53 -> 1 : (t1l6b'=2);
+  [worker1dotask_t1l7] t1l7=0 & worker1Alloct1l7 & worker1Loc=7 & worker1retry_t1l7<worker1_maxRetry_t1l7  & turn=53 -> 1.0 : (t1l7'=1) + 0.0 : (worker1retry_t1l7'=worker1retry_t1l7+1);
+  [worker1dotask_t1l7] t1l7=0 & worker1Alloct1l7 & worker1Loc=7 & worker1retry_t1l7>=worker1_maxRetry_t1l7  & turn=53 -> 1 : (t1l7'=2);
+  [worker1dotask_t3l4] t3l4=0 & worker1Alloct3l4 & worker1Loc=4 & worker1retry_t3l4<worker1_maxRetry_t3l4  & turn=53 -> 0.99 : (t3l4'=1) + 0.01 : (worker1retry_t3l4'=worker1retry_t3l4+1);
+  [worker1dotask_t3l4] t3l4=0 & worker1Alloct3l4 & worker1Loc=4 & worker1retry_t3l4>=worker1_maxRetry_t3l4  & turn=53 -> 1 : (t3l4'=2);
+  [worker1dotask_t3l7] t3l7=0 & worker1Alloct3l7 & worker1Loc=7 & worker1retry_t3l7<worker1_maxRetry_t3l7  & turn=53 -> 0.99 : (t3l7'=1) + 0.01 : (worker1retry_t3l7'=worker1retry_t3l7+1);
+  [worker1dotask_t3l7] t3l7=0 & worker1Alloct3l7 & worker1Loc=7 & worker1retry_t3l7>=worker1_maxRetry_t3l7  & turn=53 -> 1 : (t3l7'=2);
+  [worker1dotask_t3l9] t3l9=0 & worker1Alloct3l9 & worker1Loc=9 & worker1retry_t3l9<worker1_maxRetry_t3l9  & turn=53 -> 0.99 : (t3l9'=1) + 0.01 : (worker1retry_t3l9'=worker1retry_t3l9+1);
+  [worker1dotask_t3l9] t3l9=0 & worker1Alloct3l9 & worker1Loc=9 & worker1retry_t3l9>=worker1_maxRetry_t3l9  & turn=53 -> 1 : (t3l9'=2);
+  [worker1dotask_t3l9b] t3l9b=0 & worker1Alloct3l9b & worker1Loc=9 & worker1retry_t3l9b<worker1_maxRetry_t3l9b  & turn=53 -> 0.99 : (t3l9b'=1) + 0.01 : (worker1retry_t3l9b'=worker1retry_t3l9b+1);
+  [worker1dotask_t3l9b] t3l9b=0 & worker1Alloct3l9b & worker1Loc=9 & worker1retry_t3l9b>=worker1_maxRetry_t3l9b  & turn=53 -> 1 : (t3l9b'=2);
+  [worker1dotask_t3l8] t3l8=0 & worker1Alloct3l8 & worker1Loc=8 & worker1retry_t3l8<worker1_maxRetry_t3l8  & turn=53 -> 0.99 : (t3l8'=1) + 0.01 : (worker1retry_t3l8'=worker1retry_t3l8+1);
+  [worker1dotask_t3l8] t3l8=0 & worker1Alloct3l8 & worker1Loc=8 & worker1retry_t3l8>=worker1_maxRetry_t3l8  & turn=53 -> 1 : (t3l8'=2);
+  [worker1dotask_t3l8b] t3l8b=0 & worker1Alloct3l8b & worker1Loc=8 & worker1retry_t3l8b<worker1_maxRetry_t3l8b  & turn=53 -> 0.99 : (t3l8b'=1) + 0.01 : (worker1retry_t3l8b'=worker1retry_t3l8b+1);
+  [worker1dotask_t3l8b] t3l8b=0 & worker1Alloct3l8b & worker1Loc=8 & worker1retry_t3l8b>=worker1_maxRetry_t3l8b  & turn=53 -> 1 : (t3l8b'=2);
+  // worker2
+  [worker2dotask_t1l4] t1l4=0 & worker2Alloct1l4 & worker2Loc=4 & worker2retry_t1l4<worker2_maxRetry_t1l4  & turn=53 -> 1.0 : (t1l4'=1) + 0.0 : (worker2retry_t1l4'=worker2retry_t1l4+1);
+  [worker2dotask_t1l4] t1l4=0 & worker2Alloct1l4 & worker2Loc=4 & worker2retry_t1l4>=worker2_maxRetry_t1l4  & turn=53 -> 1 : (t1l4'=2);
+  [worker2dotask_t1l6a] t1l6a=0 & worker2Alloct1l6a & worker2Loc=6 & worker2retry_t1l6a<worker2_maxRetry_t1l6a  & turn=53 -> 1.0 : (t1l6a'=1) + 0.0 : (worker2retry_t1l6a'=worker2retry_t1l6a+1);
+  [worker2dotask_t1l6a] t1l6a=0 & worker2Alloct1l6a & worker2Loc=6 & worker2retry_t1l6a>=worker2_maxRetry_t1l6a  & turn=53 -> 1 : (t1l6a'=2);
+  [worker2dotask_t1l6b] t1l6b=0 & worker2Alloct1l6b & worker2Loc=6 & worker2retry_t1l6b<worker2_maxRetry_t1l6b  & turn=53 -> 1.0 : (t1l6b'=1) + 0.0 : (worker2retry_t1l6b'=worker2retry_t1l6b+1);
+  [worker2dotask_t1l6b] t1l6b=0 & worker2Alloct1l6b & worker2Loc=6 & worker2retry_t1l6b>=worker2_maxRetry_t1l6b  & turn=53 -> 1 : (t1l6b'=2);
+  [worker2dotask_t1l7] t1l7=0 & worker2Alloct1l7 & worker2Loc=7 & worker2retry_t1l7<worker2_maxRetry_t1l7  & turn=53 -> 1.0 : (t1l7'=1) + 0.0 : (worker2retry_t1l7'=worker2retry_t1l7+1);
+  [worker2dotask_t1l7] t1l7=0 & worker2Alloct1l7 & worker2Loc=7 & worker2retry_t1l7>=worker2_maxRetry_t1l7  & turn=53 -> 1 : (t1l7'=2);
+  [worker2dotask_t3l4] t3l4=0 & worker2Alloct3l4 & worker2Loc=4 & worker2retry_t3l4<worker2_maxRetry_t3l4  & turn=53 -> 0.99 : (t3l4'=1) + 0.01 : (worker2retry_t3l4'=worker2retry_t3l4+1);
+  [worker2dotask_t3l4] t3l4=0 & worker2Alloct3l4 & worker2Loc=4 & worker2retry_t3l4>=worker2_maxRetry_t3l4  & turn=53 -> 1 : (t3l4'=2);
+  [worker2dotask_t3l7] t3l7=0 & worker2Alloct3l7 & worker2Loc=7 & worker2retry_t3l7<worker2_maxRetry_t3l7  & turn=53 -> 0.99 : (t3l7'=1) + 0.01 : (worker2retry_t3l7'=worker2retry_t3l7+1);
+  [worker2dotask_t3l7] t3l7=0 & worker2Alloct3l7 & worker2Loc=7 & worker2retry_t3l7>=worker2_maxRetry_t3l7  & turn=53 -> 1 : (t3l7'=2);
+  [worker2dotask_t3l9] t3l9=0 & worker2Alloct3l9 & worker2Loc=9 & worker2retry_t3l9<worker2_maxRetry_t3l9  & turn=53 -> 0.99 : (t3l9'=1) + 0.01 : (worker2retry_t3l9'=worker2retry_t3l9+1);
+  [worker2dotask_t3l9] t3l9=0 & worker2Alloct3l9 & worker2Loc=9 & worker2retry_t3l9>=worker2_maxRetry_t3l9  & turn=53 -> 1 : (t3l9'=2);
+  [worker2dotask_t3l9b] t3l9b=0 & worker2Alloct3l9b & worker2Loc=9 & worker2retry_t3l9b<worker2_maxRetry_t3l9b  & turn=53 -> 0.99 : (t3l9b'=1) + 0.01 : (worker2retry_t3l9b'=worker2retry_t3l9b+1);
+  [worker2dotask_t3l9b] t3l9b=0 & worker2Alloct3l9b & worker2Loc=9 & worker2retry_t3l9b>=worker2_maxRetry_t3l9b  & turn=53 -> 1 : (t3l9b'=2);
+  [worker2dotask_t3l8] t3l8=0 & worker2Alloct3l8 & worker2Loc=8 & worker2retry_t3l8<worker2_maxRetry_t3l8  & turn=53 -> 0.99 : (t3l8'=1) + 0.01 : (worker2retry_t3l8'=worker2retry_t3l8+1);
+  [worker2dotask_t3l8] t3l8=0 & worker2Alloct3l8 & worker2Loc=8 & worker2retry_t3l8>=worker2_maxRetry_t3l8  & turn=53 -> 1 : (t3l8'=2);
+  [worker2dotask_t3l8b] t3l8b=0 & worker2Alloct3l8b & worker2Loc=8 & worker2retry_t3l8b<worker2_maxRetry_t3l8b  & turn=53 -> 0.99 : (t3l8b'=1) + 0.01 : (worker2retry_t3l8b'=worker2retry_t3l8b+1);
+  [worker2dotask_t3l8b] t3l8b=0 & worker2Alloct3l8b & worker2Loc=8 & worker2retry_t3l8b>=worker2_maxRetry_t3l8b  & turn=53 -> 1 : (t3l8b'=2);
+  // r3
+  [r3dotask_t2l5] t2l5=0 & r3Alloct2l5 & r3Loc=5 & r3retry_t2l5<r3_maxRetry_t2l5  & turn=53 -> 0.99 : (t2l5'=1) + 0.01 : (r3retry_t2l5'=r3retry_t2l5+1);
+  [r3dotask_t2l5] t2l5=0 & r3Alloct2l5 & r3Loc=5 & r3retry_t2l5>=r3_maxRetry_t2l5  & turn=53 -> 1 : (t2l5'=2);
+  [r3dotask_t2l8a] t2l8a=0 & r3Alloct2l8a & r3Loc=8 & r3retry_t2l8a<r3_maxRetry_t2l8a  & turn=53 -> 0.99 : (t2l8a'=1) + 0.01 : (r3retry_t2l8a'=r3retry_t2l8a+1);
+  [r3dotask_t2l8a] t2l8a=0 & r3Alloct2l8a & r3Loc=8 & r3retry_t2l8a>=r3_maxRetry_t2l8a  & turn=53 -> 1 : (t2l8a'=2);
+  [r3dotask_t2l8b] t2l8b=0 & r3Alloct2l8b & r3Loc=8 & r3retry_t2l8b<r3_maxRetry_t2l8b  & turn=53 -> 0.99 : (t2l8b'=1) + 0.01 : (r3retry_t2l8b'=r3retry_t2l8b+1);
+  [r3dotask_t2l8b] t2l8b=0 & r3Alloct2l8b & r3Loc=8 & r3retry_t2l8b>=r3_maxRetry_t2l8b  & turn=53 -> 1 : (t2l8b'=2);
+  [r3dotask_t2l8c] t2l8c=0 & r3Alloct2l8c & r3Loc=8 & r3retry_t2l8c<r3_maxRetry_t2l8c  & turn=53 -> 0.99 : (t2l8c'=1) + 0.01 : (r3retry_t2l8c'=r3retry_t2l8c+1);
+  [r3dotask_t2l8c] t2l8c=0 & r3Alloct2l8c & r3Loc=8 & r3retry_t2l8c>=r3_maxRetry_t2l8c  & turn=53 -> 1 : (t2l8c'=2);
+  [r3dotask_t2l8d] t2l8d=0 & r3Alloct2l8d & r3Loc=8 & r3retry_t2l8d<r3_maxRetry_t2l8d  & turn=53 -> 0.99 : (t2l8d'=1) + 0.01 : (r3retry_t2l8d'=r3retry_t2l8d+1);
+  [r3dotask_t2l8d] t2l8d=0 & r3Alloct2l8d & r3Loc=8 & r3retry_t2l8d>=r3_maxRetry_t2l8d  & turn=53 -> 1 : (t2l8d'=2);
+  [r3dotask_t3l4] t3l4=0 & r3Alloct3l4 & r3Loc=4 & r3retry_t3l4<r3_maxRetry_t3l4  & turn=53 -> 0.97 : (t3l4'=1) + 0.03 : (r3retry_t3l4'=r3retry_t3l4+1);
+  [r3dotask_t3l4] t3l4=0 & r3Alloct3l4 & r3Loc=4 & r3retry_t3l4>=r3_maxRetry_t3l4  & turn=53 -> 1 : (t3l4'=2);
+  [r3dotask_t3l7] t3l7=0 & r3Alloct3l7 & r3Loc=7 & r3retry_t3l7<r3_maxRetry_t3l7  & turn=53 -> 0.97 : (t3l7'=1) + 0.03 : (r3retry_t3l7'=r3retry_t3l7+1);
+  [r3dotask_t3l7] t3l7=0 & r3Alloct3l7 & r3Loc=7 & r3retry_t3l7>=r3_maxRetry_t3l7  & turn=53 -> 1 : (t3l7'=2);
+  [r3dotask_t3l9] t3l9=0 & r3Alloct3l9 & r3Loc=9 & r3retry_t3l9<r3_maxRetry_t3l9  & turn=53 -> 0.97 : (t3l9'=1) + 0.03 : (r3retry_t3l9'=r3retry_t3l9+1);
+  [r3dotask_t3l9] t3l9=0 & r3Alloct3l9 & r3Loc=9 & r3retry_t3l9>=r3_maxRetry_t3l9  & turn=53 -> 1 : (t3l9'=2);
+  [r3dotask_t3l9b] t3l9b=0 & r3Alloct3l9b & r3Loc=9 & r3retry_t3l9b<r3_maxRetry_t3l9b  & turn=53 -> 0.97 : (t3l9b'=1) + 0.03 : (r3retry_t3l9b'=r3retry_t3l9b+1);
+  [r3dotask_t3l9b] t3l9b=0 & r3Alloct3l9b & r3Loc=9 & r3retry_t3l9b>=r3_maxRetry_t3l9b  & turn=53 -> 1 : (t3l9b'=2);
+  [r3dotask_t3l8] t3l8=0 & r3Alloct3l8 & r3Loc=8 & r3retry_t3l8<r3_maxRetry_t3l8  & turn=53 -> 0.97 : (t3l8'=1) + 0.03 : (r3retry_t3l8'=r3retry_t3l8+1);
+  [r3dotask_t3l8] t3l8=0 & r3Alloct3l8 & r3Loc=8 & r3retry_t3l8>=r3_maxRetry_t3l8  & turn=53 -> 1 : (t3l8'=2);
+  [r3dotask_t3l8b] t3l8b=0 & r3Alloct3l8b & r3Loc=8 & r3retry_t3l8b<r3_maxRetry_t3l8b  & turn=53 -> 0.97 : (t3l8b'=1) + 0.03 : (r3retry_t3l8b'=r3retry_t3l8b+1);
+  [r3dotask_t3l8b] t3l8b=0 & r3Alloct3l8b & r3Loc=8 & r3retry_t3l8b>=r3_maxRetry_t3l8b  & turn=53 -> 1 : (t3l8b'=2);
+  // r4
+  [r4dotask_t2l5] t2l5=0 & r4Alloct2l5 & r4Loc=5 & r4retry_t2l5<r4_maxRetry_t2l5  & turn=53 -> 0.99 : (t2l5'=1) + 0.01 : (r4retry_t2l5'=r4retry_t2l5+1);
+  [r4dotask_t2l5] t2l5=0 & r4Alloct2l5 & r4Loc=5 & r4retry_t2l5>=r4_maxRetry_t2l5  & turn=53 -> 1 : (t2l5'=2);
+  [r4dotask_t2l8a] t2l8a=0 & r4Alloct2l8a & r4Loc=8 & r4retry_t2l8a<r4_maxRetry_t2l8a  & turn=53 -> 0.99 : (t2l8a'=1) + 0.01 : (r4retry_t2l8a'=r4retry_t2l8a+1);
+  [r4dotask_t2l8a] t2l8a=0 & r4Alloct2l8a & r4Loc=8 & r4retry_t2l8a>=r4_maxRetry_t2l8a  & turn=53 -> 1 : (t2l8a'=2);
+  [r4dotask_t2l8b] t2l8b=0 & r4Alloct2l8b & r4Loc=8 & r4retry_t2l8b<r4_maxRetry_t2l8b  & turn=53 -> 0.99 : (t2l8b'=1) + 0.01 : (r4retry_t2l8b'=r4retry_t2l8b+1);
+  [r4dotask_t2l8b] t2l8b=0 & r4Alloct2l8b & r4Loc=8 & r4retry_t2l8b>=r4_maxRetry_t2l8b  & turn=53 -> 1 : (t2l8b'=2);
+  [r4dotask_t2l8c] t2l8c=0 & r4Alloct2l8c & r4Loc=8 & r4retry_t2l8c<r4_maxRetry_t2l8c  & turn=53 -> 0.99 : (t2l8c'=1) + 0.01 : (r4retry_t2l8c'=r4retry_t2l8c+1);
+  [r4dotask_t2l8c] t2l8c=0 & r4Alloct2l8c & r4Loc=8 & r4retry_t2l8c>=r4_maxRetry_t2l8c  & turn=53 -> 1 : (t2l8c'=2);
+  [r4dotask_t2l8d] t2l8d=0 & r4Alloct2l8d & r4Loc=8 & r4retry_t2l8d<r4_maxRetry_t2l8d  & turn=53 -> 0.99 : (t2l8d'=1) + 0.01 : (r4retry_t2l8d'=r4retry_t2l8d+1);
+  [r4dotask_t2l8d] t2l8d=0 & r4Alloct2l8d & r4Loc=8 & r4retry_t2l8d>=r4_maxRetry_t2l8d  & turn=53 -> 1 : (t2l8d'=2);
+  [r4dotask_t3l4] t3l4=0 & r4Alloct3l4 & r4Loc=4 & r4retry_t3l4<r4_maxRetry_t3l4  & turn=53 -> 0.97 : (t3l4'=1) + 0.03 : (r4retry_t3l4'=r4retry_t3l4+1);
+  [r4dotask_t3l4] t3l4=0 & r4Alloct3l4 & r4Loc=4 & r4retry_t3l4>=r4_maxRetry_t3l4  & turn=53 -> 1 : (t3l4'=2);
+  [r4dotask_t3l7] t3l7=0 & r4Alloct3l7 & r4Loc=7 & r4retry_t3l7<r4_maxRetry_t3l7  & turn=53 -> 0.97 : (t3l7'=1) + 0.03 : (r4retry_t3l7'=r4retry_t3l7+1);
+  [r4dotask_t3l7] t3l7=0 & r4Alloct3l7 & r4Loc=7 & r4retry_t3l7>=r4_maxRetry_t3l7  & turn=53 -> 1 : (t3l7'=2);
+  [r4dotask_t3l9] t3l9=0 & r4Alloct3l9 & r4Loc=9 & r4retry_t3l9<r4_maxRetry_t3l9  & turn=53 -> 0.97 : (t3l9'=1) + 0.03 : (r4retry_t3l9'=r4retry_t3l9+1);
+  [r4dotask_t3l9] t3l9=0 & r4Alloct3l9 & r4Loc=9 & r4retry_t3l9>=r4_maxRetry_t3l9  & turn=53 -> 1 : (t3l9'=2);
+  [r4dotask_t3l9b] t3l9b=0 & r4Alloct3l9b & r4Loc=9 & r4retry_t3l9b<r4_maxRetry_t3l9b  & turn=53 -> 0.97 : (t3l9b'=1) + 0.03 : (r4retry_t3l9b'=r4retry_t3l9b+1);
+  [r4dotask_t3l9b] t3l9b=0 & r4Alloct3l9b & r4Loc=9 & r4retry_t3l9b>=r4_maxRetry_t3l9b  & turn=53 -> 1 : (t3l9b'=2);
+  [r4dotask_t3l8] t3l8=0 & r4Alloct3l8 & r4Loc=8 & r4retry_t3l8<r4_maxRetry_t3l8  & turn=53 -> 0.97 : (t3l8'=1) + 0.03 : (r4retry_t3l8'=r4retry_t3l8+1);
+  [r4dotask_t3l8] t3l8=0 & r4Alloct3l8 & r4Loc=8 & r4retry_t3l8>=r4_maxRetry_t3l8  & turn=53 -> 1 : (t3l8'=2);
+  [r4dotask_t3l8b] t3l8b=0 & r4Alloct3l8b & r4Loc=8 & r4retry_t3l8b<r4_maxRetry_t3l8b  & turn=53 -> 0.97 : (t3l8b'=1) + 0.03 : (r4retry_t3l8b'=r4retry_t3l8b+1);
+  [r4dotask_t3l8b] t3l8b=0 & r4Alloct3l8b & r4Loc=8 & r4retry_t3l8b>=r4_maxRetry_t3l8b  & turn=53 -> 1 : (t3l8b'=2);
+  // r5
+  [r5dotask_t2l5] t2l5=0 & r5Alloct2l5 & r5Loc=5 & r5retry_t2l5<r5_maxRetry_t2l5  & turn=53 -> 0.99 : (t2l5'=1) + 0.01 : (r5retry_t2l5'=r5retry_t2l5+1);
+  [r5dotask_t2l5] t2l5=0 & r5Alloct2l5 & r5Loc=5 & r5retry_t2l5>=r5_maxRetry_t2l5  & turn=53 -> 1 : (t2l5'=2);
+  [r5dotask_t2l8a] t2l8a=0 & r5Alloct2l8a & r5Loc=8 & r5retry_t2l8a<r5_maxRetry_t2l8a  & turn=53 -> 0.99 : (t2l8a'=1) + 0.01 : (r5retry_t2l8a'=r5retry_t2l8a+1);
+  [r5dotask_t2l8a] t2l8a=0 & r5Alloct2l8a & r5Loc=8 & r5retry_t2l8a>=r5_maxRetry_t2l8a  & turn=53 -> 1 : (t2l8a'=2);
+  [r5dotask_t2l8b] t2l8b=0 & r5Alloct2l8b & r5Loc=8 & r5retry_t2l8b<r5_maxRetry_t2l8b  & turn=53 -> 0.99 : (t2l8b'=1) + 0.01 : (r5retry_t2l8b'=r5retry_t2l8b+1);
+  [r5dotask_t2l8b] t2l8b=0 & r5Alloct2l8b & r5Loc=8 & r5retry_t2l8b>=r5_maxRetry_t2l8b  & turn=53 -> 1 : (t2l8b'=2);
+  [r5dotask_t2l8c] t2l8c=0 & r5Alloct2l8c & r5Loc=8 & r5retry_t2l8c<r5_maxRetry_t2l8c  & turn=53 -> 0.99 : (t2l8c'=1) + 0.01 : (r5retry_t2l8c'=r5retry_t2l8c+1);
+  [r5dotask_t2l8c] t2l8c=0 & r5Alloct2l8c & r5Loc=8 & r5retry_t2l8c>=r5_maxRetry_t2l8c  & turn=53 -> 1 : (t2l8c'=2);
+  [r5dotask_t2l8d] t2l8d=0 & r5Alloct2l8d & r5Loc=8 & r5retry_t2l8d<r5_maxRetry_t2l8d  & turn=53 -> 0.99 : (t2l8d'=1) + 0.01 : (r5retry_t2l8d'=r5retry_t2l8d+1);
+  [r5dotask_t2l8d] t2l8d=0 & r5Alloct2l8d & r5Loc=8 & r5retry_t2l8d>=r5_maxRetry_t2l8d  & turn=53 -> 1 : (t2l8d'=2);
+  [r5dotask_t3l4] t3l4=0 & r5Alloct3l4 & r5Loc=4 & r5retry_t3l4<r5_maxRetry_t3l4  & turn=53 -> 0.97 : (t3l4'=1) + 0.03 : (r5retry_t3l4'=r5retry_t3l4+1);
+  [r5dotask_t3l4] t3l4=0 & r5Alloct3l4 & r5Loc=4 & r5retry_t3l4>=r5_maxRetry_t3l4  & turn=53 -> 1 : (t3l4'=2);
+  [r5dotask_t3l7] t3l7=0 & r5Alloct3l7 & r5Loc=7 & r5retry_t3l7<r5_maxRetry_t3l7  & turn=53 -> 0.97 : (t3l7'=1) + 0.03 : (r5retry_t3l7'=r5retry_t3l7+1);
+  [r5dotask_t3l7] t3l7=0 & r5Alloct3l7 & r5Loc=7 & r5retry_t3l7>=r5_maxRetry_t3l7  & turn=53 -> 1 : (t3l7'=2);
+  [r5dotask_t3l9] t3l9=0 & r5Alloct3l9 & r5Loc=9 & r5retry_t3l9<r5_maxRetry_t3l9  & turn=53 -> 0.97 : (t3l9'=1) + 0.03 : (r5retry_t3l9'=r5retry_t3l9+1);
+  [r5dotask_t3l9] t3l9=0 & r5Alloct3l9 & r5Loc=9 & r5retry_t3l9>=r5_maxRetry_t3l9  & turn=53 -> 1 : (t3l9'=2);
+  [r5dotask_t3l9b] t3l9b=0 & r5Alloct3l9b & r5Loc=9 & r5retry_t3l9b<r5_maxRetry_t3l9b  & turn=53 -> 0.97 : (t3l9b'=1) + 0.03 : (r5retry_t3l9b'=r5retry_t3l9b+1);
+  [r5dotask_t3l9b] t3l9b=0 & r5Alloct3l9b & r5Loc=9 & r5retry_t3l9b>=r5_maxRetry_t3l9b  & turn=53 -> 1 : (t3l9b'=2);
+  [r5dotask_t3l8] t3l8=0 & r5Alloct3l8 & r5Loc=8 & r5retry_t3l8<r5_maxRetry_t3l8  & turn=53 -> 0.97 : (t3l8'=1) + 0.03 : (r5retry_t3l8'=r5retry_t3l8+1);
+  [r5dotask_t3l8] t3l8=0 & r5Alloct3l8 & r5Loc=8 & r5retry_t3l8>=r5_maxRetry_t3l8  & turn=53 -> 1 : (t3l8'=2);
+  [r5dotask_t3l8b] t3l8b=0 & r5Alloct3l8b & r5Loc=8 & r5retry_t3l8b<r5_maxRetry_t3l8b  & turn=53 -> 0.97 : (t3l8b'=1) + 0.03 : (r5retry_t3l8b'=r5retry_t3l8b+1);
+  [r5dotask_t3l8b] t3l8b=0 & r5Alloct3l8b & r5Loc=8 & r5retry_t3l8b>=r5_maxRetry_t3l8b  & turn=53 -> 1 : (t3l8b'=2);
+endmodule
+
+
+// Reward: cost
+rewards
+  // worker1 move
+  [worker1movel1_l2] true : 1;
+  [worker1movel2_l1] true : 1;
+  [worker1movel1_l4] true : 1;
+  [worker1movel4_l1] true : 1;
+  [worker1movel2_l3] true : 1;
+  [worker1movel3_l2] true : 1;
+  [worker1movel2_l5] true : 1;
+  [worker1movel5_l2] true : 1;
+  [worker1movel3_l6] true : 1;
+  [worker1movel6_l3] true : 1;
+  [worker1movel4_l5] true : 1;
+  [worker1movel5_l4] true : 1;
+  [worker1movel4_l7] true : 1;
+  [worker1movel7_l4] true : 1;
+  [worker1movel5_l6] true : 1;
+  [worker1movel6_l5] true : 1;
+  [worker1movel5_l8] true : 1;
+  [worker1movel8_l5] true : 1;
+  [worker1movel6_l9] true : 1;
+  [worker1movel9_l6] true : 1;
+  [worker1movel7_l8] true : 1;
+  [worker1movel8_l7] true : 1;
+  [worker1movel8_l9] true : 1;
+  [worker1movel9_l8] true : 1;
+  // worker1 dotask
+  [worker1dotask_t1l4] true : worker1_cost_t1l4;
+  [worker1dotask_t1l6a] true : worker1_cost_t1l6a;
+  [worker1dotask_t1l6b] true : worker1_cost_t1l6b;
+  [worker1dotask_t1l7] true : worker1_cost_t1l7;
+  [worker1dotask_t3l4] true : worker1_cost_t3l4;
+  [worker1dotask_t3l7] true : worker1_cost_t3l7;
+  [worker1dotask_t3l9] true : worker1_cost_t3l9;
+  [worker1dotask_t3l9b] true : worker1_cost_t3l9b;
+  [worker1dotask_t3l8] true : worker1_cost_t3l8;
+  [worker1dotask_t3l8b] true : worker1_cost_t3l8b;
+  // worker2 move
+  [worker2movel1_l2] true : 1;
+  [worker2movel2_l1] true : 1;
+  [worker2movel1_l4] true : 1;
+  [worker2movel4_l1] true : 1;
+  [worker2movel2_l3] true : 1;
+  [worker2movel3_l2] true : 1;
+  [worker2movel2_l5] true : 1;
+  [worker2movel5_l2] true : 1;
+  [worker2movel3_l6] true : 1;
+  [worker2movel6_l3] true : 1;
+  [worker2movel4_l5] true : 1;
+  [worker2movel5_l4] true : 1;
+  [worker2movel4_l7] true : 1;
+  [worker2movel7_l4] true : 1;
+  [worker2movel5_l6] true : 1;
+  [worker2movel6_l5] true : 1;
+  [worker2movel5_l8] true : 1;
+  [worker2movel8_l5] true : 1;
+  [worker2movel6_l9] true : 1;
+  [worker2movel9_l6] true : 1;
+  [worker2movel7_l8] true : 1;
+  [worker2movel8_l7] true : 1;
+  [worker2movel8_l9] true : 1;
+  [worker2movel9_l8] true : 1;
+  // worker2 dotask
+  [worker2dotask_t1l4] true : worker2_cost_t1l4;
+  [worker2dotask_t1l6a] true : worker2_cost_t1l6a;
+  [worker2dotask_t1l6b] true : worker2_cost_t1l6b;
+  [worker2dotask_t1l7] true : worker2_cost_t1l7;
+  [worker2dotask_t3l4] true : worker2_cost_t3l4;
+  [worker2dotask_t3l7] true : worker2_cost_t3l7;
+  [worker2dotask_t3l9] true : worker2_cost_t3l9;
+  [worker2dotask_t3l9b] true : worker2_cost_t3l9b;
+  [worker2dotask_t3l8] true : worker2_cost_t3l8;
+  [worker2dotask_t3l8b] true : worker2_cost_t3l8b;
+  // r3 move
+  [r3movel1_l2] true : 1;
+  [r3movel2_l1] true : 1;
+  [r3movel1_l4] true : 1;
+  [r3movel4_l1] true : 1;
+  [r3movel2_l3] true : 1;
+  [r3movel3_l2] true : 1;
+  [r3movel2_l5] true : 1;
+  [r3movel5_l2] true : 1;
+  [r3movel3_l6] true : 1;
+  [r3movel6_l3] true : 1;
+  [r3movel4_l5] true : 1;
+  [r3movel5_l4] true : 1;
+  [r3movel4_l7] true : 1;
+  [r3movel7_l4] true : 1;
+  [r3movel5_l6] true : 1;
+  [r3movel6_l5] true : 1;
+  [r3movel5_l8] true : 1;
+  [r3movel8_l5] true : 1;
+  [r3movel6_l9] true : 1;
+  [r3movel9_l6] true : 1;
+  [r3movel7_l8] true : 1;
+  [r3movel8_l7] true : 1;
+  [r3movel8_l9] true : 1;
+  [r3movel9_l8] true : 1;
+  // r3 dotask
+  [r3dotask_t2l5] true : r3_cost_t2l5;
+  [r3dotask_t2l8a] true : r3_cost_t2l8a;
+  [r3dotask_t2l8b] true : r3_cost_t2l8b;
+  [r3dotask_t2l8c] true : r3_cost_t2l8c;
+  [r3dotask_t2l8d] true : r3_cost_t2l8d;
+  [r3dotask_t3l4] true : r3_cost_t3l4;
+  [r3dotask_t3l7] true : r3_cost_t3l7;
+  [r3dotask_t3l9] true : r3_cost_t3l9;
+  [r3dotask_t3l9b] true : r3_cost_t3l9b;
+  [r3dotask_t3l8] true : r3_cost_t3l8;
+  [r3dotask_t3l8b] true : r3_cost_t3l8b;
+  // r4 move
+  [r4movel1_l2] true : 1;
+  [r4movel2_l1] true : 1;
+  [r4movel1_l4] true : 1;
+  [r4movel4_l1] true : 1;
+  [r4movel2_l3] true : 1;
+  [r4movel3_l2] true : 1;
+  [r4movel2_l5] true : 1;
+  [r4movel5_l2] true : 1;
+  [r4movel3_l6] true : 1;
+  [r4movel6_l3] true : 1;
+  [r4movel4_l5] true : 1;
+  [r4movel5_l4] true : 1;
+  [r4movel4_l7] true : 1;
+  [r4movel7_l4] true : 1;
+  [r4movel5_l6] true : 1;
+  [r4movel6_l5] true : 1;
+  [r4movel5_l8] true : 1;
+  [r4movel8_l5] true : 1;
+  [r4movel6_l9] true : 1;
+  [r4movel9_l6] true : 1;
+  [r4movel7_l8] true : 1;
+  [r4movel8_l7] true : 1;
+  [r4movel8_l9] true : 1;
+  [r4movel9_l8] true : 1;
+  // r4 dotask
+  [r4dotask_t2l5] true : r4_cost_t2l5;
+  [r4dotask_t2l8a] true : r4_cost_t2l8a;
+  [r4dotask_t2l8b] true : r4_cost_t2l8b;
+  [r4dotask_t2l8c] true : r4_cost_t2l8c;
+  [r4dotask_t2l8d] true : r4_cost_t2l8d;
+  [r4dotask_t3l4] true : r4_cost_t3l4;
+  [r4dotask_t3l7] true : r4_cost_t3l7;
+  [r4dotask_t3l9] true : r4_cost_t3l9;
+  [r4dotask_t3l9b] true : r4_cost_t3l9b;
+  [r4dotask_t3l8] true : r4_cost_t3l8;
+  [r4dotask_t3l8b] true : r4_cost_t3l8b;
+  // r5 move
+  [r5movel1_l2] true : 1;
+  [r5movel2_l1] true : 1;
+  [r5movel1_l4] true : 1;
+  [r5movel4_l1] true : 1;
+  [r5movel2_l3] true : 1;
+  [r5movel3_l2] true : 1;
+  [r5movel2_l5] true : 1;
+  [r5movel5_l2] true : 1;
+  [r5movel3_l6] true : 1;
+  [r5movel6_l3] true : 1;
+  [r5movel4_l5] true : 1;
+  [r5movel5_l4] true : 1;
+  [r5movel4_l7] true : 1;
+  [r5movel7_l4] true : 1;
+  [r5movel5_l6] true : 1;
+  [r5movel6_l5] true : 1;
+  [r5movel5_l8] true : 1;
+  [r5movel8_l5] true : 1;
+  [r5movel6_l9] true : 1;
+  [r5movel9_l6] true : 1;
+  [r5movel7_l8] true : 1;
+  [r5movel8_l7] true : 1;
+  [r5movel8_l9] true : 1;
+  [r5movel9_l8] true : 1;
+  // r5 dotask
+  [r5dotask_t2l5] true : r5_cost_t2l5;
+  [r5dotask_t2l8a] true : r5_cost_t2l8a;
+  [r5dotask_t2l8b] true : r5_cost_t2l8b;
+  [r5dotask_t2l8c] true : r5_cost_t2l8c;
+  [r5dotask_t2l8d] true : r5_cost_t2l8d;
+  [r5dotask_t3l4] true : r5_cost_t3l4;
+  [r5dotask_t3l7] true : r5_cost_t3l7;
+  [r5dotask_t3l9] true : r5_cost_t3l9;
+  [r5dotask_t3l9b] true : r5_cost_t3l9b;
+  [r5dotask_t3l8] true : r5_cost_t3l8;
+  [r5dotask_t3l8b] true : r5_cost_t3l8b;
+endrewards

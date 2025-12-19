@@ -1,0 +1,11 @@
+SequentialPlan:
+    move(r3, l1, l4)
+    move(r3, l4, l7)
+    move(worker1, l1, l4)
+    dotask(r3, t3l7, l7)
+    move(r3, l7, l8)
+    dotask(worker1, t3l4, l4)
+    dotask(r3, t2l8a, l8)
+    move(r3, l8, l5)
+    dotask(worker1, t1l4, l4)
+    dotask(r3, t2l5, l5)

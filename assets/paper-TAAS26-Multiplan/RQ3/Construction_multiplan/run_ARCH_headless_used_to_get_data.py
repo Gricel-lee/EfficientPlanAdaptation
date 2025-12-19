@@ -41,7 +41,7 @@ def main():
         print(plan)
     elif one_plan_or_multiple=='multiple':
         print(f"[run_SHARP_headless] Generating multiple plans...")
-        pddlplanner.generate_plans(fdomain, fproblem, output_dir, timeout=temperstEngineTimeout)
+        pddlplanner.runPlanner(fdomain, fproblem, output_dir, timeout=temperstEngineTimeout)
     print("[run_SHARP_headless] Plans generation completed.")
 
 
@@ -54,7 +54,7 @@ def main():
         
     elif one_plan_or_multiple=='multiple':
         print(f"[run_SHARP_headless] Generating PRISM/Evochecker files for multiple plans...")
-        plans_found = pddlplanner.generate_plans(fdomain, fproblem, output_dir, timeout=temperstEngineTimeout)
+        plans_found = pddlplanner.runPlanner(fdomain, fproblem, output_dir, timeout=temperstEngineTimeout)
         for i, plan in enumerate(plans_found):
             print(f"[run_SHARP_headless] Generating files for plan {i+1}:\n{plan}")
             
