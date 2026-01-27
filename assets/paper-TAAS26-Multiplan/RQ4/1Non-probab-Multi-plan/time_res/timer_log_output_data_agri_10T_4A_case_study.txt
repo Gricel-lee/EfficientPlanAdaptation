@@ -1,4 +1,4 @@
-[TIMER] ENHSP Planning Time Plan1: Elapsed time: $2.3776 \pm 1.7123$
+[TIMER] ENHSP Planning Time Plan1: Elapsed time: $2.3776 \pm 0.7123$
 [TIMER] TEMPest Planning Time for Plan2: Elapsed time: $6.1278 \pm 2.0985$
 [TIMER] TEMPest Planning Time for Plan3: Elapsed time: $7.5788 \pm 2.4871$
 [TIMER] TEMPest Planning Time for Plan4: Elapsed time: $10.6408 \pm 2.9514$

@@ -1,0 +1,17 @@
+[TIMER] ENHSP Planning Time Plan1: Elapsed time: 0.4093 seconds
+[TIMER] TEMPest Planning Time for Plan2: Elapsed time: 0.9665 seconds
+[TIMER] TEMPest Planning Time for Plan3: Elapsed time: 1.0638 seconds
+[TIMER] TEMPest Planning Time for Plan4: Elapsed time: 1.1593 seconds
+[TIMER] TEMPest Planning Time for Plan5: Elapsed time: 1.2885 seconds
+[TIMER] TEMPest Planning Time for Plan6: Elapsed time: 1.5352 seconds
+[TIMER] TEMPest Planning Time for Plan7: Elapsed time: 1.7067 seconds
+[TIMER] TEMPest Planning Time for Plan8: Elapsed time: 1.8750 seconds
+[TIMER] TEMPest Planning Time for Plan9: Elapsed time: 2.0060 seconds
+[TIMER] TEMPest Planning Time for Plan10: Elapsed time: 2.1159 seconds
+[TIMER] TEMPest Planning Time for Plan11: Elapsed time: 2.2590 seconds
+[TIMER] TEMPest Planning Time for Plan12: Elapsed time: 2.3529 seconds
+[TIMER] TEMPest Planning Time for Plan14: Elapsed time: 2.6061 seconds
+[TIMER] TEMPest Planning Time for Plan15: Elapsed time: 2.6586 seconds
+[TIMER] TEMPest Planning Time for Plan16: Elapsed time: 2.8057 seconds
+[TIMER] TEMPest Planning Time for Plan17: Elapsed time: 2.9170 seconds
+[TIMER] TEMPest Planning Time for Plan18: Elapsed time: 2.9695 seconds

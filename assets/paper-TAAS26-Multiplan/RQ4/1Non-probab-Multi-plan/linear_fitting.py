@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 def plot_raw_data():
     # Raw data (mean ± std) for each task
     raw_data = [
+        [1.1211, 1.9611, 2.6362, 3.1941, 3.6269],  # NEW: first row (means)
         [1.2316, 2.2515, 2.3373, 3.4992, 4.3283],  # 5 tasks, 3 agents
         [5.5012, 11.9495, 22.8916, 30.9586, 38.0720],  # 10 tasks, 3 agents
         [7.5731, 570.3567, 688.1855, 844.4668, 961.1288],  # 15 tasks, 3 agents
@@ -27,12 +28,14 @@ def plot_raw_data():
 
     # Standard deviations for each data set
     std_devs = [
+        [0.1078, 0.1848, 0.2191, 0.4934, 0.6068],  # NEW: first row (stds)
         [0.0134, 0.6645, 0.3077, 0.6645, 0.6645],  # Std for 5 tasks, 3 agents
         [0.0134, 2.0348, 3.4587, 5.0241, 8.0412],  # Std for 10 tasks, 3 agents
         [0.0187, 69.2175, 74.9238, 80.9347, 93.2982],  # Std for 15 tasks, 3 agents
         [0.0201, 56.2084, 61.5093, 68.0914, 79.0528],  # Std for 15 tasks, 4 agents
         [0.0198, 86.5432, 94.3056, 103.2476, 112.2890],  # Std for 15 tasks, 5 agents
     ]
+
     
     # x-axis values representing the number of plans (1, 5, 10, 15, 20)
     x = np.array([1, 5, 10, 15, 20])
@@ -42,7 +45,7 @@ def plot_raw_data():
     stds = [np.array(std_dev) for std_dev in std_devs]
     
     # Legends for each dataset
-    legends = ["5t3a", "10t3a", "15t3a", "15t4a", "15t5a"]
+    legends = ["4t2a", "5t3a", "10t3a", "15t3a", "15t4a", "15t5a"]
     
     # Plotting the data with error bars
     plt.figure(figsize=(10, 6))
@@ -64,9 +67,6 @@ def plot_raw_data():
     
     # Show plot
     plt.show()
-
-# Call the function to plot
-plot_raw_data()
 
 
 
@@ -94,6 +94,7 @@ def print_linear_fit(y):
 
 
 # --------- Data for different variants ---------
+y0 = np.array([1.1211, 1.9611, 2.6362, 3.1941, 3.6269])
 y1 = np.array([1.2316, 2.2515, 2.3373, 3.4992, 4.3283])  # Time values
 y2 = np.array([5.5012, 11.9495, 22.8916, 30.9586, 38.0720])
 y3 = np.array([7.5731, 570.3567, 688.1855, 844.4668, 961.1288])
@@ -103,7 +104,21 @@ y5 = np.array([17.2418, 749.8326, 838.1968, 934.3133, 1027.7720])
 # Data x points
 x = np.array([1, 5, 10, 15, 20])  # Corresponding to number of plans
 
+y0 = np.array([0.4106,
+               1.3030,
+               1.7905,
+               2.2576,
+               2.6944])
+
+y0 = np.array([0.4424,
+               1.3597,
+               2.1932,
+               2.8446,
+               3.4198])
 
 # Function get slope by performing linear fitting
-print_linear_fit(y1)
-s
+print_linear_fit(y0)
+
+# Call the function to plot
+plot_raw_data()
+
