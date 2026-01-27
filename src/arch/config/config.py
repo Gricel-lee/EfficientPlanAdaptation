@@ -28,7 +28,8 @@ SOURCE = os.path.join(HP_PATH, "prj-venv/bin/activate")
 JAR_FILE = os.path.join(HP_PATH, "arch/apps/EvoChecker/EvoChecker-1.1.0.jar")
 LIBS_PATH = os.path.join(HP_PATH, "arch/apps/EvoChecker/libs")
 
-# Set EvoChecker environment var
+
+# ---- Set EvoChecker environment var ----
 # for linux or windows
 EVO_LIBRARY_PATH = f"{LIBS_PATH}/runtime"
 LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH = "LD_LIBRARY_PATH"
@@ -43,9 +44,9 @@ if platform == "darwin":
 print(f"[LTA-API] Loaded configuration: HP_PATH={HP_PATH}, NUM_TIMED_RUNS={NUM_TIMED_RUNS}, VERBOSE={VERBOSE}, POPULATION_SIZE={POPULATION_SIZE}, MAX_EVALUATIONS={MAX_EVALUATIONS}")
 PYTHON_EXECUTABLE = os.path.join(HP_PATH, "prj-venv/bin/python3")
 
+# ---- MOEA Algorithm ----
 # Note: Currently only NSGAII is supported
 MOEA = "NSGAII"
-
 
 
 #---- Global variables (not in config)-----

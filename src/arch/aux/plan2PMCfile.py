@@ -11,6 +11,9 @@ import unified_planning.plans.plan as Plan
 
 from arch.config.config import EVO_LIBRARY_PATH
 
+from arch.planningProblem.planningProblem import planning_problem
+
+
 
 def get_agents_in_plan(plan:PlanGenerationResult):
     '''Get agents in plan'''
@@ -199,8 +202,26 @@ def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, po
         for agent in plan_task_per_agent.keys():
             for task in plan_task_per_agent[agent]:
                 prob = prob_agent_dic[(str(agent), str(task))]
-                s += f"const double p_{agent}_{task}={prob};\n"
+                s += f"const double p_{agent}_{task}_ORIGINAL={prob};\n"
+                
+        # e value:
+        s += "\nconst double e = 2.718281828459045;\n"
+        # OK {worker1, r3} plan_agent_set
+        for agent in plan_agents_set:
+            print("Agent:", agent)
+            for task in plan_task_per_agent[agent]:
+                agentID = str(agent) # agent is type: unified_planning.model.fnode.FNode
+                taskInstanceID = str(task) # task is type: unified_planning.model.fnode.FNode
+                s += f"const double steepness{agentID}_{taskInstanceID} = {planning_problem.get_steepness(agentID, taskInstanceID)};\n"
+        s += "\n"
         
+        # Agent probability formulas:
+        for agent in plan_task_per_agent.keys():
+            for task in plan_task_per_agent[agent]:
+                prob = prob_agent_dic[(str(agent), str(task))]
+                s += f"formula p_{agent}_{task} = 2 * (1 - p_{agent}_{task}_ORIGINAL) * (1 / (1 + 1/pow(e,({agent}retry_{task} * steepness{agent}_{task})))) + (2 * p_{agent}_{task}_ORIGINAL - 1);\n"
+        s += "\n"
+
         # Final states
         for agent in plan_agents_set:
             n_agent_state = len(plan_actions_per_agent[agent]) + 1
@@ -236,8 +257,20 @@ def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, po
                 n_trans += 1
             s += "endmodule\n\n"
         
+        # Reward vals
+        for agent in plan_agents_set:
+            for action in plan_actions_per_agent[agent]:
+                if action._action.name == "dotask":
+                    task = str(action.actual_parameters[1])
+                    cost = cost_agent_dic[(str(agent), task)]
+                    # add cost original
+                    s += f"formula r_{agent}_{task}_ORIGINAL = {cost};\n"
+                    # add formula (reward varies with retries)
+                    s += f"formula r_{agent}_{task} = r_{agent}_{task}_ORIGINAL * ({agent}retry_{task}+1);\n"
+                    
+        
         # Rewards
-        s += "rewards \"cost\"\n"
+        s += "\n\nrewards \"cost\"\n"
         for agent in plan_agents_set:
             for action in plan_actions_per_agent[agent]:
                 if action._action.name == "move":
@@ -257,7 +290,7 @@ def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, po
         if evoChecker:
             s_evoProps += "//objective, max\nP=? [ F \"success\" ]\n\n"
             s_evoProps += "//objective, min\nR=? [ F \"done\" ]\n\n"
-            s_evoProps += f"////constraint, min, {p_min}\n//P=? [ F \"success\" ]\n\n"
+            s_evoProps += f"//constraint, min, {p_min}\nP=? [ F \"success\" ]\n\n"
         
         # Save .pm and .props files
         if evoChecker:
@@ -275,8 +308,8 @@ def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, po
         print(f"Error creating PRISM file: {e}")
         #print the traceback.print_exc()
         traceback.print_exc()
+        import sys # Error if not added here
         sys.exit(1)
-    
     # Return path to config.props file (only needed for EvoChecker)
     return os.path.join(output_dir, fname_config_props)
 
