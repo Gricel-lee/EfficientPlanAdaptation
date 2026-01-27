@@ -7,6 +7,11 @@
 # 
 # Set the paths to your problem in the main() function below.
 
+# This self-contained script performs the following:
+# A) Runs ARCH in headless mode to generate plans and EvoChecker files.
+# B) Plots results from multiple plans and highlights Pareto front.
+# C) Generates LaTeX table with Pareto metrics using pymoo.
+
 import arch.aux.json2pddl as json2pddl
 import arch.aux.pddlplanner as pddlplanner
 import arch.aux.plan2PMCfile as plan2PMCfile
@@ -18,7 +23,7 @@ import pandas as pd
 import numpy as np
 
 
-
+# =============== A) Main function running ARCH ===============
 def main():
     # Internal parameters
     headless = True
@@ -104,6 +109,8 @@ def _get_files_2plot():
 
 
 
+
+# =============== B) Plotting function for results from different plans ===============
 def plot_results():
     # Get files
     files = _get_files_2plot()
@@ -203,6 +210,13 @@ def plot_results():
     plt.close()
 
 
+
+
+
+
+
+
+# =============== C) Generate LaTeX table with Pareto metrics using pymoo ===============
 
 import numpy as np
 from pymoo.indicators.hv import HV

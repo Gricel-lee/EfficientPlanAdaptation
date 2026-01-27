@@ -7,6 +7,10 @@
 # 
 # Set the paths to your problem in the main() function below.
 
+# This self-contained script performs the following:
+# A) Runs ARCH in headless mode to generate plans and EvoChecker files.
+# B) Generates LaTeX table with Pareto metrics using pymoo.
+
 import arch.aux.json2pddl as json2pddl
 import arch.aux.pddlplanner as pddlplanner
 import arch.aux.plan2PMCfile as plan2PMCfile
@@ -19,6 +23,7 @@ import numpy as np
 
 
 
+# =============== A) Main function running ARCH ===============
 def main():
     # Internal parameters
     headless = True
@@ -105,6 +110,12 @@ def _get_files_2plot():
 
 
 
+
+
+
+
+# =============== B) Generate LaTeX table with Pareto metrics using pymoo ===============
+
 import numpy as np
 from pymoo.indicators.hv import HV
 from pymoo.indicators.gd import GD
@@ -135,7 +146,7 @@ def generate_latex_table_pymoo():
     # ------------------------------------------------
     # Convert objectives to MINIMIZATION for pymoo
     # ------------------------------------------------
-    # Our objective is: MAX X, MIN Y
+    # Objective is: MAX X, MIN Y
     # In pymoo:
     #   maximize X -> minimize -X
     #   minimize Y -> minimize Y
@@ -234,5 +245,5 @@ if __name__ == "__main__":
     one_plan_or_multiple='multiple'  # 'one' or 'multiple' plans
     main()
     generate_latex_table_pymoo()
-    
-    # Continure with plotting in 
+
+    # Continue with plotting if needed
