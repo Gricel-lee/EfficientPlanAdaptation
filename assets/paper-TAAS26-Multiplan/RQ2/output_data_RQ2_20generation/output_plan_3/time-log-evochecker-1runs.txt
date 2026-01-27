@@ -1,1 +1,0 @@
-[example2-1] Time elapsed: 50.13 seconds
