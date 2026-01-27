@@ -34,5 +34,5 @@ def main(input_dir ="src/Problems/fullmdp/"):
     print("[runfullMDP] Done.")
 
 if __name__ == "__main__":
-    json_file_path = "/home/gnvf500/Gricel-Documents/GithubGris/EfficientPlanAdaptation/assets/paper-TAAS26-Multiplan/RQ4/3PRISM_fullMDP/JSONs_n_fullMDPs"
+    json_file_path = "../assets/paper-TAAS26-Multiplan/RQ4/3PRISM_fullMDP/JSONs_n_fullMDPs"
     main(json_file_path)

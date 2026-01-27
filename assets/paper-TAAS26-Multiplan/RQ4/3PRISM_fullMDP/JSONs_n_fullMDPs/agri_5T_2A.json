@@ -144,18 +144,6 @@
         {
           "id": "t1l4",
           "location": "l4"
-        },
-        {
-          "id": "t1l6a",
-          "location": "l6"
-        },
-        {
-          "id": "t1l6b",
-          "location": "l6"
-        },
-        {
-          "id": "t1l7",
-          "location": "l7"
         }
       ]
     },
@@ -170,18 +158,6 @@
         },
         {
           "id": "t2l8a",
-          "location": "l8"
-        },
-        {
-          "id": "t2l8b",
-          "location": "l8"
-        },
-        {
-          "id": "t2l8c",
-          "location": "l8"
-        },
-        {
-          "id": "t2l8d",
           "location": "l8"
         }
       ]
@@ -198,51 +174,13 @@
         {
           "id": "t3l7",
           "location": "l7"
-        },
-        {
-          "id": "t3l9",
-          "location": "l9"
-        }
-        ,
-        {
-          "id": "t3l9b",
-          "location": "l9"
-        },
-        {
-          "id": "t3l8",
-          "location": "l8"
-        },
-        {
-          "id": "t3l8b",
-          "location": "l8"
         }
       ]
     }
   ],
-    "agents": [
+  "agents": [
     {
       "id": "worker1",
-      "type": "worker",
-      "initial_location": "l1",
-      "tasks": [
-        {
-          "type": "t1",
-          "probability_of_success": 1.0,
-          "cost": 3,
-          "duration": 5,
-          "number_of_retries": 5
-        },
-        {
-          "type": "t3",
-          "probability_of_success": 0.99,
-          "cost": 5,
-          "duration": 3,
-          "number_of_retries": 5
-        }
-      ]
-    },
-    {
-      "id": "worker2",
       "type": "worker",
       "initial_location": "l1",
       "tasks": [
@@ -274,53 +212,7 @@
           "probability_of_success": 0.99,
           "cost": 1,
           "duration": 5,
-          "number_of_retries": 10,
-          "steepness": 0.1
-        },
-        {
-          "type": "t3",
-          "probability_of_success": 0.97,
-          "cost": 1,
-          "duration": 3,
-          "number_of_retries": 10,
-          "steepness": 0.1
-        }
-      ]
-    },
-    {
-      "id": "r4",
-      "type": "robot",
-      "initial_location": "l1",
-      "tasks": [
-        {
-          "type": "t2",
-          "probability_of_success": 0.99,
-          "cost": 1,
-          "duration": 5,
-          "number_of_retries": 10,
-          "steepness": 0.1
-        },
-        {
-          "type": "t3",
-          "probability_of_success": 0.97,
-          "cost": 1,
-          "duration": 3,
-          "number_of_retries": 10,
-          "steepness": 0.1
-        }
-      ]
-    },
-    {
-      "id": "r5",
-      "type": "robot",
-      "initial_location": "l1",
-      "tasks": [
-        {
-          "type": "t2",
-          "probability_of_success": 0.99,
-          "cost": 1,
-          "duration": 5,
-          "number_of_retries": 10,
+          "number_of_retries": 2,
           "steepness": 0.1
         },
         {
@@ -335,7 +227,7 @@
     }
   ],
   "constraints": {
-    "mission_probability_of_success": 0.65,
+    "mission_probability_of_success": 0.95,
     "min_assignment_probability": 0.5
   }
 }
