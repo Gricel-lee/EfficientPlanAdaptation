@@ -34,6 +34,50 @@
 
         <!-- Main Content Area -->
         <main>
+
+            <!-- Create Form to input for "user type", "explanation format", "explanation level of detail"-->
+            <div class="mb-12 bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">User Input</h2>
+                <form id="user-input-form">
+                    <div class="mb-4">
+                        <label for="user-type" class="block text-gray-700 text-sm font-bold mb-2">Select User Role:</label>
+                        <select id="user-type" name="user_type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="researcher">Researcher</option>
+                            <option value="practitioner">Industry</option>
+                            <option value="policy-maker">Policy Maker</option>
+                            <option value="non-expert">Non-expert (none of the above)</option>
+
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="explanation-tone" class="block text-gray-700 text-sm font-bold mb-2">Select Explanation Tone:</label>
+                        <select id="explanation-tone" name="explanation_tone" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="formal">Formal</option>
+                            <option value="informal">Informal</option>
+                        </select>
+
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="explanation-format" class="block text-gray-700 text-sm font-bold mb-2">Select Explanation Format:</label>
+                        <select id="explanation-format" name="explanation_format" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="paragraphs">Text in paragraphs</option>
+                            <option value="bullets">Bullet points</option>
+                            <option value="textAndLists">Text and list</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="explanation-detail" class="block text-gray-700 text-sm font-bold mb-2">Explanation Level of Detail:</label>
+                        <select id="explanation-detail" name="explanation_detail" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
             <!-- Create Problem Form -->
             <div class="mb-12 bg-white p-6 rounded-xl shadow-lg">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-4">Create New Problem</h2>
@@ -58,7 +102,108 @@
                         </button>
                     </div>
                 </form>
+                <div id="create-problem-from-text-wrapper" class="mb-12 bg-white p-1 hidden">
+                    <form id="create-problem-from-text-form" class="">
+                        <label for="problem-text-input" class="block text-gray-700 text-sm font-bold mb-2">Problem in Text:</label>
+                        <!-- Script used to add example problem text to the textarea as a placeholder -->
+                        <textarea
+                                id="problem-text-input"
+                                name="problem_text"
+                                rows="8"
+                                autocomplete="off"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                placeholder="Describe your planning problem here..."
+                                required></textarea>
+                        <!-- Verical space -->
+                        <div class="my-5"></div>
+                        <!-- Loading spinner for text-to-JSON conversion -->
+                        <div id="text-form-spinner" class="hidden flex flex-col items-center justify-center py-4">
+                            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-green-500 mx-auto"></div>
+                            <p class="mt-3 text-gray-600">Converting text to planning problem with Gemini...</p>
+                        </div>
+                        <div class="flex items-center justify-end">
+                            <button type="submit" id="create-problem-from-text-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                Create Problem
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div id="create-from-text-checkbox-container" class="flex items-center justify-start mb-4">
+                <label class="flex items-center space-x-2 text-sm text-gray-700">
+                    <input id="create-from-text-checkbox" type="checkbox" class="h-6 w-6 text-blue-600">
+                    <span class="text-gray-700 text-sm font-bold">Planning problem from Text</span>
+                </label>
             </div>
+
+            </div>
+
+
+            
+            
+            <!-- Script to add example problem text to the textarea as a placeholder-->
+            <script>
+                fetch('case_study_text/agriculture_natural_language_problem.txt')
+                // fetch('agriculture_natural_language_problem.txt')
+                .then(response => response.text())
+                .then(text => {
+                    document.getElementById('problem-text-input').value = text;
+                })
+                .catch(err => console.error('Failed to load text file:', err));
+            </script>
+
+
+            <!-- Script to handle the visibility toggling -->
+            <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const wrapper = document.getElementById('create-problem-from-text-wrapper');
+                            const checkbox = document.getElementById('create-from-text-checkbox');
+
+                            // JSON-specific elements to hide when text mode is selected
+                            const jsonPathLabel = document.querySelector('label[for="problem-json-path"]');
+                            const jsonPathInput = document.getElementById('problem-json-path');
+                            const jsonFileSelector = document.getElementById('json-file-selector');
+                            const browseFileBtn = document.getElementById('browse-file-btn');
+                            const createProblemBtn = document.getElementById('create-problem-btn');
+
+                            if (!wrapper || !checkbox) return;
+
+                            const updateVisibility = () => {
+                                if (checkbox.checked) {
+                                    // Show text form
+                                    wrapper.classList.remove('hidden');
+                                    wrapper.style.display = '';
+                                    // Hide JSON-specific elements
+                                    if (jsonPathLabel) jsonPathLabel.style.display = 'none';
+                                    if (jsonPathInput) jsonPathInput.style.display = 'none';
+                                    if (jsonFileSelector) jsonFileSelector.style.display = 'none';
+                                    if (browseFileBtn) browseFileBtn.style.display = 'none';
+                                    if (createProblemBtn) createProblemBtn.style.display = 'none';
+                                } else {
+                                    // Hide text form
+                                    wrapper.classList.add('hidden');
+                                    wrapper.style.display = 'none';
+                                    // Show JSON-specific elements
+                                    if (jsonPathLabel) jsonPathLabel.style.display = '';
+                                    if (jsonPathInput) jsonPathInput.style.display = '';
+                                    if (jsonFileSelector) jsonFileSelector.style.display = '';
+                                    if (browseFileBtn) browseFileBtn.style.display = '';
+                                    if (createProblemBtn) createProblemBtn.style.display = '';
+                                }
+                            };
+
+                            // Initialize according to current checkbox state
+                            updateVisibility();
+
+                            // Toggle on change
+                            checkbox.addEventListener('change', () => {
+                                updateVisibility();
+                            });
+                        });
+                    </script>
+
+                    
+            <!-- Add vertical space-->
+            <div class="my-10"></div>
 
             <div id="problems-list-view" class="view">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-4">All Problems</h2>
@@ -100,6 +245,10 @@
                                 <div id="plot-chart-view" class="h-full w-full hidden">
                                     <canvas id="performance-chart"></canvas>
                                 </div>
+                                <!-- Custom Clickable Tooltip -->
+                                <div id="chart-tooltip" class="absolute bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3 z-50 hidden pointer-events-auto overflow-y-auto" style="min-width: 200px; max-height: 400px;">
+                                    <div id="chart-tooltip-content"></div>
+                                </div>
                             </div>
                         </div>
                         <!-- Right side: Data Log -->
@@ -127,10 +276,19 @@
                     </div>
                 </div>
                 
-                <!-- Down side: Additional Information -->
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Generated Plan</h3>
-                    <div id="detail-additional" class="border border-gray-300 bg-white text-gray-700 font-mono text-sm p-4 rounded-lg overflow-x-auto h-95">
+                <!-- Down side: Generated Plan and Plan Explanation -->
+                <div id="down-side-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Left: Generated Plan -->
+                    <div id="generated-plan-section">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4">Generated Plan</h3>
+                        <div id="detail-additional" class="border border-gray-300 bg-white text-gray-700 font-mono text-sm p-4 rounded-lg overflow-x-auto h-95">
+                        </div>
+                    </div>
+                    <!-- Right: Plan Explanation (hidden by default) -->
+                    <div id="plan-explanation-section" class="hidden">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4">Plan Explanation</h3>
+                        <div id="plan-explanation" class="border border-gray-300 bg-white text-gray-700 font-mono text-sm p-4 rounded-lg overflow-x-auto h-95">
+                        </div>
                     </div>
                 </div>
 

@@ -1,0 +1,49 @@
+This is an Agricultural Robotics case study describing a planning problem within a grid-based environment involving multiple agents and tasks.
+
+## **Locations**
+
+The environment is structured as a 3x3 grid with nine distinct locations:
+
+* **l1**: The "Initial location" at coordinates (1, 1).
+* **l2**: The "Location to the right of location" at coordinates (1, 2).
+* **l3**: A location at coordinates (1, 3).
+* **l4**: A location at coordinates (2, 1).
+* **l5**: A location at coordinates (2, 2).
+* **l6**: A location at coordinates (2, 3).
+* **l7**: A location at coordinates (3, 1).
+* **l8**: A location at coordinates (3, 2).
+* **l9**: A location at coordinates (3, 3).
+
+## **Paths**
+
+The locations are connected by a network of bidirectional paths with varying travel distances:
+
+* A path of distance 1 connects l1 and l2.
+* A path of distance 5 connects l1 and l4.
+* Paths of distance 1 connect adjacent locations: l2-l3, l2-l5, l3-l6, l4-l5, l4-l7, l5-l6, l5-l8, l6-l9, l7-l8, and l8-l9.
+
+## **Tasks**
+
+There are three distinct types of tasks that need to be completed across the grid:
+
+* **Harvesting (t1)**: Grape harvesting is an extremely arduous and repetitive activity. As a highly-dexterous task, this is delegated only to humans. Severe fatigue has to be mitigated whenever possible as, after many days in steep terrain conditions, workers show signs of physical and mental fatigue. This task has a base duration of 1. Instances are located at l4 (t1l4), l6 (t1l6a and t1l6b), and l7 (t1l7).
+* **Vineyard monitoring (t2)**: Continuous monitoring of vineyards includes monitoring the vines’ health, the vines’ state after a heatwave or heavy rainfall, and routine monitoring. As remote areas can be extremely difficult for humans to reach and magnify human fatigue, this task is delegated to robots. This task has a base duration of 1. Instances are located at l5 (t2l5) and l8 (t2l8a and t2l8b).
+* **Grapevine identification (t3)**: Grapevine varietal identification occurs during the observation period between the hot months of June and August. This task, comprising vine leaf pictures taken and sent to a central unit, is shared between human workers and robots. This task might fail due to communication errors, hardware failures, or the collection of unsatisfactory low-quality images. This task has a base duration of 1. Instances are located at l4 (t3l4), l7 (t3l7), and l9 (t3l9).
+
+## **Agents**
+
+A team of four agents, two workers and two robots, is available to perform the tasks. All agents start at the initial location (l1).
+
+* **worker1** and **worker2**: These two workers are identical.
+    * They can perform **Task t1** with a 100% success probability, a cost of 3, a duration of 5, and 5 retries.
+    * They can also perform **Task t3** with a 0.99 probability, a cost of 5, a duration of 3, and 5 retries.
+* **r1** and **r2**: These two robots are identical.
+    * They are assigned to **Task t2**, which they perform with a 0.99 success probability, a cost of 1, a duration of 5, and 10 retries.
+    * They can also perform **Task t3**, with a 0.97 probability, a cost of 1, a duration of 3, and 10 retries.
+
+## **Constraints**
+
+The overall plan must meet two key performance criteria:
+
+* The minimum acceptable probability of success for the entire mission is 0.95.
+* Any single task assignment must have a minimum success probability of 0.5 to be considered valid.

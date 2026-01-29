@@ -38,7 +38,7 @@ if platform == "darwin":
     EVO_LIBRARY_PATH = f"{LIBS_PATH}/runtime-amd64"
     LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH = "DYLD_LIBRARY_PATH"
     print("[Config] Running on macOS")
-    print(f"[Config] {LD_LIBRARY_PATH}")
+    print(f"[Config] {EVO_LIBRARY_PATH}")
     print(f"[Config] {LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH}")
 
 print(f"[LTA-API] Loaded configuration: HP_PATH={HP_PATH}, NUM_TIMED_RUNS={NUM_TIMED_RUNS}, VERBOSE={VERBOSE}, POPULATION_SIZE={POPULATION_SIZE}, MAX_EVALUATIONS={MAX_EVALUATIONS}")
@@ -53,6 +53,9 @@ MOEA = "NSGAII"
 # Stores problem ID to output directory path
 PROBLEM_OUTPUT_DIR = {str: str} 
 PROBLEM_OUTPUT_JSON = {str: str}
+
+# Temporary path for storing problems generated from text (natural language) input
+TEMP_PATH = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + "/../../../temp")
 
 # PDDL file names
 FILE_DOMAIN_PDDL = 'cphs_domain.pddl'

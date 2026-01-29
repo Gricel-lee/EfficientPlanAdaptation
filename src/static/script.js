@@ -16,6 +16,17 @@ const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
 const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
 const createProblemForm = document.getElementById('create-problem-form');
 const createProblemBtn = document.getElementById('create-problem-btn');
+//add create-problem-from-text-btn
+//add "create-from-text-checkbox
+// add create-problem-from-text-wrapper
+// create-problem-from-text-form
+const createFromTextCheckbox = document.getElementById('create-from-text-checkbox');
+const createProblemFromTextWrapper = document.getElementById('problem-text-input');
+const createProblemFromTextBtn = document.getElementById('create-problem-from-text-btn');
+const createProblemFromTextForm = document.getElementById('create-problem-from-text-form');
+const textFormSpinner = document.getElementById('text-form-spinner');
+
+// Plot views and elements
 const plotLoadingView = document.getElementById('plot-loading-view');
 const plotErrorView = document.getElementById('plot-error-view');
 const plotChartView = document.getElementById('plot-chart-view');
@@ -32,6 +43,7 @@ let listViewInterval = null; // To hold the polling interval for the list view
 
 // --- API Functions ---
 
+// Create problem from JSON file path
 async function createProblem(description, jsonFilePath) {
     createProblemBtn.disabled = true;
     createProblemBtn.textContent = 'Creating...';
@@ -50,6 +62,34 @@ async function createProblem(description, jsonFilePath) {
     } finally {
         createProblemBtn.disabled = false;
         createProblemBtn.textContent = 'Create Problem';
+    }
+}
+
+// Create problem from text input, not JSON file
+async function createProblemFromText(description, naturalLanguageText) {
+    console.log("[DEBUG] createProblemFromText called");
+    console.log("[DEBUG] Text length:", naturalLanguageText.length);
+    createProblemFromTextBtn.disabled = true;
+    createProblemFromTextBtn.classList.add('hidden');
+    // Show the loading spinner
+    if (textFormSpinner) textFormSpinner.classList.remove('hidden');
+    try {
+        const response = await fetch('/api/problems/from-text/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ description: description, text: naturalLanguageText })
+        });
+        console.log("[DEBUG] Response status:", response.status);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        fetchAllProblems();
+    } catch (error) {
+        console.error("Failed to create problem from text:", error);
+        alert('Failed to create problem from text. Check console for details.');
+    } finally {
+        // Hide the loading spinner and restore button
+        if (textFormSpinner) textFormSpinner.classList.add('hidden');
+        createProblemFromTextBtn.disabled = false;
+        createProblemFromTextBtn.classList.remove('hidden');
     }
 }
 
@@ -207,20 +247,26 @@ async function fetchAndRenderJSONOutput(problemId) {
 //         }
 
 
+/**
+ * Fetches the combined plot data (Pareto Set and Front) from the FastAPI backend.
+ * Filters out duplicate (x, y, setData) combinations before rendering.
+ */
 async function fetchPlotData(problemId) {
             try {
+                // Get plot data from the backend API
                 const response = await fetch(`/api/problems/${problemId}/results`);
-                
+                // Check for HTTP errors
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({ detail: 'Could not parse error response.' }));
                     throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
                 }
-                
+                // Parse the JSON response
                 const plotData = await response.json();
                 
-                // Validate the primary plot data
+                // Validate the primary plot data (x_values, y_values, labels), if they exist continue
                 if (plotData.x_values && plotData.y_values && plotData.x_label && plotData.y_label) {
                     
+                    // --- NEW: Filter for unique (x, y, setData) combinations ---
                     const uniqueSignatures = new Set();
                     const uniqueScatterData = [];
                     const uniqueSetDataValues = [];
@@ -251,7 +297,7 @@ async function fetchPlotData(problemId) {
                     } : null;
                     
                     // Pass the newly filtered unique data to the render function
-                    renderPlot(uniqueScatterData, plotData.x_label, plotData.y_label, filteredSetData);
+                    renderPlot(uniqueScatterData, plotData.x_label, plotData.y_label, filteredSetData, problemId);
 
                     // Ensure the correct view is visible
                     plotChartView.classList.remove('hidden');
@@ -339,6 +385,11 @@ function renderProblemDetail(problem) {
     // Hide the "Additional Information" section by default each time app renders
     document.getElementById('detail-additional').parentElement.classList.add('hidden');
 
+    // Hide and clear the Plan Explanation section for the new problem
+    const explanationSection = document.getElementById('plan-explanation-section');
+    explanationSection.classList.add('hidden');
+    document.getElementById('plan-explanation').innerHTML = '';
+
     plotLoadingView.classList.add('hidden');
     plotErrorView.classList.add('hidden');
     plotChartView.classList.add('hidden');
@@ -408,7 +459,7 @@ function renderProblemDetail(problem) {
  * @param {string} yLabel - The label for the Y-axis.
  * @param {Object|null} setData - The supplementary data for tooltips.
  */
-function renderPlot(scatterData, xLabel, yLabel, setData) {
+function renderPlot(scatterData, xLabel, yLabel, setData, problemId) {
 
     const ctx = document.getElementById('performance-chart').getContext('2d');
 
@@ -460,54 +511,175 @@ function renderPlot(scatterData, xLabel, yLabel, setData) {
                         display: false // Hide the legend as there's only one dataset
                     },
                     tooltip: {
-                        enabled: true,
-                        mode: 'nearest',
-                        intersect: true,
-                        padding: 29,
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        // --- This is the core logic for custom tooltips ---
-                        callbacks: {
-                            // Disable the default title
-                            title: function() {
-                                return '';
-                            },
-                            // Use the 'label' callback to construct the entire tooltip.
-                            // It can return an array of strings for multi-line tooltips.
-                            label: function(tooltipItem) {
-                                const xValue = tooltipItem.raw.x;
-                                const yValue = tooltipItem.raw.y;
-
-                                // Start building the lines for the tooltip
-                                // creates an array called tooltipLines and puts the x and y values as the first two lines
-                                const tooltipLines = [
-                                    `${xValue}`,
-                                    `${yValue}`
-                                ];
-
-                                // Check if setData and its values are valid
-                                if (setData && setData.values) {
-                                    const dataIndex = tooltipItem.dataIndex;
-
-                                    // Check if the index is valid for setData values array
-                                    if (dataIndex >= 0 && dataIndex < setData.values.length) {
-                                        const pointSetData = setData.values[dataIndex];
-                                        
-                                        // Format the set data array as a string like "[val1, val2, ...]"
-                                        const setDataString = `[${pointSetData.join(', ')}]`;
-                                        tooltipLines.push(setDataString);
-                                    }
-                                }
-                                
-                                return tooltipLines;
-                            }
-                        }
+                        enabled: false // Disable built-in tooltip, use click-based custom tooltip
                     }
+                },
+            // Handle click on chart points
+            onClick: function(event, elements) {
+            const tooltipEl = document.getElementById('chart-tooltip');
+            const tooltipContent = document.getElementById('chart-tooltip-content');
+
+            if (elements.length === 0) {
+                // Clicked on empty area - hide tooltip
+                tooltipEl.classList.add('hidden');
+                return;
+            }
+
+            // Get clicked point coordinates
+            const element = elements[0];
+            const dataIndex = element.index;
+            const dataPoint = scatterData[dataIndex];
+            const xValue = dataPoint.x;
+            const yValue = dataPoint.y;
+
+            // Find ALL solutions that share this (x, y) coordinate
+            const matchingIndices = [];
+            scatterData.forEach((pt, idx) => {
+                if (pt.x === xValue && pt.y === yValue) {
+                    matchingIndices.push(idx);
                 }
+            });
+
+            // Build tooltip header with coordinates and close button
+            let html = `<div class="flex justify-between items-start mb-2 pb-2 border-b border-gray-600">
+                <div>
+                    <div class="text-gray-300 text-xs">${xLabel}: ${xValue}</div>
+                    <div class="text-gray-300 text-xs">${yLabel}: ${yValue}</div>
+                    <div class="text-gray-400 text-xs mt-1">${matchingIndices.length} solution${matchingIndices.length > 1 ? 's' : ''} at this point</div>
+                </div>
+                <button onclick="closeChartTooltip()" class="text-gray-400 hover:text-white text-lg font-bold ml-3 -mt-1">&times;</button>
+            </div>`;
+
+            // Render each matching solution with its parameters
+            matchingIndices.forEach((solIdx, displayIdx) => {
+                let pointSetData = null;
+                if (setData && setData.values && solIdx < setData.values.length) {
+                    pointSetData = setData.values[solIdx];
+                }
+
+                // Solution header with Explain button
+                html += `<div class="${displayIdx > 0 ? 'mt-2 pt-2 border-t border-gray-700' : ''}">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="font-semibold cursor-pointer hover:text-blue-300" onclick="handleSolutionSelect('${problemId}', ${solIdx}, ${pointSetData ? JSON.stringify(pointSetData).replace(/"/g, '&quot;') : '[]'})">Solution ${solIdx + 1}</span>
+                        <button
+                            class="px-2 py-0.5 bg-blue-500 hover:bg-blue-600 text-white rounded text-xs font-medium transition-colors"
+                            onclick="handleSolutionSelect('${problemId}', ${solIdx}, ${pointSetData ? JSON.stringify(pointSetData).replace(/"/g, '&quot;') : '[]'})">
+                            Explain
+                        </button>
+                    </div>`;
+
+                // Parameters for this solution
+                if (pointSetData) {
+                    const labels = setData.labels || [];
+                    html += `<div class="space-y-1 ml-2">`;
+                    pointSetData.forEach((value, i) => {
+                        const label = labels[i] || `Param ${i + 1}`;
+                        html += `<button
+                            class="w-full text-left px-2 py-1 rounded hover:bg-gray-700 transition-colors cursor-pointer text-xs"
+                            onclick="handleTooltipItemClick(${solIdx}, ${i}, ${value}, '${label}')">
+                            <span class="text-gray-400">${label}:</span> <span class="font-medium">${value}</span>
+                        </button>`;
+                    });
+                    html += `</div>`;
+                }
+
+                html += `</div>`;
+            });
+
+            tooltipContent.innerHTML = html;
+
+            // Position the tooltip near the clicked point
+            const canvasRect = ctx.canvas.getBoundingClientRect();
+            const clickX = event.native.clientX;
+            const clickY = event.native.clientY;
+
+            tooltipEl.style.left = clickX + window.pageXOffset + 15 + 'px';
+            tooltipEl.style.top = clickY + window.pageYOffset - 10 + 'px';
+            tooltipEl.classList.remove('hidden');
+        }
         }
     });
 }
 
+/**
+ * Close the chart tooltip
+ */
+function closeChartTooltip() {
+    const tooltipEl = document.getElementById('chart-tooltip');
+    if (tooltipEl) tooltipEl.classList.add('hidden');
+}
 
+/**
+ * Handler for clicking on a parameter item in the tooltip.
+ * @param {number} solutionIndex - The index of the solution point.
+ * @param {number} paramIndex - The index of the parameter within the solution.
+ * @param {number} value - The value of the parameter.
+ * @param {string} label - The label of the parameter.
+ */
+function handleTooltipItemClick(solutionIndex, paramIndex, value, label) {
+    console.log(`[Chart] Parameter clicked - Solution: ${solutionIndex + 1}, Parameter: ${label}, Value: ${value}`);
+    // TODO: Add custom behavior for parameter clicks here
+    // // Hide the tooltip
+    // const tooltipEl = document.getElementById('chart-tooltip');
+    // if (tooltipEl) tooltipEl.classList.add('hidden');
+    // // Add your custom action here
+    // // For example: highlight this parameter, copy to clipboard, show in detail panel, etc.
+    // alert(`Selected parameter:\n${label}: ${value}\n\nFrom Solution ${solutionIndex + 1}`);
+}
+
+/**
+ * Handler for selecting a complete solution from the tooltip.
+ * @param {string} problemId - The ID of the problem.
+ * @param {number} solutionIndex - The index of the solution point.
+ * @param {Array} solutionData - The array of parameter values for this solution.
+ */
+async function handleSolutionSelect(problemId, solutionIndex, solutionData) {
+    console.log(`[Chart] Solution selected - Problem: ${problemId}, Index: ${solutionIndex + 1}, Data:`, solutionData);
+
+    // Hide the tooltip
+    const tooltipEl = document.getElementById('chart-tooltip');
+    if (tooltipEl) tooltipEl.classList.add('hidden');
+
+    // Unhide the plan-explanation-section
+    const explanationSection = document.getElementById('plan-explanation-section');
+    explanationSection.classList.remove('hidden');
+
+    // Show loading spinner inside the explanation box
+    const explanationBox = document.getElementById('plan-explanation');
+    explanationBox.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full">
+            <div class="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent"></div>
+            <p class="mt-3 text-gray-500 text-sm">Generating explanation for Solution ${solutionIndex + 1}...</p>
+        </div>`;
+
+    try {
+        const response = await fetch(`/api/problems/${problemId}/explain-solution`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                solution_index: solutionIndex,
+                solution_data: solutionData,
+                role: document.getElementById('user-type').value,
+                format: document.getElementById('explanation-format').value,
+                levelDetail: document.getElementById('explanation-detail').value,
+                tone: document.getElementById('explanation-tone').value
+            })
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+            throw new Error(errorData.detail || `HTTP error ${response.status}`);
+        }
+        // Shown the explanation in the window
+        const result = await response.json();
+        explanationBox.innerHTML = `<p class="whitespace-pre-wrap">
+        Explanation for Solution ${solutionIndex + 1}:        
+        ${result.explanation}
+        </p>`;
+    } catch (error) {
+        console.error('[Chart] Error fetching explanation:', error);
+        explanationBox.innerHTML = `<p class="text-red-500">Error: ${error.message}. \nError when explaining solution ${solutionIndex + 1}.</p>`;
+    }
+}
 
 
 // --- View & Modal Switching Logic ---
@@ -685,6 +857,24 @@ createProblemForm.addEventListener('submit', (event) => {
     const description = document.getElementById('problem-description').value;
     const jsonFilePath = document.getElementById('problem-json-path').value;
     createProblem(description, jsonFilePath);
+});
+
+console.log("[DEBUG] createProblemFromTextForm element:", createProblemFromTextForm);
+createProblemFromTextForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const descriptionInput = document.getElementById('problem-description');
+    const description = descriptionInput.value.trim();
+    const naturalLanguageText = document.getElementById('problem-text-input').value;
+
+    // Validate description field is filled
+    if (!description) {
+        descriptionInput.reportValidity();
+        return;
+    }
+
+    console.log("[DEBUG] Description:", description);
+    console.log("[DEBUG] Text length:", naturalLanguageText.length);
+    createProblemFromText(description, naturalLanguageText);
 });
 
 // --- Initial Load ---

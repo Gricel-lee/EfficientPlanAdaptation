@@ -73,8 +73,17 @@ def main(problem_id, json_file_path):
             
             # Run PDDL planner
             print(f"[RunPlanner]: Running PDDL planner for {name_file}-{run}...")
-            plan = pddlplanner.runPlanner(problem, output_dir)
+            # TODO: currently timeout is set to 0 to avoid running TempestEngine
+            # need to allow for multiple plans with timeout > 0
+            # (see headless version in GitHub branch for multiple plans)
+            tempestEngineTimeout = 0 # in seconds
+            plans_found = pddlplanner.runPlanner(file_domain, file_problem, output_dir, json_data, timeout=tempestEngineTimeout, headless=False)
             
+            if not plans_found or len(plans_found) == 0:
+                #TODO: raise Error(f"No plans found for {name_file}-{run}") in Error Handler
+                print(f"[RunPlanner]: No plans found for {name_file}-{run}. Exiting.")
+            # TODO: Currently only the first plan is used (see headless version in GitHub branch for multiple plans)
+            plan = plans_found[0] 
             # print(plan)
             
             # Generate PRISM/Evochecker file from PDDL plan with indexed filenames

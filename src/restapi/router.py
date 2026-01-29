@@ -1,15 +1,11 @@
 # api/router.py
 from arch.config.config import PROBLEM_OUTPUT_JSON
-from fastapi import APIRouter, HTTPException, status, BackgroundTasks
+from fastapi import APIRouter, HTTPException, status, BackgroundTasks, Request
 from typing import List
-from restapi.models import Problem, Problem2Create
+from restapi.models import Problem, Problem2Create, ProblemFromTextCreate
 from restapi import planner_service
 from typing import Dict
-
-
-# --------------------------
-# Initialize in-memory database   #@TODO: from db.memory_db import PROBLEM_DATABASE # Needed for background task
-PROBLEM_DATABASE: Dict[str, Problem] = {}
+from restapi.memory_db import PROBLEM_DATABASE
 
 
 # --------------------------
@@ -69,3 +65,45 @@ def get_problem_timeline(problem_id: str):
     if timeline is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Timeline for problem ID '{problem_id}' not found.")
     return timeline
+
+
+
+@api_router.post("/problems/{problem_id}/explain-solution")
+async def explain_solution(problem_id: str, payload: dict):
+    print(f"[Router] Received request to explain solution for problem ID: {problem_id} with payload: {payload}")
+    problem = planner_service.get_problem_by_id(problem_id)
+    print(f"[Router] Retrieved problem: {problem}")
+    if not problem:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Problem with ID '{problem_id}' not found.")
+    solution_index = payload.get("solution_index", 0)
+    solution_data = payload.get("solution_data", [])
+    
+    role = payload.get("role", "non-expert")
+    format = payload.get("format", "detailed")
+    levelDetail = payload.get("levelDetail", "technical")
+    tone = payload.get("tone", "formal")
+
+    explanation = planner_service.explain_solution(problem, solution_index, solution_data,
+                                                role, format, levelDetail, tone)
+    return {"explanation": explanation}
+
+
+
+@api_router.post("/problems/from-text/", response_model=Problem, status_code=status.HTTP_201_CREATED)
+async def create_problem_from_text(problem_text: ProblemFromTextCreate, background_tasks: BackgroundTasks):
+    # Log problem details for debugging
+    print("[Router] Received problem from text input:")
+    print(f"  Description: {problem_text.description[:50]}..." if len(problem_text.description) > 50 else f"  Description: {problem_text.description}")
+    print(f"  Text length: {len(problem_text.text)} characters")
+    print(f"  Text preview: {problem_text.text[:200]}..." if len(problem_text.text) > 200 else f"  Text: {problem_text.text}")
+    # Convert text to JSON planning problem
+    json_problem = planner_service.convert_text_to_json_problem(problem_text.text)
+    if not json_problem:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Failed to convert text to JSON planning problem.")
+    # Create Problem2Create object
+    problem_in = Problem2Create(description=problem_text.description, json_file=json_problem)
+    # Create and start the problem
+    new_problem = planner_service.create_and_start_problem(problem_in)
+    # Run problem object as a background task
+    background_tasks.add_task(planner_service.run_hybrid_planner, new_problem, PROBLEM_DATABASE)
+    return new_problem

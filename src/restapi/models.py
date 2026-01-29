@@ -12,6 +12,14 @@ class Problem2Create(BaseModel):
     description: str = Field(..., example="My Planning Problem", description="The description of the problem.")
     json_file: str = Field(..., example='../assets/planningProblem/example.json', description="The file path for the JSON structured problem.")
 
+class ProblemFromTextCreate(BaseModel):
+    """
+    Model for creating a new problem from natural language text.
+    """
+    description: str = Field(..., example="My Planning Problem from Text", description="The description of the problem.")
+    text: str = Field(..., example="This is an Agricultural Robotics case study describing a planning problem...", description="Natural language text describing the planning problem.")
+    
+
 class Problem(Problem2Create):
     """
     Model for a planning problem in the database.

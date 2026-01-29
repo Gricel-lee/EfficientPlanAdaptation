@@ -24,6 +24,8 @@ fastapi-cloud-cli==0.1.5
 fasteners==0.20
 fixtures==4.2.6
 fonttools==4.59.1
+google-auth==2.48.0
+google-genai==1.60.0
 grpcio==1.74.0
 grpcio-tools==1.74.0
 h11==0.16.0

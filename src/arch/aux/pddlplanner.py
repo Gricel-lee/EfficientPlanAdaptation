@@ -44,7 +44,7 @@ def printImportedPDDLproblem(problem:PDDLReader):
     
 
 # ----- Generating one or multiple plans ------
-def runPlanner(f_domain, f_problem, output_directory, jsondata, timeout):
+def runPlanner(f_domain, f_problem, output_directory, jsondata, timeout, headless=True):
     plans_found = set()
     plans_obj_found = []
     
@@ -63,16 +63,26 @@ def runPlanner(f_domain, f_problem, output_directory, jsondata, timeout):
     k = 1
     print(f"[pddlplanner] Running ENHSP as first solver...")
     plan = runENHSP(problem, output_directory)
-    # Save PRISM/Evochecker files
-    savePRISMEvochekerFiles(planning_problem.json_data, planning_problem.output_dir_name, k, plan)
-    # save time
-    planning_problem.save_timer(label="ENHSP Planning Time Plan1")
     
+    if headless:
+        # Save PRISM/Evochecker files
+        savePRISMEvochekerFiles(planning_problem.json_data, planning_problem.output_dir_name, k, plan, headless=True)
+        # save time
+        planning_problem.save_timer(label="ENHSP Planning Time Plan1")
+    else:
+        # Save PRISM/Evochecker files
+        savePRISMEvochekerFiles(jsondata, output_directory, k, plan, headless=False)
+        
+     #TODO: replace plan.txt with plan_<k>.txt in UI code if needed to support multiple plans, for now keep plan.txt for compatibility
+    # save plan.txt for UI compatibility (first plan from ENHSP)
+    with open(f"{output_directory}/plan.txt", "w") as f:
+        f.write(str(plan.plan))
+
     # Save the plan
     plans_found.add(plan.plan)
     plans_obj_found.append(plan)
 
-    # Then, run TEMPest to generate multiple plans
+    # ----- Then, run TEMPest to generate multiple plans ------
     print(f"[pddlplanner] Running TEMPest to generate multiple plans...")
     # 'incremental': True is faster but may generate more similar plans
     with AnytimePlanner(name="tempest", params={'incremental': False}) as p:
@@ -87,29 +97,43 @@ def runPlanner(f_domain, f_problem, output_directory, jsondata, timeout):
                 with open(f"{output_directory}/plan_{k}.txt", "w") as f:
                     print(f"[pddlplanner] Saving TEMPest plan {k} to file: {output_directory}/plan_{k}.txt")
                     f.write(str(res.plan))
-                
                 # Save PRISM/Evochecker files
-                savePRISMEvochekerFiles(planning_problem.json_data, planning_problem.output_dir_name, k, res)
-                # save time
-                planning_problem.save_timer(label=f"TEMPest Planning Time for Plan{k}")
+                if headless:
+                    savePRISMEvochekerFiles(planning_problem.json_data, planning_problem.output_dir_name, k, res, headless=True)
+                    # save time
+                    planning_problem.save_timer(label=f"TEMPest Planning Time for Plan{k}")
+                else:
+                    savePRISMEvochekerFiles(jsondata, output_directory, k, res, headless=False)
     return plans_obj_found
 
 
 
-def savePRISMEvochekerFiles(jsondata, output_dir_name, k, plan):
-    ''' Save PRISM and EvoChecker files for each plan found 
-    temperstEngineTimeout: timeout for the planner
+def savePRISMEvochekerFiles(jsondata, output_dir_param, k, plan, headless=True):
+    ''' Save PRISM and EvoChecker files for each plan found
+    tempestEngineTimeout: timeout for the planner
     if 0, only one plan is generated.
     '''
-    output_dir = planning_problem.output_dir
-    output_dir_name = planning_problem.output_dir_name
-    
-    print(f"[run_SHARP_headless] Generating PRISM/Evochecker files for plan {k}:\n{plan}")
-    
-    # Add output folder
-    PROBLEM_OUTPUT_DIR[output_dir_name+str(k)] = os.path.join(output_dir, f"output_plan_{k}")
+    if headless:
+        # Use planning_problem attributes (headless mode)
+        output_dir = planning_problem.output_dir
+        output_dir_name = planning_problem.output_dir_name
+    else:
+        # Use passed parameters (non-headless mode)
+        output_dir = output_dir_param
+        output_dir_name = os.path.basename(output_dir_param)
+        # Initialize planning_problem with jsondata for createPRISMfile to use
+        planning_problem.set_from_data(jsondata, output_dir)
 
-    print(f"[run_SHARP_headless] Creating PRISM file...")
+    print(f"[pddlplanner] Generating PRISM/Evochecker files for plan {k}:\n{plan}")
+
+    output_plan_dir = os.path.join(output_dir, f"output_plan_{k}")
+
+    print(f"[pddlplanner] Output plan dir: {output_plan_dir}")
+    print(f"[pddlplanner] Key: {output_dir_name+str(k)}")
+    # Add output folder
+    PROBLEM_OUTPUT_DIR[output_dir_name+str(k)] = output_plan_dir
+
+    print(f"[pddlplanner] Creating PRISM file...")
     name_file = f"plan_{k}"
     plan2PMCfile.createPRISMfile(PROBLEM_OUTPUT_DIR[output_dir_name+str(k)], name_file, plan, jsondata, planNumber=f"_{k}", population=POPULATION_SIZE, max_evals=MAX_EVALUATIONS)
     plan2PMCfile.createPRISMfile(PROBLEM_OUTPUT_DIR[output_dir_name+str(k)], name_file, plan, jsondata, evoChecker=True, planNumber=f"_{k}", population=POPULATION_SIZE, max_evals=MAX_EVALUATIONS)

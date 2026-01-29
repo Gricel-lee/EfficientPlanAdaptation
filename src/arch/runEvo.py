@@ -49,7 +49,8 @@ def main(problem_id, json_file_path, evo_jar_file, evo_config_file="evo_config.p
             # Command that runs the Java program
             command = (
                 f"{LD_LIBRARY_PATH_OR_DYLD_LIBRARY_PATH}={EVO_LIBRARY_PATH} "
-                f"java -jar {evo_jar_file} {evo_config_file}")
+                # f"java -jar {evo_jar_file} {evo_config_file}")
+                f"java -Djava.awt.headless=true -jar {evo_jar_file} {evo_config_file}")
             
             print(f"[RunEvo] Running command: {command}")
 

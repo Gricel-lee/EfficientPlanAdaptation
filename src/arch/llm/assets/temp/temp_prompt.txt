@@ -1,0 +1,452 @@
+Generate a JSON file as described in the prompt-instructions.txt.
+
+
+
+###################################
+Problem definition="This is an Agricultural Robotics case study describing a planning problem within a grid-based environment involving multiple agents and tasks.
+
+## **Locations**
+
+The environment is structured as a 3x3 grid with nine distinct locations:
+
+* **l1**: The "Initial location" at coordinates (1, 1).
+* **l2**: The "Location to the right of location" at coordinates (1, 2).
+* **l3**: A location at coordinates (1, 3).
+* **l4**: A location at coordinates (2, 1).
+* **l5**: A location at coordinates (2, 2).
+* **l6**: A location at coordinates (2, 3).
+* **l7**: A location at coordinates (3, 1).
+* **l8**: A location at coordinates (3, 2).
+* **l9**: A location at coordinates (3, 3).
+
+## **Paths**
+
+The locations are connected by a network of bidirectional paths with varying travel distances:
+
+* A path of distance 1 connects l1 and l2.
+* A path of distance 5 connects l1 and l4.
+* Paths of distance 1 connect adjacent locations: l2-l3, l2-l5, l3-l6, l4-l5, l4-l7, l5-l6, l5-l8, l6-l9, l7-l8, and l8-l9.
+
+## **Tasks**
+
+There are three distinct types of tasks that need to be completed across the grid:
+
+* **Harvesting (t1)**: Grape harvesting is an extremely arduous and repetitive activity. As a highly-dexterous task, this is delegated only to humans. Severe fatigue has to be mitigated whenever possible as, after many days in steep terrain conditions, workers show signs of physical and mental fatigue. This task has a base duration of 1. Instances are located at l4 (t1l4), l6 (t1l6a and t1l6b), and l7 (t1l7).
+* **Vineyard monitoring (t2)**: Continuous monitoring of vineyards includes monitoring the vines’ health, the vines’ state after a heatwave or heavy rainfall, and routine monitoring. As remote areas can be extremely difficult for humans to reach and magnify human fatigue, this task is delegated to robots. This task has a base duration of 1. Instances are located at l5 (t2l5) and l8 (t2l8a and t2l8b).
+* **Grapevine identification (t3)**: Grapevine varietal identification occurs during the observation period between the hot months of June and August. This task, comprising vine leaf pictures taken and sent to a central unit, is shared between human workers and robots. This task might fail due to communication errors, hardware failures, or the collection of unsatisfactory low-quality images. This task has a base duration of 1. Instances are located at l4 (t3l4), l7 (t3l7), and l9 (t3l9).
+
+## **Agents**
+
+A team of four agents, two workers and two robots, is available to perform the tasks. All agents start at the initial location (l1).
+
+* **worker1** and **worker2**: These two workers are identical.
+    * They can perform **Task t1** with a 100% success probability, a cost of 3, a duration of 5, and 5 retries.
+    * They can also perform **Task t3** with a 0.99 probability, a cost of 5, a duration of 3, and 5 retries.
+* **r1** and **r2**: These two robots are identical.
+    * They are assigned to **Task t2**, which they perform with a 0.99 success probability, a cost of 1, a duration of 5, and 10 retries.
+    * They can also perform **Task t3**, with a 0.97 probability, a cost of 1, a duration of 3, and 10 retries.
+
+## **Constraints**
+
+The overall plan must meet two key performance criteria:
+
+* The minimum acceptable probability of success for the entire mission is 0.95.
+* Any single task assignment must have a minimum success probability of 0.5 to be considered valid."
+
+
+
+###################################
+prompt-instructions.txt content=
+ "﻿## Instructions
+You are an expert AI assistant tasked with generating structured JSON files for a complex planning and scheduling system.
+
+
+You will be provided with two key inputs:
+1.  A single example of a valid JSON file that conforms to the required schema.
+2.  A natural language description of a new planning problem scenario.
+
+
+Your task is to generate a single, complete, and valid JSON file that accurately represents the new planning problem described in the natural language text. The generated JSON must strictly adhere to the structure and schema of the provided example.
+
+
+Additionally, generate an AI-feedback.txt file with explanatory feedback on critical decisions taken to generate such a file. This will be passed to non-domain experts to understand the generated JSON better.
+
+
+
+
+## JSON Schema Breakdown 
+The JSON file has five main top-level keys: `locations`, `paths`, `tasks`, `agents`, and `constraints`.
+
+
+---
+
+
+1. locations
+This is a list of all possible physical locations in the environment.
+-   `id`: A unique string identifier for the location (e.g., "l1", "l2").
+-   `description`: (Optional) A brief text description of the location.
+-   `coordinates`: An object with numerical `x` and `y` values.
+Example:
+```json
+{
+  "id": "l1",
+  "description": "Initial location.",
+  "coordinates": { "x": 1, "y": 1 }
+}
+
+
+2. paths
+This is a list defining the connections between locations. All paths are bidirectional by default.
+-   `start_location`: The id of the starting location.
+-   `end_location`: The id of the ending location.
+-   `path_description`: (Optional) A brief text description of the path.
+-   `distance`: A numerical value representing the cost or length to travel between the locations.
+Example:
+JSON
+{
+"start_location": "l1",
+"end_location": "l2",
+"path_description": "Path from l1 to l2",
+"distance": 1
+}
+
+
+3. tasks
+This is a list defining the types of tasks that need to be completed. Each task type can have multiple instances at various locations.
+-   `id`: A unique string identifier for the task type (e.g., "t1", "t2").
+-   `description`: A text description of the task type.
+-   `duration`: A numerical value for the base time required to complete one instance of this task.
+-   `instances`: A list of specific occurrences of this task.
+-   `id`: A unique string identifier for the task instance (e.g., "t1l4").
+-   `location`: The id of the location where this task instance must be performed.
+Example:
+JSON
+{
+"id": "t1",
+"description": "Task t1",
+"duration": 1,
+"instances": [
+{ "id": "t1l4", "location": "l4" },
+{ "id": "t1l6a", "location": "l6" }
+]
+}
+
+
+4. agents
+This is a list of all available agents (e.g., workers, robots) that can perform tasks.
+-   `id`: A unique string identifier for the agent (e.g., "worker1", "r1").
+-   `type`: A string indicating the agent's type (e.g., "worker", "robot").
+-   `initial_location`: The starting location id for the agent.
+-   `tasks`: A list of the task types this agent is capable of performing, along with agent-specific parameters for each task.
+-   `type`: The id of the task type (e.g., "t1").
+-   `probability_of_success`: A float between 0.0 and 1.0.
+-   `cost`: The numerical cost for this agent to perform this task type.
+-   `duration`: The time it takes for this specific agent to perform this task type.
+-   `number_of_retries`: The maximum number of times the agent can retry the task upon failure.
+Example`:
+JSON
+{
+"id": "worker1",
+"type": "worker",
+"initial_location": "l1",
+"tasks": [
+{
+"type": "t1",
+"probability_of_success": 1.00,
+"cost": 3,
+"duration": 5,
+"number_of_retries": 5
+}
+]
+}
+
+
+5. constraints
+An object containing global constraints for the entire mission plan.
+-   `mission_probability_of_success`: The minimum acceptable overall probability of success for the mission plan.
+-   `min_assignment_probability`: The minimum probability of success required for any single task assignment to be considered valid.
+Example:
+JSON
+"constraints": {
+"mission_probability_of_success": 0.95,
+"min_assignment_probability": 0.5
+}
+---
+
+
+## Additional Rules:
+
+
+For constraints:
+1. If the description of a new planning problem scenario does not contain any mission probability of success , assign this to 0.0 `"mission_probability_of_success": 0.0`.
+2.  If the description of a new planning problem scenario does not contain any minimum mission probability of assignment,  assign this to 0.0 `""min_assignment_probability": 0.0`.
+
+
+For paths:
+3. If the description of a new planning problem scenario does not contain any paths, define a path between all given locations (paths are automatically bidirectional, e.g., if loc1 to loc2 is added, loc2 to loc1 is omitted).
+4. If the description of a new planning problem scenario does not contain any distances between the paths, assign a distance of 1 ("distance": 1).
+5. If the coordinates of the locations are not defined, assign 0,0 coordinates ("coordinates": { "x": 0, "y": 0 }).
+6. If the description of a new planning problem scenario does not contain the agent’s probability of success, define this a 1 ("probability_of_success": 1.00,).
+
+
+
+
+
+
+
+
+## ERRORS 
+If one of the following errors is identified in the description of a new planning problem scenario, do not create a JSON file nor an AI-feedback.txt file. Instead create a new `Error.txt` file with feedback on the problem.
+
+
+1. The description does not contain any locations.
+2. The description does not contain any agents.
+3. The description does not contain any tasks.
+4. There are tasks that cannot be performed by any agent."
+
+
+
+###################################
+File example.json="{
+    "_comment": "Locations",
+    "locations": [
+      {
+        "id": "l1",
+        "description": "Initial location.",
+        "coordinates": { "x": 1, "y": 1 }
+      },
+      {
+        "id": "l2",
+        "description": "Location to the right of location.",
+        "coordinates": { "x": 1, "y": 2 }
+      },
+      {
+        "id": "l3",
+        "coordinates": { "x": 1, "y": 3 }
+      },
+      {
+        "id": "l4",
+        "coordinates": { "x": 2, "y": 1 }
+      },
+      {
+        "id": "l5",
+        "coordinates": { "x": 2, "y": 2 }
+      },
+      {
+        "id": "l6",
+        "coordinates": { "x": 2, "y": 3 }
+      },
+      {
+        "id": "l7",
+        "coordinates": { "x": 3, "y": 1 }
+      },
+      {
+        "id": "l8",
+        "coordinates": { "x": 3, "y": 2 }
+      },
+      {
+        "id": "l9",
+        "coordinates": { "x": 3, "y": 3 }
+      }
+    ],
+    "_comment": "Paths bidirectional",
+    "paths": [
+    {
+      "start_location": "l1",
+      "end_location": "l2",
+      "path_description": "Path from l1 to l2",
+      "distance": 1
+    },
+    {
+      "start_location": "l1",
+      "end_location": "l4",
+      "path_description": "Path from l1 to l4",
+      "distance": 5
+    },
+    {
+      "start_location": "l2",
+      "end_location": "l3",
+      "path_description": "Path from l2 to l3",
+      "distance": 1
+    },
+    {
+      "start_location": "l2",
+      "end_location": "l5",
+      "path_description": "Path from l2 to l5",
+      "distance": 1
+    },
+    {
+      "start_location": "l3",
+      "end_location": "l6",
+      "path_description": "Path from l3 to l6",
+      "distance": 1
+    },
+    {
+      "start_location": "l4",
+      "end_location": "l5",
+      "path_description": "Path from l4 to l5",
+      "distance": 1
+    },
+    {
+      "start_location": "l4",
+      "end_location": "l7",
+      "path_description": "Path from l4 to l7",
+      "distance": 1
+    },
+    {
+      "start_location": "l5",
+      "end_location": "l6",
+      "path_description": "Path from l5 to l6",
+      "distance": 1
+    },
+    {
+      "start_location": "l5",
+      "end_location": "l8",
+      "path_description": "Path from l5 to l8",
+      "distance": 1
+    },
+    {
+      "start_location": "l6",
+      "end_location": "l9",
+      "path_description": "Path from l6 to l9",
+      "distance": 1
+    },
+    {
+      "start_location": "l7",
+      "end_location": "l8",
+      "path_description": "Path from l7 to l8",
+      "distance": 1
+    },
+    {
+      "start_location": "l8",
+      "end_location": "l9",
+      "path_description": "Path from l8 to l9",
+      "distance": 1
+    }
+  ],
+  "_comment": "Tasks",
+  "tasks": [
+    {
+      "id": "t1",
+      "description": "Task t1",
+      "duration": 1,
+      "instances": [
+        {
+          "id": "t1l4", "location": "l4"
+        },
+        {
+          "id": "t1l6a", "location": "l6"
+        },
+        {
+          "id": "t1l6b", "location": "l6"
+        },
+        {
+          "id": "t1l7", "location": "l7"
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "description": "Task t2",
+      "duration": 1,
+      "instances": [
+        {
+          "id": "t2l5",
+          "location": "l5"
+        },
+        {
+          "id": "t2l8a", "location": "l8"
+        },
+        {
+          "id": "t2l8b", "location": "l8"
+        }
+      ]
+    },
+    {
+      "id": "t3",
+      "description": "Task t3",
+      "duration": 1,
+      "instances": [
+        {
+          "id": "t3l4", "location": "l4"
+        },
+        {
+          "id": "t3l7", "location": "l7"
+        },
+        {
+          "id": "t3l9", "location": "l9"
+        }
+      ]
+    }
+  ],
+    "_comment": "Agents",
+    "agents": [
+      {
+        "id": "h1",
+        "type": "worker",
+        "initial_location": "l1",
+        "tasks": [
+          {
+            "type": "t1",
+            "probability_of_success": 0.98,
+            "cost": 4,
+            "duration": 6,
+            "number_of_retries": 3
+          }
+        ]
+      },
+      {
+        "id": "r1",
+        "type": "robot",
+        "initial_location": "l3",
+        "tasks": [
+          {
+            "type": "t1",
+            "probability_of_success": 0.95,
+            "cost": 1,
+            "duration": 4,
+            "number_of_retries": 10
+          }
+        ]
+      },
+      {
+        "id": "r2",
+        "type": "robot",
+        "initial_location": "l7",
+        "tasks": [
+          {
+            "type": "t2",
+            "probability_of_success": 0.99,
+            "cost": 1,
+            "duration": 5,
+            "number_of_retries": 10
+          },
+          {
+            "type": "t3",
+            "probability_of_success": 0.97,
+            "cost": 1,
+            "duration": 3,
+            "number_of_retries": 10
+          }
+        ]
+      },
+      {
+        "id": "r3",
+        "type": "robot",
+        "initial_location": "l9",
+        "tasks": [
+          {
+            "type": "t3",
+            "probability_of_success": 0.96,
+            "cost": 1,
+            "duration": 3,
+            "number_of_retries": 10
+          }
+        ]
+      }
+    ],
+    "constraints": {
+      "mission_probability_of_success": 0.95,
+      "min_assignment_probability": 0.5
+    }
+}"

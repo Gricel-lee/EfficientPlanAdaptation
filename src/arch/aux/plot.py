@@ -1,5 +1,7 @@
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for headless environments
 import matplotlib.pyplot as plt
-import os 
+import os
 
 def get_first_file_with_suffix(directory, suffix="_Front"):
     # List all files in the directory

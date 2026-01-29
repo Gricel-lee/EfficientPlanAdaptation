@@ -1,0 +1,226 @@
+import os
+import json
+import re
+from google import genai
+from google.genai import types
+from arch.llm.explanation import Explanation
+from restapi.memory_db import PROBLEM_DATABASE
+from restapi.models import Problem
+
+from arch.config.config import TEMP_PATH
+
+# Get the directory where this script is located
+script_dir = os.path.dirname(os.path.abspath(__file__)) # src/arch/llm
+        
+        
+class Gemini4Planning:
+    ''' Class to interact with Google Gemini LLM for planning problems.
+        It handles two main functionalities:
+        1. Generating a JSON representation of a planning problem from a natural language description.
+        2. Generating explanations for selected solutions based on the planning problem JSON.
+    '''
+    
+    def __init__(self, credential: str = "src/arch/llm/assets/seams26-key.json"):
+        self.credential = credential
+        self.set_env_var()
+        # Vertex AI client (uses service account)
+        self.client = genai.Client(vertexai=True, project="seams26", location="us-central1")
+        # Store generated JSON from text (only used when starting from natural language planning problem)
+        self.json = {}
+    
+    def set_env_var(self):
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.credential
+        
+    # === Get functions ===
+    def get_json(self, problem_txt: str) -> dict:
+        return self.json if self.json else self._generate_json_from_gemini(problem_txt)
+
+    def get_explanation(self, role, format, levelDetail, tone, problem, solution_selected) -> str:
+        ''' Generate explanation using Gemini for current role, format, level of detail and tone in UI.'''
+        
+        # Expected values:
+        # role = researcher | practitioner | policy-maker | non-expert
+        # tone = formal | informal
+        # format = paragraphs | bullets | textAndLists
+        # levelDetail = high | medium | low
+        return self._generate_explanation_from_gemini(role, tone, format, levelDetail, problem, solution_selected)
+
+
+    # === Internal functions ===
+    def _generate_explanation_from_gemini(self, role, format, levelDetail, tone, problem: Problem, solution_selected) -> str:
+        # access json problem from problem
+        json_data = problem.json_file
+        # read JSON file content
+        with open(json_data, 'r', encoding='utf-8') as f:
+            json_input_planning_problem = json.load(f)
+        # Read only "plan" and from "pareto" select only the solution_selected
+        # solution_selected is 0-based index, paretoSolutionId is 1-based
+        # json_input_planning_problem = {
+        #     "plan": json_input_planning_problem.get("plan", {}),
+        #     "pareto": [point for point in json_input_planning_problem.get("pareto", []) if point.get("paretoSolutionId") == solution_selected + 1]
+        # }
+        
+        # Assemble prompt
+        prompt_text = self._assemble_prompt_for_explanation(
+            human_role=role,
+            format=format,
+            level_of_detail=levelDetail,
+            tone=tone,
+            json_input_planning_problem=json_input_planning_problem
+        )
+        
+        # Send prompt to Gemini
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=[prompt_text],
+            config=types.GenerateContentConfig(
+                thinking_config=types.ThinkingConfig(thinking_budget=0)  # disables thinking
+            ),
+        )
+        print("✅ Received explanation response from Gemini model.")
+
+        explanation = response.text.strip()
+        
+        print("✅ Assembled explanation prompt for Gemini:\n", prompt_text)
+        s = f"Generated explanation for\nrole={role}, format={format}, levelDetail={levelDetail}, tone={tone}\nproblem={problem},\nsolution_selected={solution_selected}"
+        return "\n\n-----------Explanation:\n" + explanation + "\n\n\n-----------PROMPT USED FOR EXPLANATION:\n" + prompt_text + "\n\n-----------Metadata:\n" + s
+
+
+
+    def _assemble_prompt_for_explanation(self, human_role, format, level_of_detail, tone, json_input_planning_problem) -> str:
+        
+        if level_of_detail == "high":
+            level_of_detail = "high-level of detail, providing a detailed overview of the plan and solution, and all details described in the planning problem as well as the solution."
+        elif level_of_detail == "medium":
+            level_of_detail = "medium level of detail, providing most of the insights into the solution, rather than all planning problem details."
+        elif level_of_detail == "low":
+            level_of_detail = "low level of detail, providing only the key insights into the solution."
+        if tone == "informal":
+            tone = "informal, conversational tone, but still professional"
+        
+        #TODO: Add text description of the planning problem if provided from UI
+        prompt = f"""\
+## Instructions:
+You are an expert system designed to analyse robotics, human, and AI agent plans. 
+There is a system in place that generates task plans for a robot or AI agent to complete a set of tasks in a given environment.
+This system takes into account various factors such as the robots' and humans' capabilities, the environment's constraints, and the tasks' and mission requirements.
+The system has already generated a task plan and an optimal solution that addresses how many retries are possible per task for the given problem.
+The solution selecting the number of task retries is selected to maximize associated probabilities of success and minimize costs.
+
+Your task is to interpret a JSON file containing this detailed task plan—with specific move and task actions, and the solution with task retries.
+You must generate an explanation of why this solution is valid and how it addresses the problem requirements.
+
+
+
+## Explanation Requirements:
+The explanation should be tailored for a user with role **{human_role}**. The explanation must consider the output format, tone and level of detail as specified below:
+- **Format**: The explanation should be presented in **{format}** format.
+- **Level of Detail**: The explanation should be in **{level_of_detail}** level of detail. , providing insights into the technical aspects of the plan and solution.
+- **Tone**: The explanation should be written in a **{tone}** tone.
+
+
+## JSON containing the planning problem (from which the plan and solution were generated):
+Its content is: \n"{json_input_planning_problem}". 
+
+## JSON containing the task plan and solution:
+The JSON structured contains the task plan and the selected solution (shown as "Pareto", ignore this name).
+The solution includes an ID, associated probability of succeeding with the plan and expected cost, and the number of retries per task.
+Its content is: \n"{json_input_planning_problem}". 
+
+"""
+
+
+
+        return prompt
+    
+
+    def _generate_json_from_gemini(self, problem_txt: str) -> dict:
+        # Step 1: Read supporting files
+        file_paths = {
+            "promptInstructions.txt": os.path.join(script_dir, "assets/prompt-instructions.txt"),
+            "example.json": os.path.join(script_dir, "assets/example.json")
+        }
+
+        file_contents = {}
+        for name, path in file_paths.items():
+            with open(path, "r", encoding="utf-8") as f:
+                file_contents[name] = f.read().strip()
+        
+        # Add the problem definition in natural language from UI
+        file_contents["problemdef"] = problem_txt
+
+        # Step 2: Construct single long prompt
+        prompt_text = (
+            "Generate a JSON file as described in the prompt-instructions.txt.\n\n\n\n"
+            f"###################################\n"
+            f"Problem definition=\"{file_contents['problemdef']}\"\n\n\n\n"
+            f"###################################\n"
+            f"prompt-instructions.txt content=\n \"{file_contents['promptInstructions.txt']}\"\n\n\n\n"
+            f"###################################\n"
+            f"File example.json=\"{file_contents['example.json']}\""
+        )
+        
+        # save prompt to a temp file for reference
+        os.makedirs(TEMP_PATH, exist_ok=True)
+        temp_prompt_path = os.path.join(TEMP_PATH, "temp_prompt.txt")
+        with open(temp_prompt_path, "w", encoding="utf-8") as f:
+            f.write(prompt_text)
+        print(f"✅ Saved prompt to {temp_prompt_path}")
+
+        # Step 3: Send prompt to Gemini
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=[prompt_text],
+            config=types.GenerateContentConfig(
+                thinking_config=types.ThinkingConfig(thinking_budget=0)  # disables thinking
+            ),
+        )
+        print("✅ Received response from Gemini model.")
+
+        # Step 4: Extract, clean and save response
+        output_text = response.text.strip()
+
+        # Remove markdown code fences if present (```json ... ``` or ``` ... ```)
+        # clean_text = re.sub(r"```json|```", "", output_text).strip()
+        clean_text = re.sub(r"^```json\s*", "", output_text)
+        clean_text = re.sub(r"^```\s*", "", clean_text)
+        clean_text = re.sub(r"\s*```$", "", clean_text).strip()
+        # Sometimes the model adds extra newlines, remove them
+        clean_text = clean_text.strip()
+        
+        # Try to parse the cleaned text as JSON
+        try:
+            json_data = json.loads(clean_text)
+        except json.JSONDecodeError as e:
+            print("❌ Failed to parse JSON from Gemini output:", e)
+            print("⚠️ Model output is not strict JSON. Saving raw output.")
+            json_data = output_text
+            # TODO: Add error handling
+
+        # save gen JSON to a temp file
+        # num = random.randint(1000, 9999) # TODO: save with unique id
+        output_path = os.path.join(TEMP_PATH, "temp_json.txt")
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(json_data, f, indent=2)
+
+        print(f"✅ Saved Gemini response to {output_path}")
+        
+        
+        # Store in instance variable
+        self.json = json_data
+        
+        return json_data
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

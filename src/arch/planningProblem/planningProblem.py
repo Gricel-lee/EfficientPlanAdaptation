@@ -48,11 +48,20 @@ class PlanningProblem:
         self.output_dir =  os.path.join(os.path.dirname(json_file_path), output_dir_name)
         self.temperstEngineTimeout = temperstEngineTimeout
         self.one_plan_or_multiple = one_plan_or_multiple
-        
+
         # set JSON data
         self.data = self._read_json()
         # set steepness map
         self.steepness_map = self._load_steepness_map(self.data)
+
+    def set_from_data(self, json_data: dict, output_dir: str):
+        '''Initialize from already-loaded JSON data (for non-headless mode).'''
+        self.data = json_data
+        self.json_data = json_data
+        self.output_dir = output_dir
+        self.output_dir_name = os.path.basename(output_dir)
+        # set steepness map
+        self.steepness_map = self._load_steepness_map(json_data)
         
     def get_steepness(self, agent_id: str, task_instance_id: str):
         ''' Returns steepness for agent and task instance. '''

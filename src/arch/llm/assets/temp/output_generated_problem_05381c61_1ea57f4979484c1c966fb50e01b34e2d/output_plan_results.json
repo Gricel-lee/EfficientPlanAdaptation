@@ -1,0 +1,427 @@
+{
+    "plan": [
+        {
+            "name": "move",
+            "agent": "worker2",
+            "initialLocation": "l1",
+            "endLocation": "l4",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "worker2",
+            "initialLocation": "l4",
+            "endLocation": null,
+            "taskId": "t1l4"
+        },
+        {
+            "name": "dotask",
+            "agent": "worker2",
+            "initialLocation": "l4",
+            "endLocation": null,
+            "taskId": "t3l4"
+        },
+        {
+            "name": "move",
+            "agent": "worker2",
+            "initialLocation": "l4",
+            "endLocation": "l7",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "worker2",
+            "initialLocation": "l7",
+            "endLocation": null,
+            "taskId": "t1l7"
+        },
+        {
+            "name": "dotask",
+            "agent": "worker2",
+            "initialLocation": "l7",
+            "endLocation": null,
+            "taskId": "t3l7"
+        },
+        {
+            "name": "move",
+            "agent": "r1",
+            "initialLocation": "l1",
+            "endLocation": "l2",
+            "taskId": null
+        },
+        {
+            "name": "move",
+            "agent": "worker2",
+            "initialLocation": "l7",
+            "endLocation": "l8",
+            "taskId": null
+        },
+        {
+            "name": "move",
+            "agent": "worker2",
+            "initialLocation": "l8",
+            "endLocation": "l9",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "worker2",
+            "initialLocation": "l9",
+            "endLocation": null,
+            "taskId": "t3l9"
+        },
+        {
+            "name": "move",
+            "agent": "worker2",
+            "initialLocation": "l9",
+            "endLocation": "l6",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "worker2",
+            "initialLocation": "l6",
+            "endLocation": null,
+            "taskId": "t1l6b"
+        },
+        {
+            "name": "dotask",
+            "agent": "worker2",
+            "initialLocation": "l6",
+            "endLocation": null,
+            "taskId": "t1l6a"
+        },
+        {
+            "name": "move",
+            "agent": "r1",
+            "initialLocation": "l2",
+            "endLocation": "l5",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "r1",
+            "initialLocation": "l5",
+            "endLocation": null,
+            "taskId": "t2l5"
+        },
+        {
+            "name": "move",
+            "agent": "r1",
+            "initialLocation": "l5",
+            "endLocation": "l8",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "r1",
+            "initialLocation": "l8",
+            "endLocation": null,
+            "taskId": "t2l8a"
+        },
+        {
+            "name": "dotask",
+            "agent": "r1",
+            "initialLocation": "l8",
+            "endLocation": null,
+            "taskId": "t2l8b"
+        }
+    ],
+    "pareto": [
+        {
+            "paretoSolutionId": 1,
+            "QoS": {
+                "probabilitySucc": -0.0,
+                "cost": 0.0
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "worker2",
+                    "task": "t1l4"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "worker2",
+                    "task": "t3l4"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "worker2",
+                    "task": "t1l7"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "worker2",
+                    "task": "t3l7"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "worker2",
+                    "task": "t3l9"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "worker2",
+                    "task": "t1l6b"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "worker2",
+                    "task": "t1l6a"
+                },
+                {
+                    "maxRetry": 10,
+                    "agent": "r1",
+                    "task": "t2l5"
+                },
+                {
+                    "maxRetry": 8,
+                    "agent": "r1",
+                    "task": "t2l8a"
+                },
+                {
+                    "maxRetry": 7,
+                    "agent": "r1",
+                    "task": "t2l8b"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 2,
+            "QoS": {
+                "probabilitySucc": -0.0,
+                "cost": 0.0
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "worker2",
+                    "task": "t1l4"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "worker2",
+                    "task": "t3l4"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "worker2",
+                    "task": "t1l7"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "worker2",
+                    "task": "t3l7"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "worker2",
+                    "task": "t3l9"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "worker2",
+                    "task": "t1l6b"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "worker2",
+                    "task": "t1l6a"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r1",
+                    "task": "t2l5"
+                },
+                {
+                    "maxRetry": 10,
+                    "agent": "r1",
+                    "task": "t2l8a"
+                },
+                {
+                    "maxRetry": 10,
+                    "agent": "r1",
+                    "task": "t2l8b"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 3,
+            "QoS": {
+                "probabilitySucc": -0.0,
+                "cost": 0.0
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "worker2",
+                    "task": "t1l4"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "worker2",
+                    "task": "t3l4"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "worker2",
+                    "task": "t1l7"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "worker2",
+                    "task": "t3l7"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "worker2",
+                    "task": "t3l9"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "worker2",
+                    "task": "t1l6b"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "worker2",
+                    "task": "t1l6a"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "r1",
+                    "task": "t2l5"
+                },
+                {
+                    "maxRetry": 6,
+                    "agent": "r1",
+                    "task": "t2l8a"
+                },
+                {
+                    "maxRetry": 6,
+                    "agent": "r1",
+                    "task": "t2l8b"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 4,
+            "QoS": {
+                "probabilitySucc": -0.0,
+                "cost": 0.0
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 3,
+                    "agent": "worker2",
+                    "task": "t1l4"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "worker2",
+                    "task": "t3l4"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "worker2",
+                    "task": "t1l7"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "worker2",
+                    "task": "t3l7"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "worker2",
+                    "task": "t3l9"
+                },
+                {
+                    "maxRetry": 4,
+                    "agent": "worker2",
+                    "task": "t1l6b"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "worker2",
+                    "task": "t1l6a"
+                },
+                {
+                    "maxRetry": 9,
+                    "agent": "r1",
+                    "task": "t2l5"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r1",
+                    "task": "t2l8a"
+                },
+                {
+                    "maxRetry": 8,
+                    "agent": "r1",
+                    "task": "t2l8b"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 5,
+            "QoS": {
+                "probabilitySucc": -0.0,
+                "cost": 0.0
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 3,
+                    "agent": "worker2",
+                    "task": "t1l4"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "worker2",
+                    "task": "t3l4"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "worker2",
+                    "task": "t1l7"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "worker2",
+                    "task": "t3l7"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "worker2",
+                    "task": "t3l9"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "worker2",
+                    "task": "t1l6b"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "worker2",
+                    "task": "t1l6a"
+                },
+                {
+                    "maxRetry": 6,
+                    "agent": "r1",
+                    "task": "t2l5"
+                },
+                {
+                    "maxRetry": 5,
+                    "agent": "r1",
+                    "task": "t2l8a"
+                },
+                {
+                    "maxRetry": 7,
+                    "agent": "r1",
+                    "task": "t2l8b"
+                }
+            ]
+        }
+    ]
+}

@@ -14,6 +14,8 @@ import arch.runPlanner as runPlanner
 import arch.runEvo as runEvo
 import arch.aux.planandPareto2JSON as planandPareto2JSON
 import restapi.timeline as timeline
+import arch.llm.geminiLLM as geminiLLM
+import json
 
 # Import config variables
 print("[LTA-API] Loading configuration from config.ini")
@@ -63,6 +65,46 @@ def delete_problem_by_id(problem_id: str) -> bool:
     PROBLEM_DATABASE[problem_id].error_message = f"Problem with ID '{problem_id}' not found when deleting."
     return False
 
+
+def convert_text_to_json_problem(problem_text: str) -> str | None:
+    """Converts the given text to a JSON planning problem using LLM.
+    Returns the file path to the saved JSON file."""
+    try:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        gemini = geminiLLM.Gemini4Planning(credential=f"{script_dir}/../arch/llm/assets/seams26-key.json")
+        json_data = gemini.get_json(problem_text)
+
+        # Save the generated JSON as file
+        output_dir = config.TEMP_PATH
+        os.makedirs(output_dir, exist_ok=True)
+        unique_id = uuid.uuid4().hex[:8]
+        output_path = f"{output_dir}/generated_problem_{unique_id}.json"
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(json_data, f, indent=2)
+        print(f"[Service] Saved generated JSON to {output_path}")
+        return output_path
+    except Exception as e:
+        print(f"[LTA-API-ERROR] Failed to convert text to JSON planning problem: {e}")
+        traceback.print_exc()
+        return None
+
+
+def explain_solution(problem, solution_index: int, solution_data: list,
+                    role: str, format: str, levelDetail: str, tone: str) -> str:
+    """Returns an explanation for a given solution. TODO: Replace with actual logic."""
+    try:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        gemini = geminiLLM.Gemini4Planning(credential=f"{script_dir}/../arch/llm/assets/seams26-key.json")
+        # solution
+        solution_selected = solution_data[solution_index]
+        # Generate explanation
+        explanation = gemini.get_explanation(role, format, levelDetail, tone, problem, solution_selected)
+        
+    except Exception as e:
+        print(f"[LTA-API-ERROR] Failed to explain solution for problem {problem.id}: {e}")
+        traceback.print_exc()
+        explanation = "Error generating explanation."
+    return explanation
 
 
 
@@ -170,7 +212,6 @@ def _parse_set_results_file(results_file: str, problem_id: str) -> dict | None:
         print(f"Error parsing SET results file {results_file}: {e}")
         # Return None but don't set the main problem status to failed
         return None
-    
 
 def get_results_for_problem(problem_id: str):
     """
