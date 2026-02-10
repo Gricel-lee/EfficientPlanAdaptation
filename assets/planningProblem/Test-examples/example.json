@@ -269,7 +269,7 @@
       }
     ],
     "constraints": {
-      "mission_probability_of_success": 0.95,
+      "mission_probability_of_success": 0.5,
       "min_assignment_probability": 0.5
     }
 }

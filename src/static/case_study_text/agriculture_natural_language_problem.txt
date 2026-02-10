@@ -45,5 +45,5 @@ A team of four agents, two workers and two robots, is available to perform the t
 
 The overall plan must meet two key performance criteria:
 
-* The minimum acceptable probability of success for the entire mission is 0.95.
+* The minimum acceptable probability of success for the entire mission is 0.05.
 * Any single task assignment must have a minimum success probability of 0.5 to be considered valid.

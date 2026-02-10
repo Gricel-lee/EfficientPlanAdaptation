@@ -1,11 +1,11 @@
 # api/router.py
-from arch.config.config import PROBLEM_OUTPUT_JSON
-from fastapi import APIRouter, HTTPException, status, BackgroundTasks, Request
-from typing import List
+from arch.config.config import PROBLEM_OUTPUT_JSON, TEMP_PATH
+from fastapi import APIRouter, HTTPException, status, BackgroundTasks, Request, UploadFile, File
+from typing import List, Dict
 from restapi.models import Problem, Problem2Create, ProblemFromTextCreate
 from restapi import planner_service
-from typing import Dict
 from restapi.memory_db import PROBLEM_DATABASE
+import os, uuid, json
 
 
 # --------------------------
@@ -87,6 +87,27 @@ async def explain_solution(problem_id: str, payload: dict):
                                                 role, format, levelDetail, tone)
     return {"explanation": explanation}
 
+
+
+@api_router.post("/upload-json")
+async def upload_json_file(file: UploadFile = File(...)):
+    """Upload a JSON file from the user's local machine and store it in the temp directory."""
+    contents = await file.read()
+    # Validate it's valid JSON
+    try:
+        json_data = json.loads(contents)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid JSON file.")
+    # Save to temp directory
+    os.makedirs(TEMP_PATH, exist_ok=True)
+    unique_id = uuid.uuid4().hex[:8]
+    # Use original filename (without extension) + unique suffix
+    original_name = os.path.splitext(file.filename)[0] if file.filename else "uploaded_problem"
+    output_path = os.path.join(TEMP_PATH, f"{original_name}_{unique_id}.json")
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(json_data, f, indent=2)
+    print(f"[Router] Saved uploaded JSON to {output_path}")
+    return {"json_file_path": output_path}
 
 
 @api_router.post("/problems/from-text/", response_model=Problem, status_code=status.HTTP_201_CREATED)

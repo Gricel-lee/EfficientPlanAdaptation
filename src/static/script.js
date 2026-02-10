@@ -852,6 +852,49 @@ function renderTimeline(timelineData) {
 backButton.addEventListener('click', showListView);
 confirmDeleteBtn.addEventListener('click', handleConfirmDelete);
 cancelDeleteBtn.addEventListener('click', hideDeleteConfirmation);
+// --- Browse JSON File Button ---
+document.getElementById('browse-file-btn').addEventListener('click', () => {
+    document.getElementById('json-file-selector').click();
+});
+
+document.getElementById('json-file-selector').addEventListener('change', async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const browseBtn = document.getElementById('browse-file-btn');
+    const originalText = browseBtn.textContent;
+    browseBtn.disabled = true;
+    browseBtn.textContent = 'Uploading...';
+
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('/api/upload-json', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ detail: 'Upload failed' }));
+            throw new Error(errorData.detail || `HTTP error ${response.status}`);
+        }
+
+        const result = await response.json();
+        // Update the JSON file path input with the server-side path
+        document.getElementById('problem-json-path').value = result.json_file_path;
+        console.log(`[Upload] JSON file stored at: ${result.json_file_path}`);
+    } catch (error) {
+        console.error('[Upload] Failed to upload JSON file:', error);
+        alert('Failed to upload JSON file. ' + error.message);
+    } finally {
+        browseBtn.disabled = false;
+        browseBtn.textContent = originalText;
+        // Reset file input so the same file can be selected again
+        event.target.value = '';
+    }
+});
+
 createProblemForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const description = document.getElementById('problem-description').value;
