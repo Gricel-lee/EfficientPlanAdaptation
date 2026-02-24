@@ -644,13 +644,17 @@ async function handleSolutionSelect(problemId, solutionIndex, solutionData) {
     const explanationSection = document.getElementById('plan-explanation-section');
     explanationSection.classList.remove('hidden');
 
-    // Show loading spinner inside the explanation box
+    // Show loading spinner inside the explanation iframe
     const explanationBox = document.getElementById('plan-explanation');
-    explanationBox.innerHTML = `
-        <div class="flex flex-col items-center justify-center h-full">
-            <div class="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent"></div>
-            <p class="mt-3 text-gray-500 text-sm">Generating explanation for Solution ${solutionIndex + 1}...</p>
-        </div>`;
+    const writeToIframe = (content) => {
+        const doc = explanationBox.contentDocument || explanationBox.contentWindow.document;
+        doc.open(); doc.write(content); doc.close();
+    };
+    writeToIframe(`<body style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-family:sans-serif;color:#6b7280;">
+        <div style="width:40px;height:40px;border:4px solid #3b82f6;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+        <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+        <p style="margin-top:12px;font-size:14px;">Generating explanation for Solution ${solutionIndex + 1}...</p>
+    </body>`);
 
     try {
         const response = await fetch(`/api/problems/${problemId}/explain-solution`, {
@@ -666,18 +670,20 @@ async function handleSolutionSelect(problemId, solutionIndex, solutionData) {
             })
         });
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+            const errorData = await response.json().catch(() => ({ detail: 'Error in explanation fetching.' }));
             throw new Error(errorData.detail || `HTTP error ${response.status}`);
         }
-        // Shown the explanation in the window
         const result = await response.json();
-        explanationBox.innerHTML = `<p class="whitespace-pre-wrap">
-        Explanation for Solution ${solutionIndex + 1}:        
-        ${result.explanation}
-        </p>`;
+        // Strip code block fences; Gemini may wrap the HTML in (e.g. ```html ... ```)
+        let html = result.explanation.trim();
+        html = html.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/, '').trim();
+        // add header with the solution index
+        html = `<h2 style="font-size:18px;font-weight:bold;margin-bottom:12px;color:#000000;">Explanation for Solution ${solutionIndex + 1}</h2>` + html;
+        // Write generated Gemini explanation in HTML format to the iframe
+        writeToIframe(html);
     } catch (error) {
         console.error('[Chart] Error fetching explanation:', error);
-        explanationBox.innerHTML = `<p class="text-red-500">Error: ${error.message}. \nError when explaining solution ${solutionIndex + 1}.</p>`;
+        writeToIframe(`<body style="font-family:sans-serif;padding:16px;color:#ef4444;">Error: ${error.message}</body>`);
     }
 }
 
