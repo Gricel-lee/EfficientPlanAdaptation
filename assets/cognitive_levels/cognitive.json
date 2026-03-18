@@ -1,0 +1,49 @@
+{
+    "users": [
+        {
+            "role": "AI expert",
+            "attention": {
+                "high_high": 0.3,
+                "high_low": 0.1,
+                "low_high": 0.4,
+                "low_low": 0.2
+            },
+            "understanding": {
+                "high_high": 0.5,
+                "high_low": 0.4,
+                "low_high": 0.05,
+                "low_low": 0.05
+            }
+        },
+        {
+            "role": "Domain expert",
+            "attention": {
+                "high_high": 0.49,
+                "high_low": 0.4,
+                "low_high": 0.05,
+                "low_low": 0.05
+            },
+            "understanding": {
+                "high_high": 1,
+                "high_low": 0,
+                "low_high": 0,
+                "low_low": 0
+            }
+        },
+        {
+            "role": "Non-expert",
+            "attention": {
+                "high_high": 0.49,
+                "high_low": 0.4,
+                "low_high": 0.05,
+                "low_low": 0.05
+            },
+            "understanding": {
+                "high_high": 0.5,
+                "high_low": 0.4,
+                "low_high": 0.05,
+                "low_low": 0.05
+            }
+        }
+    ]
+}

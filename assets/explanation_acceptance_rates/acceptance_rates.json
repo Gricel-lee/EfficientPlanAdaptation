@@ -1,0 +1,139 @@
+{
+    "users": [
+        {
+            "role": "AI expert",
+            "level_of_detail": [
+                {
+                    "high_detail": {
+                        "acceptance": 0,
+                        "rejection": 20
+                    }
+                },
+                {
+                    "summary": {
+                        "acceptance": 20,
+                        "rejection": 90
+                    }
+                }
+            ],
+            "tone": [
+                {
+                    "precise": {
+                        "acceptance": 0,
+                        "rejection": 3
+                    },
+                    "casual": {
+                        "acceptance": 10,
+                        "rejection": 0
+                    }
+                }
+            ],
+            "format": [
+                {
+                    "list": {
+                        "acceptance": 0,
+                        "rejection": 12
+                    },
+                    "paragraph": {
+                        "acceptance": 10,
+                        "rejection": 0
+                    },
+                    "bullet": {
+                        "acceptance": 11,
+                        "rejection": 5
+                    }
+                }
+            ]
+        },
+        {
+            "role": "Domain expert",
+            "level_of_detail": [
+                {
+                    "high_detail": {
+                        "acceptance": 110,
+                        "rejection": 0
+                    }
+                },
+                {
+                    "summary": {
+                        "acceptance": 100,
+                        "rejection": 90
+                    }
+                }
+            ],
+            "tone": [
+                {
+                    "precise": {
+                        "acceptance": 129,
+                        "rejection": 3
+                    },
+                    "casual": {
+                        "acceptance": 100,
+                        "rejection": 0
+                    }
+                }
+            ],
+            "format": [
+                {
+                    "list": {
+                        "acceptance": 120,
+                        "rejection": 12
+                    },
+                    "paragraph": {
+                        "acceptance": 100,
+                        "rejection": 0
+                    },
+                    "bullet": {
+                        "acceptance": 110,
+                        "rejection": 5
+                    }
+                }
+            ]
+        },
+        {
+            "role": "Non-expert",
+            "level_of_detail": [
+                {
+                    "high_detail": {
+                        "acceptance": 1,
+                        "rejection": 0
+                    }
+                },
+                {
+                    "summary": {
+                        "acceptance": 2,
+                        "rejection": 9
+                    }
+                }
+            ],
+            "tone": [
+                {
+                    "precise": {
+                        "acceptance": 12,
+                        "rejection": 3
+                    },
+                    "casual": {
+                        "acceptance": 10,
+                        "rejection": 0
+                    }
+                }
+            ],
+            "format": [
+                {
+                    "list": {
+                        "acceptance": 22,
+                        "rejection": 12
+                    },
+                    "paragraph": {
+                        "acceptance": 1,
+                        "rejection": 0
+                    },
+                    "bullet": {
+                        "acceptance": 19,
+                        "rejection": 6
+                    }
+                }
+            ]
+        }
+    ]
+}
