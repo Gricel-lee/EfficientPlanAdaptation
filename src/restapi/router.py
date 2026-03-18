@@ -1,5 +1,5 @@
 # api/router.py
-from arch.config.config import PROBLEM_OUTPUT_JSON, TEMP_PATH
+from arch.config.config import PROBLEM_OUTPUT_JSON, TEMP_PATH, ACCEPTANCE_RATES_FILE, COGNITIVE_STATE_FILE
 from fastapi import APIRouter, HTTPException, status, BackgroundTasks, Request, UploadFile, File
 from typing import List, Dict
 from restapi.models import Problem, Problem2Create, ProblemFromTextCreate
@@ -87,6 +87,36 @@ async def explain_solution(problem_id: str, payload: dict):
                                                 role, format, levelDetail, tone)
     return {"explanation": explanation}
 
+
+
+@api_router.get("/acceptance-rates")
+def get_acceptance_rates():
+    """Returns acceptance/rejection rates per role from the configured JSON file."""
+    with open(ACCEPTANCE_RATES_FILE, 'r') as f:
+        return json.load(f)
+
+
+@api_router.put("/acceptance-rates")
+def update_acceptance_rates(data: dict):
+    """Writes updated acceptance/rejection rates back to the JSON file."""
+    with open(ACCEPTANCE_RATES_FILE, 'w') as f:
+        json.dump(data, f, indent=4)
+    return data
+
+
+@api_router.get("/cognitive-state")
+def get_cognitive_state():
+    """Returns cognitive attention/understanding state from the configured JSON file."""
+    with open(COGNITIVE_STATE_FILE, 'r') as f:
+        return json.load(f)
+
+
+@api_router.put("/cognitive-state")
+def update_cognitive_state(data: dict):
+    """Writes updated cognitive state back to the JSON file."""
+    with open(COGNITIVE_STATE_FILE, 'w') as f:
+        json.dump(data, f, indent=4)
+    return data
 
 
 @api_router.post("/upload-json")

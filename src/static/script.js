@@ -926,7 +926,171 @@ createProblemFromTextForm.addEventListener('submit', (event) => {
     createProblemFromText(description, naturalLanguageText);
 });
 
-// --- Initial Load ---
+// --- Acceptance Rates ---
+let acceptanceRatesDataJson = null;
+
+async function fetchAcceptanceRates() {
+    try {
+        const response = await fetch('/api/acceptance-rates');
+        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+        // JSON content structed as { users: [ { role: '...', level_of_detail: [...], tone: [...], format: [...] }, ... ] }
+        acceptanceRatesDataJson = await response.json();
+        updateAcceptanceRatesDisplay();
+    } catch (error) {
+        console.error('[AcceptanceRates] Failed to fetch:', error);
+    }
+}
+
+function updateAcceptanceRatesDisplay() {
+    if (!acceptanceRatesDataJson) return;
+    const roleName = document.getElementById('user-type').value;
+    const userData = acceptanceRatesDataJson.users.find(u => u.role === roleName) || acceptanceRatesDataJson.users[0];
+
+    const { high_detail: highDetail } = userData.level_of_detail[0];
+    const { summary } = userData.level_of_detail[1];
+    // ar = acceptance rate
+    document.getElementById('ar-level-detail-high-a').value = highDetail.acceptance;
+    document.getElementById('ar-level-detail-high-r').value = highDetail.rejection;
+    document.getElementById('ar-level-detail-summary-a').value = summary.acceptance;
+    document.getElementById('ar-level-detail-summary-r').value = summary.rejection;
+
+    const { precise, casual } = userData.tone[0];
+    document.getElementById('ar-tone-precise-a').value = precise.acceptance;
+    document.getElementById('ar-tone-precise-r').value = precise.rejection;
+    document.getElementById('ar-tone-casual-a').value = casual.acceptance;
+    document.getElementById('ar-tone-casual-r').value = casual.rejection;
+
+    const { list, paragraph, bullet } = userData.format[0];
+    document.getElementById('ar-format-list-a').value = list.acceptance;
+    document.getElementById('ar-format-list-r').value = list.rejection;
+    document.getElementById('ar-format-paragraph-a').value = paragraph.acceptance;
+    document.getElementById('ar-format-paragraph-r').value = paragraph.rejection;
+    document.getElementById('ar-format-bullet-a').value = bullet.acceptance;
+    document.getElementById('ar-format-bullet-r').value = bullet.rejection;
+}
+
+function buildUpdatedAcceptanceRatesData() {
+    // Create JSON with updated data from UI
+    const roleName = document.getElementById('user-type').value;
+    const userIndex = acceptanceRatesDataJson.users.findIndex(u => u.role === roleName);
+    if (userIndex === -1) return null;
+
+    const user = acceptanceRatesDataJson.users[userIndex];
+    user.level_of_detail[0].high_detail.acceptance = parseInt(document.getElementById('ar-level-detail-high-a').value) || 0;
+    user.level_of_detail[0].high_detail.rejection  = parseInt(document.getElementById('ar-level-detail-high-r').value) || 0;
+    user.level_of_detail[1].summary.acceptance     = parseInt(document.getElementById('ar-level-detail-summary-a').value) || 0;
+    user.level_of_detail[1].summary.rejection      = parseInt(document.getElementById('ar-level-detail-summary-r').value) || 0;
+    user.tone[0].precise.acceptance  = parseInt(document.getElementById('ar-tone-precise-a').value) || 0;
+    user.tone[0].precise.rejection   = parseInt(document.getElementById('ar-tone-precise-r').value) || 0;
+    user.tone[0].casual.acceptance   = parseInt(document.getElementById('ar-tone-casual-a').value) || 0;
+    user.tone[0].casual.rejection    = parseInt(document.getElementById('ar-tone-casual-r').value) || 0;
+    user.format[0].list.acceptance       = parseInt(document.getElementById('ar-format-list-a').value) || 0;
+    user.format[0].list.rejection        = parseInt(document.getElementById('ar-format-list-r').value) || 0;
+    user.format[0].paragraph.acceptance  = parseInt(document.getElementById('ar-format-paragraph-a').value) || 0;
+    user.format[0].paragraph.rejection   = parseInt(document.getElementById('ar-format-paragraph-r').value) || 0;
+    user.format[0].bullet.acceptance     = parseInt(document.getElementById('ar-format-bullet-a').value) || 0;
+    user.format[0].bullet.rejection      = parseInt(document.getElementById('ar-format-bullet-r').value) || 0;
+    return acceptanceRatesDataJson;
+}
+
+async function saveAcceptanceRates() {
+    const updated = buildUpdatedAcceptanceRatesData();
+    if (!updated) return;
+    try {
+        await fetch('/api/acceptance-rates', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updated)
+        });
+    } catch (error) {
+        console.error('[AcceptanceRates] Failed to save:', error);
+    }
+}
+
+// --- Cognitive State ---
+let cognitiveStateDataJson = null;
+
+async function fetchCognitiveState() {
+    try {
+        const response = await fetch('/api/cognitive-state');
+        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+        // JSON content structured as { users: [ { role: '...', attention: { ... }, understanding: { ... } }, ... ] }
+        cognitiveStateDataJson = await response.json();
+        updateCognitiveStateDisplay();
+    } catch (error) {
+        console.error('[CognitiveState] Failed to fetch:', error);
+    }
+}
+
+function updateCognitiveStateDisplay() {
+    // Create JSON with updated data from UI
+    if (!cognitiveStateDataJson) return;
+    const roleName = document.getElementById('user-type').value;
+    const userData = cognitiveStateDataJson.users.find(u => u.role === roleName) || cognitiveStateDataJson.users[0];
+    const { attention, understanding } = userData;
+    document.getElementById('cognitive-attention-high-high-output').value = attention.high_high;
+    document.getElementById('cognitive-attention-high-low-output').value  = attention.high_low;
+    document.getElementById('cognitive-attention-low-high-output').value  = attention.low_high;
+    document.getElementById('cognitive-attention-low-low-output').value   = attention.low_low;
+    document.getElementById('cognitive-understanding-high-high-output').value = understanding.high_high;
+    document.getElementById('cognitive-understanding-high-low-output').value  = understanding.high_low;
+    document.getElementById('cognitive-understanding-low-high-output').value  = understanding.low_high;
+    document.getElementById('cognitive-understanding-low-low-output').value   = understanding.low_low;
+}
+
+async function saveCognitiveState() {
+    const roleName = document.getElementById('user-type').value;
+    const userIndex = cognitiveStateDataJson.users.findIndex(u => u.role === roleName);
+    if (userIndex === -1) return;
+    const user = cognitiveStateDataJson.users[userIndex];
+    user.attention.high_high = parseFloat(document.getElementById('cognitive-attention-high-high-output').value) || 0;
+    user.attention.high_low  = parseFloat(document.getElementById('cognitive-attention-high-low-output').value)  || 0;
+    user.attention.low_high  = parseFloat(document.getElementById('cognitive-attention-low-high-output').value)  || 0;
+    user.attention.low_low   = parseFloat(document.getElementById('cognitive-attention-low-low-output').value)   || 0;
+    user.understanding.high_high = parseFloat(document.getElementById('cognitive-understanding-high-high-output').value) || 0;
+    user.understanding.high_low  = parseFloat(document.getElementById('cognitive-understanding-high-low-output').value)  || 0;
+    user.understanding.low_high  = parseFloat(document.getElementById('cognitive-understanding-low-high-output').value)  || 0;
+    user.understanding.low_low   = parseFloat(document.getElementById('cognitive-understanding-low-low-output').value)   || 0;
+    try {
+        await fetch('/api/cognitive-state', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cognitiveStateDataJson)
+        });
+    } catch (error) {
+        console.error('[CognitiveState] Failed to save:', error);
+    }
+}
+
+// --- Initial Load of Acceptance Rates and Cognitive State ---
 document.addEventListener('DOMContentLoaded', () => {
     showListView();
+    document.getElementById('explanation-details-checkbox').addEventListener('change', function () {
+        document.getElementById('explanation-details-wrapper').classList.toggle('hidden', !this.checked);
+    });
+    fetchAcceptanceRates();
+    fetchCognitiveState();
+    document.getElementById('user-type').addEventListener('change', () => {
+        updateAcceptanceRatesDisplay();
+        updateCognitiveStateDisplay();
+    });
+    // Monitor changes in acceptance rates
+    const AR_INPUT_IDS = [
+        'ar-level-detail-high-a', 'ar-level-detail-high-r',
+        'ar-level-detail-summary-a', 'ar-level-detail-summary-r',
+        'ar-tone-precise-a', 'ar-tone-precise-r',
+        'ar-tone-casual-a', 'ar-tone-casual-r',
+        'ar-format-list-a', 'ar-format-list-r',
+        'ar-format-paragraph-a', 'ar-format-paragraph-r',
+        'ar-format-bullet-a', 'ar-format-bullet-r'
+    ];
+    AR_INPUT_IDS.forEach(id => document.getElementById(id).addEventListener('change', saveAcceptanceRates));
+    // Monitor changes in cognitive state
+    const CS_INPUT_IDS = [
+        'cognitive-attention-high-high-output', 'cognitive-attention-high-low-output',
+        'cognitive-attention-low-high-output',  'cognitive-attention-low-low-output',
+        'cognitive-understanding-high-high-output', 'cognitive-understanding-high-low-output',
+        'cognitive-understanding-low-high-output',  'cognitive-understanding-low-low-output'
+    ];
+    CS_INPUT_IDS.forEach(id => document.getElementById(id).addEventListener('change', saveCognitiveState));
 });

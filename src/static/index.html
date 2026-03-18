@@ -37,24 +37,6 @@
         <!-- Main Content Area -->
         <main>
 
-            <!-- Create Form to input for "user type", "explanation format", "explanation level of detail"-->
-            <div class="mb-12 bg-white p-6 rounded-xl shadow-lg">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">User Input</h2>
-                <form id="user-input-form">
-                    <div class="mb-4">
-                        <label for="user-type" class="block text-gray-700 text-sm font-bold mb-2">Select User
-                            Role:</label>
-                        <select id="user-type" name="user_type"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                            <option value="researcher">Researcher</option>
-                            <option value="practitioner">Industry</option>
-                            <option value="policy-maker">Policy Maker</option>
-                            <option value="non-expert">Non-expert (none of the above)</option>
-
-                        </select>
-                    </div>
-                </form>
-            </div>
 
             <!-- Create Problem Form -->
             <div class="mb-12 bg-white p-6 rounded-xl shadow-lg">
@@ -126,7 +108,6 @@
             <!-- Script to add example problem text to the textarea as a placeholder-->
             <script>
                 fetch('case_study_text/agriculture_natural_language_problem.txt')
-                    // fetch('agriculture_natural_language_problem.txt')
                     .then(response => response.text())
                     .then(text => {
                         document.getElementById('problem-text-input').value = text;
@@ -206,6 +187,7 @@
                     <h2 id="detail-title" class="text-3xl font-bold text-gray-800 mb-2"></h2>
                     <p id="detail-id" class="text-sm text-gray-500 mb-6 font-mono"></p>
 
+                    <!-- Two columns layout (on large screens, one in small) -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <!-- Left side: Plot -->
                         <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-96">
@@ -249,52 +231,169 @@
                                 class="border border-gray-300 bg-white text-gray-700 font-mono text-sm p-4 rounded-lg overflow-x-auto h-95">
                             </div>
                         </div>
-                        <!-- Explanation Details checkbox and options -->
+                    </div>
+
+                    <!-- Explanation options -->
+                    <!-- Two columns layout (on large screens, one in small) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Left column: Explanation Details checkbox -->
                         <div class="mt-4">
                             <label class="inline-flex items-center space-x-2 text-sm cursor-pointer">
                                 <input type="checkbox" id="explanation-details-checkbox" class="h-6 w-6 text-blue-600">
                                 <!-- <input id="create-from-text-checkbox" type="checkbox" class="h-6 w-6 text-blue-600"> -->
-                                <span class="text-gray-700 text-sm font-bold">Select Explanation Details (then click point in 2D plot to explain solution)</span>
+                                <span class="text-lg font-semibold text-gray-800">Show Explanation Details<br>(then click point in 2D plot to explain solution)</span>
                             </label>
                         </div>
+                        <!-- Right explanation options -->
                         <div id="explanation-details-wrapper" class="hidden mt-2">
-                            <div class="mb-4">
-                                <label for="explanation-tone" class="block text-gray-700 text-sm font-bold mb-2">Select
-                                    Explanation Tone:</label>
-                                <select id="explanation-tone" name="explanation_tone"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                    <option value="formal">Formal</option>
-                                    <option value="informal">Informal</option>
-                                </select>
+                            <!-- Set user -->
+                            <h4 class="text-lg font-semibold text-gray-800"> ◼️ Set Explanation Data</h4>
+                            <div class="mb-4 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                                <form id="user-input-form">
+                                    <div class="mb-4">
+                                        <label for="user-type" class="block text-gray-700 text-sm font-bold mb-2">User Role:</label>
+                                        <select id="user-type" name="user_type"
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            <option value="AI expert">AI Expert</option>
+                                            <option value="Domain expert">Domain Expert</option>
+                                            <option value="Non-expert">Non-expert</option>
+                                        </select>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="mb-4">
-                                <label for="explanation-format"
-                                    class="block text-gray-700 text-sm font-bold mb-2">Select Explanation
-                                    Format:</label>
-                                <select id="explanation-format" name="explanation_format"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                    <option value="paragraphs">Text in paragraphs</option>
-                                    <option value="bullets">Bullet points</option>
-                                    <option value="textAndLists">Text and list</option>
-                                </select>
+
+                            <!-- Set/Show Acceptance Rates -->
+                            <div class="mb-4 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                                <h4 class="text-lg font-semibold text-gray-800">Acceptance rates</h4>
+                                <div class="grid grid-cols-[100px_1fr_1fr_1fr] gap-3 items-start mt-2">
+                                    <!-- Row 1: Level of Detail -->
+                                    <div class="flex items-center h-full pt-6">
+                                        <span class="text-gray-600 text-sm font-semibold">Level of Detail</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-gray-700 text-sm font-bold mb-1">High-detail</span>
+                                        <div class="flex items-center gap-1">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">A:</label>
+                                            <input type="number" min="0" step="1" id="ar-level-detail-high-a" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">R:</label>
+                                            <input type="number" min="0" step="1" id="ar-level-detail-high-r" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="block text-gray-700 text-sm font-bold mb-1">Summary</span>
+                                        <div class="flex items-center gap-1">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">A:</label>
+                                            <input type="number" min="0" step="1" id="ar-level-detail-summary-a" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">R:</label>
+                                            <input type="number" min="0" step="1" id="ar-level-detail-summary-r" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        </div>
+                                    </div>
+                                    <div></div>
+                                    <!-- Row 2: Tone -->
+                                    <div class="flex items-center h-full pt-6">
+                                        <span class="text-gray-600 text-sm font-semibold">Tone</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-gray-700 text-sm font-bold mb-1">Precise</span>
+                                        <div class="flex items-center gap-1">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">A:</label>
+                                            <input type="number" min="0" step="1" id="ar-tone-precise-a" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">R:</label>
+                                            <input type="number" min="0" step="1" id="ar-tone-precise-r" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="block text-gray-700 text-sm font-bold mb-1">Casual</span>
+                                        <div class="flex items-center gap-1">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">A:</label>
+                                            <input type="number" min="0" step="1" id="ar-tone-casual-a" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">R:</label>
+                                            <input type="number" min="0" step="1" id="ar-tone-casual-r" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        </div>
+                                    </div>
+                                    <div></div>
+                                    <!-- Row 3: Format -->
+                                    <div class="flex items-center h-full pt-6">
+                                        <span class="text-gray-600 text-sm font-semibold">Format</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-gray-700 text-sm font-bold mb-1">List</span>
+                                        <div class="flex items-center gap-1">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">A:</label>
+                                            <input type="number" min="0" step="1" id="ar-format-list-a" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">R:</label>
+                                            <input type="number" min="0" step="1" id="ar-format-list-r" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="block text-gray-700 text-sm font-bold mb-1">Paragraph</span>
+                                        <div class="flex items-center gap-1">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">A:</label>
+                                            <input type="number" min="0" step="1" id="ar-format-paragraph-a" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">R:</label>
+                                            <input type="number" min="0" step="1" id="ar-format-paragraph-r" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="block text-gray-700 text-sm font-bold mb-1">Bullets</span>
+                                        <div class="flex items-center gap-1">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">A:</label>
+                                            <input type="number" min="0" step="1" id="ar-format-bullet-a" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            <label class="text-gray-600 text-xs whitespace-nowrap">R:</label>
+                                            <input type="number" min="0" step="1" id="ar-format-bullet-r" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-4">
-                                <label for="explanation-detail"
-                                    class="block text-gray-700 text-sm font-bold mb-2">Explanation Level of
-                                    Detail:</label>
-                                <select id="explanation-detail" name="explanation_detail"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                    <option value="high">High</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="low">Low</option>
-                                </select>
+
+                            
+                            <!-- Set/Show Cognitive levels predicted -->
+                            <div class="mb-4 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                                <!-- Attention-->
+                                <h4 class="text-lg font-semibold text-gray-700 text-sm  font-bold mb-2">Predicted Cognitive Attention</h4>
+                                <!-- Attention Grid for High/Low combinations -->
+                                <div class="flex items-center gap-1">
+                                    <label class="text-gray-600 text-xs whitespace-nowrap">high-high:</label>
+                                    <input type="number" step="0.01" min="0" id="cognitive-attention-high-high-output" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <label class="text-gray-600 text-xs whitespace-nowrap">high-low:</label>
+                                    <input type="number" step="0.01" min="0" id="cognitive-attention-high-low-output" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <label class="text-gray-600 text-xs whitespace-nowrap">low-high:</label>
+                                    <input type="number" step="0.01" min="0" id="cognitive-attention-low-high-output" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <label class="text-gray-600 text-xs whitespace-nowrap">low-low:</label>
+                                    <input type="number" step="0.01" min="0" id="cognitive-attention-low-low-output" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                </div>
+                                <div class="my-3"></div>
+                                <!-- Understanding -->
+                                <label for="cognitive-understanding" class="block text-gray-700 text-sm font-bold mb-2">Predicted Cognitive Understanding:</label>
+                                <!-- Understanding Grid for High/Low combinations -->
+                                <div class="flex items-center gap-1">
+                                    <label class="text-gray-600 text-xs whitespace-nowrap">high-high:</label>
+                                    <input type="number" step="0.01" min="0" id="cognitive-understanding-high-high-output" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <label class="text-gray-600 text-xs whitespace-nowrap">high-low:</label>
+                                    <input type="number" step="0.01" min="0" id="cognitive-understanding-high-low-output" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <label class="text-gray-600 text-xs whitespace-nowrap">low-high:</label>
+                                    <input type="number" step="0.01" min="0" id="cognitive-understanding-low-high-output" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <label class="text-gray-600 text-xs whitespace-nowrap">low-low:</label>
+                                    <input type="number" step="0.01" min="0" id="cognitive-understanding-low-low-output" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                </div>
+                            </div>
+
+                            <!-- Explanation details Policy generated -->
+                            <h4 class="text-lg font-semibold text-gray-800">◼️ Obtain Explanation Data</h4>
+                            <div class="mb-4 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                                <!-- Tone-->
+                                <label for="explanation-tone" class="block text-gray-700 text-sm font-bold mb-2">Obtained Explanation Tone:</label>
+                                <output id="explanation-tone" class="block shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></output>
+                                <div class="my-3"></div>
+                                <!-- Format -->
+                                <label for="explanation-format" class="block text-gray-700 text-sm font-bold mb-2">Obtained Explanation Format:</label>
+                                <output id="explanation-format" class="block shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></output>
+                                <div class="my-3"></div>
+                                <!-- Level of Detail -->
+                                <label for="explanation-detail" class="block text-gray-700 text-sm font-bold mb-2">Obtained Level of Detail:</label>
+                                <output id="explanation-detail" class="block shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></output>
                             </div>
                         </div>
-                        <script>
-                            document.getElementById('explanation-details-checkbox').addEventListener('change', function () {
-                                document.getElementById('explanation-details-wrapper').classList.toggle('hidden', !this.checked);
-                            });
-                        </script>
 
                     </div>
                 </div>
