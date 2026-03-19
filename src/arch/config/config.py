@@ -28,6 +28,10 @@ ACCEPTANCE_RATES_FILE = config['PATHS']['ACCEPTANCE_RATES']
 # Cognitive user predicted state
 COGNITIVE_STATE_FILE = config['PATHS']['COGNITIVE_STATE_FILE']
 
+# PRISM path
+PRISM_PATH = "~/ProgramsGris/prism-4.8.1/bin/prism" 
+# PRISM_PATH = config['PATHS']['PRISM_PATH'] # TODO: Check why moving this to config.ini causes issues with PRISM execution
+
 # Python virtual environment
 SOURCE = os.path.join(HP_PATH, "prj-venv/bin/activate")
 JAR_FILE = os.path.join(HP_PATH, "arch/apps/EvoChecker/EvoChecker-1.1.0.jar")

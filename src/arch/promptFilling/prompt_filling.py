@@ -1,11 +1,11 @@
 """
 This file generated the PRISM POMDP model to obtain the prompt filling options to generate an explanation.
 """
-from arch.config.config import PROBLEM_OUTPUT_JSON, ACCEPTANCE_RATES_FILE, COGNITIVE_STATE_FILE
-
 import os
 import json
-from arch.config.config import ACCEPTANCE_RATES_FILE, COGNITIVE_STATE_FILE
+import re
+import subprocess
+from arch.config.config import ACCEPTANCE_RATES_FILE, COGNITIVE_STATE_FILE, PRISM_PATH
 
 
 class PromptFilling:
@@ -25,17 +25,13 @@ class PromptFilling:
         # 2) Create POMDP instance
         self.pomdp = self.create_POMDP_instance()
         # save in 
-        temp = "/home/gnvf500/Gricel-Documents/GithubGris/EfficientPlanAdaptation/src/arch/promptFilling/data/temp"
+        temp = "/home/gnvf500/Gricel-Documents/GithubGris/EfficientPlanAdaptation/src/arch/promptFilling/data/temp/pomdp_instance.pm"
         save_file(temp, self.pomdp)
-
-        ## --- I AM HERE!!!
-        
+        print("POMDP instance created and saved to temp file for debugging.")
         # 3) Generate POMDP policy (run PRISM)
-        self.generate_POMDP_policy()
+        self.policy = self.generate_POMDP_policy()
         self.prompt_filling_vals = self.map_policy_to_explanation_params()
-        # TODO: Map policy to selected level_of_detail, tone, format
-        # TODO: Return to front end
-        # TODO: Pass workflow to explanation_service
+        print("[PromptFilling] Mapped policy to explanation parameters:", self.prompt_filling_vals)
         
 
     def read_user_cognitive_pred(self):
@@ -118,18 +114,63 @@ class PromptFilling:
         return instance
     
     def generate_POMDP_policy(self):
-        # TODO
-        pass
+        data_dir = os.path.join(os.path.dirname(__file__), "data", "temp")
+        pomdp_file = os.path.join(data_dir, "pomdp_instance.pm")
+        strat_file = os.path.join(data_dir, "policy.txt")
+        prism_bin = os.path.expanduser(PRISM_PATH)
+
+        cmd = [
+            prism_bin,
+            pomdp_file,
+            "-pf", 'R{"acceptance"}max=? [ F done ]',
+            "-exportstrat", f"{strat_file}:type=actions"
+        ]
+
+        result = subprocess.run(cmd, capture_output=True, text=True)
+
+        if result.returncode != 0:
+            print("PRISM error:\n", result.stderr)
+            return
+
+        print("PRISM output:\n", result.stdout)
+
+        if os.path.exists(strat_file):
+            policy = open_file(strat_file)
+            print("Generated policy:\n", policy)
+            return policy
+        else:
+            print("Error: strategy file was not generated.")
+    
+    
     
     def map_policy_to_explanation_params(self):
-        # TODO
+        # In Policy a,b,c represents:
+        # //-- level_of_detail -- a1: high_detail; a2: summary
+        # //-- tone -- b1: precise; b2: casual
+        # //-- format -- c1: list; c2: paragraph; c3: bullet
+
+        detail_map = {"a1": "high_detail", "a2": "summary"}
+        tone_map   = {"b1": "precise",     "b2": "casual"}
+        format_map = {"c1": "list",        "c2": "paragraph", "c3": "bullet"}
+
+        def find_first(pattern):
+            for line in self.policy.splitlines():
+                m = re.search(pattern, line)
+                if m:
+                    return m.group(1)
+            return None
+
+        a = find_first(r'select_prompt_(a\d+)\s*$')
+        b = find_first(r'select_prompt_(b\d+)\s*$')
+        c = find_first(r'select_prompt_(c\d+)\s*$')
+
         return {
-            "tone": ("tone", "ERROR_TONE_NOT_FOUND"),
-            "format": ("format", "ERROR_FORMAT_NOT_FOUND"),
-            "detail": ("detail", "ERROR_DETAIL_NOT_FOUND")
+            "detail": detail_map.get(a, "ERROR_DETAIL_NOT_FOUND"),
+            "tone":   tone_map.get(b,   "ERROR_TONE_NOT_FOUND"),
+            "format": format_map.get(c, "ERROR_FORMAT_NOT_FOUND"),
         }
 
-
+    
 
 
 
@@ -153,3 +194,12 @@ def open_file(filedir):
         return file.read()
     
     
+# --------- Test ---------
+if __name__ == "__main__":
+    # ACCEPTANCE_RATES_FILE = "../../../EfficientPlanAdaptation/assets/explanation_acceptance_rates/acceptance_rates.json"
+    # COGNITIVE_STATE_FILE = "../../../EfficientPlanAdaptation/assets/cognitive_levels/cognitive.json"
+    # PRISM_PATH = "~/ProgramsGris/prism-4.8.1/bin/prism"
+    # Example usage
+    user_role = "Non-expert"
+    prompt_filling_problem = PromptFilling(user_role)
+    print(prompt_filling_problem.prompt_filling_vals)
