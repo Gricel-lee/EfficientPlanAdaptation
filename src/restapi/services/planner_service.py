@@ -9,7 +9,7 @@ from fastapi import HTTPException, status
 import arch.config.config as config
 from arch.config.config import PROBLEM_OUTPUT_DIR, MOEA, LIBS_PATH, JAR_FILE, PROBLEM_OUTPUT_JSON
 from restapi.models import Problem, Problem2Create
-from restapi.memory_db import PROBLEM_DATABASE
+from arch.memory_db.memory_db import PROBLEM_DATABASE
 import arch.runPlanner as runPlanner
 import arch.runEvo as runEvo
 import arch.aux.planandPareto2JSON as planandPareto2JSON
@@ -71,7 +71,10 @@ def convert_text_to_json_problem(problem_text: str) -> str | None:
     Returns the file path to the saved JSON file."""
     try:
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        gemini = geminiLLM.Gemini4Planning(credential=f"{script_dir}/../arch/llm/assets/seams26-key.json")
+        gemini = geminiLLM.Gemini4Planning(credential=f"{script_dir}/../../arch/llm/assets/seams26-key.json")
+        #  /home/gnvf500/Gricel-Documents/GithubGris/EfficientPlanAdaptation/src/restapi/services/../arch/llm/assets/seams26-key.json 
+        #  /home/gnvf500/Gricel-Documents/GithubGris/EfficientPlanAdaptation/src/arch/llm/assets/seams26-key.json
+        #  /home/gnvf500/Gricel-Documents/GithubGris/EfficientPlanAdaptation/src/restapi/services/../arch/llm/assets/seams26-key.json
         json_data = gemini.get_json(problem_text)
 
         # Save the generated JSON as file
@@ -94,7 +97,7 @@ def explain_solution(problem, solution_index: int, solution_data: list,
     """Returns an explanation for a given solution. TODO: Replace with actual logic."""
     try:
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        gemini = geminiLLM.Gemini4Planning(credential=f"{script_dir}/../arch/llm/assets/seams26-key.json")
+        gemini = geminiLLM.Gemini4Planning(credential=f"{script_dir}/../../arch/llm/assets/seams26-key.json")
         # solution
         solution_selected = solution_data[solution_index]
         # Generate explanation
@@ -353,5 +356,6 @@ def _run_evochecker(problem: Problem):
         json_file_path=problem.json_file,
         evo_jar_file=JAR_FILE
     )
+
 
 

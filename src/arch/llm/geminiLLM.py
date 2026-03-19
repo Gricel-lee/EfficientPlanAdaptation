@@ -4,7 +4,7 @@ import re
 from google import genai
 from google.genai import types
 from arch.llm.explanation import Explanation
-from restapi.memory_db import PROBLEM_DATABASE
+from arch.memory_db.memory_db import PROBLEM_DATABASE
 from restapi.models import Problem
 
 from arch.config.config import TEMP_PATH
