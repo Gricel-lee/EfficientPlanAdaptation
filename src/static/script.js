@@ -634,6 +634,31 @@ function handleTooltipItemClick(solutionIndex, paramIndex, value, label) {
  * @param {Array} solutionData - The array of parameter values for this solution.
  */
 async function handleSolutionSelect(problemId, solutionIndex, solutionData) {
+    // Ensure prompt UI is prepared before handling the solution
+    await getExplanationPromptFillingVals(problemId);
+    await handleSolution(problemId, solutionIndex, solutionData);
+}
+
+async function getExplanationPromptFillingVals(problemId) {
+    try {
+        const role = document.getElementById('user-type').value;
+        console.log(`[Chart] Fetching explanation params for Problem: ${problemId}, Role: ${role}`);
+        const response = await fetch(`/api/problems/${problemId}/explanation-params`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ role })
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        document.getElementById('explanation-tone').value = data.tone;
+        document.getElementById('explanation-format').value = data.format;
+        document.getElementById('explanation-detail').value = data.detail;
+    } catch (err) {
+        console.error('[Chart] getPromptExplanation error:', err);
+    }
+}
+
+async function handleSolution(problemId, solutionIndex, solutionData) {
     console.log(`[Chart] Solution selected - Problem: ${problemId}, Index: ${solutionIndex + 1}, Data:`, solutionData);
 
     // Hide the tooltip

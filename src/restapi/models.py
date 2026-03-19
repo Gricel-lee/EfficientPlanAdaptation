@@ -30,6 +30,12 @@ class Problem(Problem2Create):
     error_message : str = Field(None, description="Error message if the problem processing failed.")
 
 
+class SelectedUser(BaseModel):
+    """
+    Model representing the user role selected in the frontend UI.
+    """
+    role: str = Field(..., example="Domain expert", description="The user role selected in the UI. Possible values: 'AI expert', 'Domain expert', 'Non-expert'.")
+
 class ProblemStatusUpdate(BaseModel):
     """
     Ensure the status is one of the allowed values.
