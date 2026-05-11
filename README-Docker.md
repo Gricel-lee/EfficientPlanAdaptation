@@ -2,6 +2,9 @@
 
 ARCH contains a Dockerfile to ease deployment and running the application. It is tested in Ubuntu distributions.
 
+**NOTE**: So far, the UI requires the JSON file to be searched in "Select a Different File", and files generated are ONLY saved in the container. To see the files ```sudo docker exec -it arch bash``` after running the container.
+
+
 ## Prerequerements
 
 - Docker installed
@@ -30,26 +33,24 @@ This command joins:
   - `arch-planner` — the Docker image (see Dockerfile file)
 
 
-Remember to add sudo or error ```permission denied while trying to connect to the docker API at unix:///var/run/docker.sock``` might appear.
 
-  3. Access the app at http://localhost:8001 or the API docs at
+  2. Access the app at http://localhost:8001 or the API docs at
   http://localhost:8001/docs
 
 
-If the Docker changes, rebuild the image.
+# Developer notes
 
-## Mounting planning problem files
+- If the Docker changes, rebuild the image (see 1.1).
 
+#### Error
+Remember to add sudo or error ```permission denied while trying to connect to the docker API at unix:///var/run/docker.sock``` might appear.
 
+#### Container name
+To find the container name:
+  
+```sudo docker ps```
 
-- `-v $(pwd)/assets:/app/src/assets` — binds your local `assets/` folder to `/app/src/assets` inside the container
-- This means you can add or edit JSON problem files without rebuilding the image
-
-
-  To find the container name:
-  ```sudo docker ps```
-
-## Access files
+#### Access files
 
 While the container is running you can open a shell inside it:
-```sudo docker exec -it arch-planner bash```
+```sudo docker exec -it arch bash```
