@@ -11,15 +11,12 @@ WORKDIR /app
 
 # Copy project
 COPY src/ ./src/
-
-# Fix tempest path in requirements.txt for the Docker environment
-RUN sed -i 's|tempest @ file:///.*|tempest @ file:///app/src/arch/apps/tempest|' src/arch/requirements.txt
-
-# Install Python dependencies (no venv needed in Docker)
-RUN pip install --no-cache-dir -r src/arch/requirements.txt
-
-# Install tempest explicitly
+# Install tempest first so it pulls the pysmt version it requires
 RUN pip install --no-cache-dir src/arch/apps/tempest/
+
+# Remove conflicting pysmt and tempest lines from requirements.txt, then install the rest
+RUN sed -i '/^PySMT/d; /^tempest/d' src/arch/requirements.txt && \
+    pip install --no-cache-dir -r src/arch/requirements.txt
 
 # Install PySMT Z3 solver
 RUN pysmt-install --z3 --confirm-agreement
