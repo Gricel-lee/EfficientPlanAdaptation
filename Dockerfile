@@ -11,6 +11,13 @@ WORKDIR /app
 
 # Copy project
 COPY src/ ./src/
+
+# Download EvoChecker (evoCheckerJar branch includes the jar + Linux .so runtime libs)
+RUN git clone --depth 1 --branch evoCheckerJar \
+    https://github.com/gerasimou/EvoChecker.git \
+    src/arch/apps/EvoChecker && \
+    chmod +x src/arch/apps/EvoChecker/EvoChecker-1.1.0.jar
+
 # Install tempest first so it pulls the pysmt version it requires
 RUN pip install --no-cache-dir src/arch/apps/tempest/
 

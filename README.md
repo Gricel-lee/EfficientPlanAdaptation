@@ -7,6 +7,9 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 ![image](https://github.com/user-attachments/assets/a1ac9011-b261-4b4b-8350-0241fd0ffc89)
 
 
+## Docker 
+
+Refere to README-Docker for instruction to run as a Docker container.
 
 ## Installing ARCH hybrid planner
 
