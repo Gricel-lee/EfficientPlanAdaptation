@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <title>Hybrid Planner Dashboard</title> -->
-    <title>Long-Term Adaptation Dashboard</title>
+    <title>COMPASS Dashboard</title>
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js for plotting -->
@@ -30,7 +30,7 @@
         <!-- Header -->
         <header class="mb-8">
             <!-- <h1 class="text-4xl font-bold text-gray-800">Hybrid Planner Dashboard</h1> -->
-            <h1 class="text-4xl font-bold text-gray-800">Long-Term Adaptation Dashboard</h1>
+            <h1 class="text-4xl font-bold text-gray-800">COMPASS Dashboard</h1>
             <p class="text-gray-600">Monitor and manage your planning problems.</p>
         </header>
 
@@ -404,6 +404,10 @@
                     <div class="p-4 flex items-center justify-between">
                         <div>
                             <h4 class="text-lg font-semibold text-gray-800">Task Timeline</h4>
+                            <button id="bulb-btn" onclick="toggleBulb()" class="mt-1 flex items-center gap-1 text-sm text-gray-500 hover:text-pink-600 transition-colors">
+                                <span id="bulb-icon" style="font-size:1.2em;">💡</span>
+                                <span id="bulb-label">Off</span>
+                            </button>
                             <p class="text-sm text-gray-500">Start times and durations in time units.</p>
                         </div>
                     </div>
@@ -522,6 +526,24 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        let bulbOn = false;
+        function toggleBulb() {
+            bulbOn = !bulbOn;
+            const icon = document.getElementById('bulb-icon');
+            const label = document.getElementById('bulb-label');
+            if (bulbOn) {
+                icon.style.filter = 'sepia(1) saturate(8) hue-rotate(290deg)';
+                label.textContent = 'On';
+                label.style.color = '#db2777';
+            } else {
+                icon.style.filter = '';
+                label.textContent = 'Off';
+                label.style.color = '';
+            }
+        }
     </script>
 
 </body>
