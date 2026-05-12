@@ -6,22 +6,19 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 
 ![image](https://github.com/user-attachments/assets/a1ac9011-b261-4b4b-8350-0241fd0ffc89)
 
+## Install ARCH hybrid planner
 
-## Docker 
+### Using Docker 
 
-Refere to README-Docker for instruction to run as a Docker container.
+Refer to [README-Docker](README-Docker.md) for instruction to run as a Docker container. Skip the next steps until ARCH UI. 
 
-## Installing ARCH hybrid planner
+
+### Installing ARCH hybrid planner locally
 
 1) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
 ![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dirFiles.png)
 
-2) **Modify** ```run.sh``` and ```config.ini``` file with your installation paths.
-
-**Modify** also the path to the tempest solver in the ```requirements.txt``` file, line: ```tempest @ file:///home/<your_path>/EfficientPlanAdaptation/src/arch/apps/tempest```
-
-
-3) Create a **python environment** from src/arch/requirements.txt file:
+2) Create a **python environment** from src/arch/requirements.txt file:
 ```
 cd src/arch
 python3 -m venv prj-venv
@@ -32,29 +29,28 @@ python3 -m venv prj-venv
 source prj-venv/bin/activate
 pip install -r requirements.txt
 deactivate
-cd ..
+cd ../..
 ```
 (or pip3). For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-environments/
 
 
-4) Continue with Running ARCH UI instructions. This will run the run.sh file and finish the installation moving the EvoChecker files.
+3) Make run_task.sh executable by running ```chmod +x run.sh```. 
+
+Continue with Running ARCH UI instructions. This will run the run.sh file.
 
 
 ## Running ARCH UI
 
-1) **Run** one of the following from terminal.
+**Run** one of the following from terminal.
 For arch--hybrid planner:
 ```
-./run.sh arch
+./run.sh
 ```
-This will automatically activate the Python environment, FastAPI, and the web app. 
+This will automatically activate the Python environment, FastAPI, and the web app.
 
-For sharp:
-```
-./run.sh sharp
-```
+## ARCH UI
 
-2) After running this script, the API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
+After running this script, the API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
 
 Note: To test and submit a planning problem directly throught the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
 
@@ -102,6 +98,18 @@ python3 run_SHARP_headless.py
 
 **Enjoy!**
 
+# Configuration
+
+## Configuring EvoChecker
+
+2) **Modify** ```config.ini``` file with EvoChecker parameters. 
+Do not modify Python path, except if running local Python instead of venv.
+
+
+
+
+
+# Additional notes
 
 ## Full-MDP
 To create a full-MDP PRISM file from a JSON file, go to:
@@ -109,7 +117,7 @@ To create a full-MDP PRISM file from a JSON file, go to:
 
 
 ## Git commit note (for devs)
-To submit changes, avoid large files by:
+To submit changes, add .gitignore to avoid commiting large files, python environment, etc. Optionally, avoid large files by:
 ```
 git add .
 git reset src/prj-venv src/apps/EvoChecker/
@@ -117,16 +125,19 @@ git commit -m "."
 git push
 ```
 
-If requires hard reset, make copy of folder, then go back n commits, e.g., 1 commit behind:
+If hard reset is required due to trying to commit a large file (an error will appear), make copy of folder, then go back n commits, e.g., 1 commit behind:
 ```
 git reset --hard HEAD~1
 ```
-Go back to the last commit that was able to push
+Go back to the last commit that was able to push without large files.
+
+## Architecture notes
+
+ARCH uses REST API. The src/restapi/ folder contains the API logic (routes, models, services). By default, FastAPI handles the HTTP server.
 
 
 
-
-## Q&A
+# Q&A
 
 ### Error when installing the python environment.
 If the python environment initialisation fails, try replace ```src/requirements.txt``` content for:

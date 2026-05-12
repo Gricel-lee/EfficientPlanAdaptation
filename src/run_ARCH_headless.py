@@ -7,9 +7,9 @@
 # 
 # Set the paths to your problem in the main() function below.
 
-import arch.aux.json2pddl as json2pddl
-import arch.aux.pddlplanner as pddlplanner
-import arch.aux.plan2PMCfile as plan2PMCfile
+import arch.planning.json2pddl as json2pddl
+import arch.planning.pddlplanner as pddlplanner
+import arch.planning.plan2PMCfile as plan2PMCfile
 import os
 from arch.config.config import PROBLEM_OUTPUT_DIR, POPULATION_SIZE, MAX_EVALUATIONS, JAR_FILE, NUM_TIMED_RUNS
 import arch.runEvo as runEvo

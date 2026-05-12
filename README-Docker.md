@@ -12,10 +12,15 @@ ARCH contains a Dockerfile to ease deployment and running the application. It is
 
 ## Run ARCH
 
-1. To build and run the Dockerfile
-
+1. To build and run the Dockerfile:
 ```bash
-cd EfficientPlanAdaptation/ && sudo docker build -t arch-planner . && cd src/ && sudo docker run -p 8001:8001 -v $(pwd)/assets:/app/src/assets --name arch arch-planner
+  sudo docker run -p 8001:8001 \
+    -v /home/gricel/Documents/GitHub/EfficientPlanAdaptation/assets:/home/gricel/Documents/GitHub/EfficientPlanAdaptation/assets \
+    --mount type=bind,src=$(pwd)/output/data,dst=/app/src/data,bind-create-src \
+    --mount type=bind,src=$(pwd)/output/libs,dst=/app/src/libs,bind-create-src \
+    --mount type=bind,src=$(pwd)/output/temp,dst=/app/temp,bind-create-src \
+    --name arch arch-planner
+
 ```
 
 This command joins:
@@ -43,12 +48,19 @@ This command joins:
 - If the Docker changes, rebuild the image (see 1.1).
 
 #### Error
-Remember to add sudo or error ```permission denied while trying to connect to the docker API at unix:///var/run/docker.sock``` might appear.
+Remember to add sudo or error ***permission denied while trying to connect to the docker API at unix:///var/run/docker.sock*** might appear.
 
 #### Container name
 To find the container name:
   
 ```sudo docker ps```
+
+#### Error or to remove an already created container 
+Error: docker: **Error response from daemon: Conflict. The container name "/arch" is already in use by container**
+
+If a container named arch was already created, first delete it to create a new one:
+
+```sudo docker rm arch```
 
 #### Access files
 

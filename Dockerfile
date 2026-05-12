@@ -2,15 +2,17 @@ FROM python:3.11-slim
 
 # Install Java (needed by EvoChecker), git (for PySMT), and build tools
 RUN apt-get update && apt-get install -y \
-    default-jre \
+    openjdk-17-jre \
     git \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
+#Note: ENHSP was compiled for Java 17 
 
 WORKDIR /app
 
 # Copy project
 COPY src/ ./src/
+COPY config.ini ./ 
 
 # Download EvoChecker (evoCheckerJar branch includes the jar + Linux .so runtime libs)
 RUN git clone --depth 1 --branch evoCheckerJar \
@@ -21,7 +23,7 @@ RUN git clone --depth 1 --branch evoCheckerJar \
 # Install tempest first so it pulls the pysmt version it requires
 RUN pip install --no-cache-dir src/arch/apps/tempest/
 
-# Remove conflicting pysmt and tempest lines from requirements.txt, then install the rest
+# Install remaining requirements without tempest and conflicting pysmt (installed by tempest)
 RUN sed -i '/^PySMT/d; /^tempest/d' src/arch/requirements.txt && \
     pip install --no-cache-dir -r src/arch/requirements.txt
 
@@ -29,7 +31,10 @@ RUN sed -i '/^PySMT/d; /^tempest/d' src/arch/requirements.txt && \
 RUN pysmt-install --z3 --confirm-agreement
 
 # Update config.ini with Docker paths
-RUN sed -i 's|HP_PATH = .*|HP_PATH = /app/src|' src/config.ini
+# sed -i: in-place editing of files
+# 's|HP_PATH = .*|HP_PATH = /app/src|': replaces any HP_PATH value with /app/src (| used as delimiter)
+# src/config.ini: target config file
+RUN sed -i 's|HP_PATH = .*|HP_PATH = /app/src|' config.ini
 
 # Set runtime library path for EvoChecker (PRISM Linux .so files)
 ENV LD_LIBRARY_PATH=/app/src/arch/apps/EvoChecker/libs/runtime

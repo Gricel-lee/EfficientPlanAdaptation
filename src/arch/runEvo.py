@@ -1,12 +1,12 @@
 import sys
-import arch.aux.json2pddl as json2pddl
-import arch.aux.pddlplanner as pddlplanner
-import arch.aux.plan2PMCfile as plan2PMCfile
-import arch.aux.auxiliary as auxiliary
+import arch.planning.json2pddl as json2pddl
+import arch.planning.pddlplanner as pddlplanner
+import arch.planning.plan2PMCfile as plan2PMCfile
+import arch.planning.auxiliary as auxiliary
 import os
 import subprocess
 import time
-import arch.aux.plot as p
+import arch.planning.plot as p
 import traceback
 from arch.config.config import * 
 

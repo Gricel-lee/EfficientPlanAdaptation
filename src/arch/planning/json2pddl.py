@@ -6,7 +6,7 @@ Read the json file containing the problem specification.
 
 import json
 import os
-import arch.aux.auxiliary as auxiliary
+import arch.planning.auxiliary as auxiliary
 
 def generate_pddl_domain(data):
     ''' Generate the PDDL domain file content from the JSON data.'''

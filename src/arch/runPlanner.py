@@ -7,12 +7,12 @@ It processes each JSON file in the input directory and generates the correspondi
 No other .json files should be present in the input directory.
 '''
 import sys
-import arch.aux.json2pddl as json2pddl
+import arch.planning.json2pddl as json2pddl
 
-import arch.aux.pddlplanner as pddlplanner
-# import arch.aux.pddlplannercopy as pddlplanner
-import arch.aux.plan2PMCfile as plan2PMCfile
-import arch.aux.auxiliary as auxiliary
+import arch.planning.pddlplanner as pddlplanner
+# import arch.planning.pddlplannercopy as pddlplanner
+import arch.planning.plan2PMCfile as plan2PMCfile
+import arch.planning.auxiliary as auxiliary
 import os
 import time
 from arch.config.config import *
@@ -80,10 +80,9 @@ def main(problem_id, json_file_path):
             plans_found = pddlplanner.runPlanner(file_domain, file_problem, output_dir, json_data, timeout=tempestEngineTimeout, headless=False)
             
             if not plans_found or len(plans_found) == 0:
-                #TODO: raise Error(f"No plans found for {name_file}-{run}") in Error Handler
-                print(f"[RunPlanner]: No plans found for {name_file}-{run}. Exiting.")
+                raise RuntimeError(f"No plans found for problem '{name_file}'. ENHSP may have failed — check Java 17+ is installed and the problem definition is valid.")
             # TODO: Currently only the first plan is used (see headless version in GitHub branch for multiple plans)
-            plan = plans_found[0] 
+            plan = plans_found[0]
             # print(plan)
             
             # Generate PRISM/Evochecker file from PDDL plan with indexed filenames

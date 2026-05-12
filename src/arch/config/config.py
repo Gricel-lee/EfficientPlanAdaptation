@@ -5,7 +5,7 @@ from sys import platform
 # ----- Read the configuration file config.ini------
 # Create a parser instance
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../../config.ini'))
 
 # Note: in the config.ini file
 # - the section [PATHS] contains the path to the project

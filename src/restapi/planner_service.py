@@ -12,7 +12,7 @@ from restapi.models import Problem, Problem2Create
 from restapi.memory_db import PROBLEM_DATABASE
 import arch.runPlanner as runPlanner
 import arch.runEvo as runEvo
-import arch.aux.planandPareto2JSON as planandPareto2JSON
+import arch.planning.planandPareto2JSON as planandPareto2JSON
 import restapi.timeline as timeline
 import arch.llm.geminiLLM as geminiLLM
 import json
@@ -318,6 +318,7 @@ def run_hybrid_planner(problem: Problem, PROBLEM_DATABASE: Dict[str, Problem]):
         print(f"--- STDERR ---\n{e.stderr}")
     except Exception as e:
         problem.status = "failed"
+        problem.error_message = str(e)
         PROBLEM_DATABASE[problem.id] = problem
         print(f"[LTA-API-ERROR] An unexpected error occurred for problem {problem.id}: {e}")
         traceback.print_exc()

@@ -8,7 +8,7 @@ from unified_planning.engines.results import PlanGenerationResult
 
 from unified_planning.shortcuts import get_environment, AnytimePlanner
 from arch.config.config import PROBLEM_OUTPUT_DIR, POPULATION_SIZE, MAX_EVALUATIONS, JAR_FILE, NUM_TIMED_RUNS
-import arch.aux.plan2PMCfile as plan2PMCfile
+import arch.planning.plan2PMCfile as plan2PMCfile
 from arch.planningProblem.planningProblem import planning_problem
 
 
@@ -63,7 +63,11 @@ def runPlanner(f_domain, f_problem, output_directory, jsondata, timeout, headles
     k = 1
     print(f"[pddlplanner] Running ENHSP as first solver...")
     plan = runENHSP(problem, output_directory)
-    
+
+    if plan.plan is None:
+        print(f"[pddlplanner] ERROR: ENHSP found no plan (status: {plan.status}). Aborting.")
+        return plans_obj_found
+
     if headless:
         # Save PRISM/Evochecker files
         savePRISMEvochekerFiles(planning_problem.json_data, planning_problem.output_dir_name, k, plan, headless=True)
@@ -72,7 +76,7 @@ def runPlanner(f_domain, f_problem, output_directory, jsondata, timeout, headles
     else:
         # Save PRISM/Evochecker files
         savePRISMEvochekerFiles(jsondata, output_directory, k, plan, headless=False)
-        
+
      #TODO: replace plan.txt with plan_<k>.txt in UI code if needed to support multiple plans, for now keep plan.txt for compatibility
     # save plan.txt for UI compatibility (first plan from ENHSP)
     with open(f"{output_directory}/plan.txt", "w") as f:
@@ -155,8 +159,8 @@ def runENHSP(problem, data_output_dir):
     
     # Get fluent from problem (for optimisation objective)
     travel_dist = problem.fluent("travel_dist")    
-    print(f"[pddlplanner] Found fluent 'travel_dist'")  # Debugging line for checking fluent
-    
+    print(f"[pddlplanner] Found fluent in the problem: {travel_dist}")  # Debugging line to check if fluent is found
+
     # Set metric to minimizing travel distance
     problem.clear_quality_metrics()  # remove previous optimization metric
     problem.add_quality_metric(MinimizeExpressionOnFinalState(travel_dist()))  # +++
@@ -178,6 +182,22 @@ def runENHSP(problem, data_output_dir):
     ) as planner:
         plan: PlanGenerationResult = planner.solve(problem)
     
+    # Print plan and status for debugging
+    print(f"[pddlplanner] Plan generation status: {plan.status}")
+
+    #TODO: if plan.status is PlanGenerationResultStatus.INTERNAL_ERROR
+    # Add error handling for the case when ENHSP fails to find a plan
+    # then set error message in the UI and skip to running TEMPest to find plans (if ENHSP fails, we can still find plans with TEMPest, but we won't have the optimal plan from ENHSP)
+    if plan.status != PlanGenerationResultStatus.SOLVED_OPTIMALLY:
+        print(f"[pddlplanner] ERROR: ENHSP failed to find an optimal plan (status: {plan.status}). Proceeding to run TEMPest for plan generation.")
+        return plan
+     #Note: ENHSP was compiled for Java 17
+
+    print(f"[pddlplanner] Plan found: {plan.plan}")
+
+    # TODO: if plan.plan is None, it means that ENHSP failed to find a plan, so we should handle this case (e.g., by logging an error message and returning an empty plan or a specific error object)
+    # Add error handling for the case when ENHSP fails to find a plan
+
     # Save
     file_name = 'plan_1.txt'
     savePlan(data_output_dir, plan, file_name)
