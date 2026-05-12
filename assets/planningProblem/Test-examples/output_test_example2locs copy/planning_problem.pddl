@@ -5,6 +5,7 @@
      t1l4  t1l6a  t1l6b  t1l7  t2l5  t2l8a  t2l8b  t3l4  t3l7  t3l9  - task)
     (:init
         (= (travel_dist) 0)
+        (= (X) 10)
         (= (turn) 1) (= (total_time) 0)
         (= (counter worker1) 0) (= (counter tractor) 0) (= (counter r1) 0) (= (counter r2) 0)
         (agent_has_turn worker1)

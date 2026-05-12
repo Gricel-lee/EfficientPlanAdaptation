@@ -15,6 +15,7 @@
     (:functions
         (p_success ?a - agent ?t - task)
         (travel_dist)
+        (X)
         (counter ?a - agent)
         (turn)
         (total_time))
@@ -25,7 +26,7 @@
                  (agent_has_turn ?r))
         :effect
             (and (not (agent_at ?r ?l_from)) (agent_at ?r ?l_to) (empty ?l_from) (not (empty ?l_to))
-                 (increase (travel_dist) 1) (increase (counter ?r) 1)
+                 (increase (travel_dist) (X)) (increase (counter ?r) 1)
                  (not (agent_has_turn ?r))
                  (forall (?b - agent) (when (next_turn ?r ?b) (agent_has_turn ?b)))
                  (when (last_agent ?r)
