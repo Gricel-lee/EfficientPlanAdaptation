@@ -5,7 +5,8 @@
         (agent_at ?r - agent ?l - location)
         (path ?l_from - location ?l_to - location)
         (empty ?l - location)
-        (task_loc ?t - task ?l - location)
+        (task_loci ?t - task ?l - location)
+        (task_locf ?t - task ?l - location)
         (task_done ?t - task)
         (task_assigned ?t - task)
         (agent_has_turn ?a - agent)
@@ -31,9 +32,9 @@
                      (and (assign (turn) 1) (increase (total_time) 1)))
                  (when (not (last_agent ?r)) (increase (turn) 1))))
     (:action dotask
-        :parameters (?a - agent ?t - task ?l - location)
+        :parameters (?a - agent ?t - task ?li - location ?lf - location)
         :precondition
-            (and (agent_at ?a ?l) (task_loc ?t ?l) (not (task_done ?t))
+            (and (agent_at ?a ?li) (task_loci ?t ?li) (task_locf ?t ?lf) (not (task_done ?t))
                  (<= 0.5 (p_success ?a ?t))
                  (agent_has_turn ?a))
         :effect
