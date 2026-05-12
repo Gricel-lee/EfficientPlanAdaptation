@@ -191,7 +191,6 @@ def runENHSP(problem, data_output_dir):
     if plan.status != PlanGenerationResultStatus.SOLVED_OPTIMALLY:
         print(f"[pddlplanner] ERROR: ENHSP failed to find an optimal plan (status: {plan.status}). Proceeding to run TEMPest for plan generation.")
         return plan
-     #Note: ENHSP was compiled for Java 17
 
     print(f"[pddlplanner] Plan found: {plan.plan}")
 
@@ -218,3 +217,6 @@ def savePlan(path, result, file_name):
         f.write(str(result.plan))
     
     print(f"[pddlplanner] Plan saved to file {path}")
+
+
+    

@@ -48,6 +48,7 @@ For arch--hybrid planner:
 ```
 This will automatically activate the Python environment, FastAPI, and the web app.
 
+
 ## ARCH UI
 
 After running this script, the API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).

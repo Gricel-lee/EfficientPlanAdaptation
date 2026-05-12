@@ -3,14 +3,32 @@
 
 # ==== run_ARCH_headless.py ====
 # This script runs the ARCH planner in headless mode.
-# This file is not accessed by the REST API, it is run directly to test the planner.
-# 
+# It will start the virtual environment, run the planner for a specified problem, and generate PRISM/Evochecker files.
+# This file is not accessed by the REST API.
+
+# == Installation
+# Set the virtual environment as in README.
+
+
+# === Usage ===
 # Set the paths to your problem in the main() function below.
+# In your cmd, from ```<path>/EfficientPlanAdaptation/``` run: 
+# ```python3 src/run_ARCH_headless.py```
+
+# Note: If python libraries missing,
+# activate the venv in the cmd: ```source src/arch/prj-venv/bin/activate```
+
+import os
+import sys
+
+_VENV_PYTHON = os.path.join(os.path.dirname(os.path.abspath(__file__)), "arch/prj-venv/bin/python3")
+if sys.executable != _VENV_PYTHON:
+    os.execv(_VENV_PYTHON, [_VENV_PYTHON] + sys.argv)
+ 
 
 import arch.planning.json2pddl as json2pddl
 import arch.planning.pddlplanner as pddlplanner
 import arch.planning.plan2PMCfile as plan2PMCfile
-import os
 from arch.config.config import PROBLEM_OUTPUT_DIR, POPULATION_SIZE, MAX_EVALUATIONS, JAR_FILE, NUM_TIMED_RUNS
 import arch.runEvo as runEvo
 import matplotlib.pyplot as plt
@@ -20,10 +38,10 @@ from arch.planningProblem.planningProblem import planning_problem
 
 
 # =============== A) Main function running ARCH ===============
-def main():
+def main(json_file_path, output_dir_name, temperstEngineTimeout=0, one_plan_or_multiple='one'):
     # --- Internal parameters ---
     headless = True
-    fdomain='planning_domain.pddl' 
+    fdomain='planning_domain.pddl'
     fproblem='planning_problem.pddl'
     output_dir =  os.path.join(os.path.dirname(json_file_path), output_dir_name)
 
@@ -48,16 +66,17 @@ def main():
     # Also generate PRISM/Evochecker files from PDDL plans
     if True: # one_plan_or_multiple=='multiple' or 'one'
         print(f"[run_ARCH_headless] Generating plans...")
-        pddlplanner.runPlanner(fdomain, fproblem, output_dir, jsondata, timeout=temperstEngineTimeout)
+        plans_found = pddlplanner.runPlanner(fdomain, fproblem, output_dir, jsondata, timeout=temperstEngineTimeout)
     print("[run_ARCH_headless] Plans generation completed.")
+    plan = plans_found[0] if plans_found else None
 
 
     # Generate PRISM/Evochecker file from PDDL plan
     if one_plan_or_multiple=='one':
         print(f"[run_ARCH_headless] Generating PRISM/Evochecker files for single plan...")
         # args = plan2PMCfile.parsePlan(plan)
-        plan2PMCfile.createPRISMfile(json_file_path, plan, jsondata, population=POPULATION_SIZE, max_evals=MAX_EVALUATIONS)
-        plan2PMCfile.createPRISMfile(json_file_path, plan, jsondata, evoChecker=True, population=POPULATION_SIZE, max_evals=MAX_EVALUATIONS)
+        plan2PMCfile.createPRISMfile(output_dir, "plan_1", plan, jsondata, population=POPULATION_SIZE, max_evals=MAX_EVALUATIONS)
+        plan2PMCfile.createPRISMfile(output_dir, "plan_1", plan, jsondata, evoChecker=True, population=POPULATION_SIZE, max_evals=MAX_EVALUATIONS)
         
     if one_plan_or_multiple=='multiple':
         print(f"[run_ARCH_headless] Generating PRISM/Evochecker files for multiple plans...")
@@ -78,7 +97,7 @@ def main():
     
     if one_plan_or_multiple=='one':
         _run_evochecker(
-            problem_id="problem",
+            problem_id=output_dir_name + "1",
             json_file_path=json_file_path)
     elif one_plan_or_multiple=='multiple':
         for i in range(len(plans_found)):
@@ -232,7 +251,14 @@ def generate_latex_table_pymoo():
 
 
 if __name__ == "__main__":
-    
+
+    # === Problem to test ===
+    json_file_path = "./assets/planningProblem/Test-examples/example2locs.json"
+    output_dir_name = "output_test_example2locs"
+    temperstEngineTimeout = 0   # 0 = ENHSP only (no TEMPest); set >0 for multiple plans
+    one_plan_or_multiple = "one"
+    main(json_file_path, output_dir_name, temperstEngineTimeout, one_plan_or_multiple)
+
     # === Experiments ===
     # === In assets/paper-TAAS26-Multiplan/ subfolders, a .py file to run each experiment separately is provided. ===
     
@@ -249,19 +275,19 @@ if __name__ == "__main__":
     # generate_latex_table_pymoo()
     
     # Experiment RQ4 
-    dirr = "../assets/paper-TAAS26-Multiplan/RQ4/1Non-probab-Multi-plan/JSONs_input/"
-    exp = [1,2,3,4,5,6,7,8,9,10]
-    for exp in exp:
-        #print this path
-        import sys
-        print(f"Processing experiment {exp} in directory {dirr}")
-        for json_file in os.listdir(dirr):
-            if json_file.endswith(".json"):
-                print(f"Running for file: {json_file}")
-                json_file_path = os.path.join(dirr, json_file)
-                output_dir_name = f"exp{exp}_output_data_" + os.path.splitext(json_file)[0]
-                temperstEngineTimeout= 20000 # seconds
-                one_plan_or_multiple='multiple'
-                print(f"Running ARCH headless  {output_dir_name}")
-                main()
+    # dirr = "../assets/paper-TAAS26-Multiplan/RQ4/1Non-probab-Multi-plan/JSONs_input/"
+    # exp = [1,2,3,4,5,6,7,8,9,10]
+    # for exp in exp:
+    #     #print this path
+    #     import sys
+    #     print(f"Processing experiment {exp} in directory {dirr}")
+    #     for json_file in os.listdir(dirr):
+    #         if json_file.endswith(".json"):
+    #             print(f"Running for file: {json_file}")
+    #             json_file_path = os.path.join(dirr, json_file)
+    #             output_dir_name = f"exp{exp}_output_data_" + os.path.splitext(json_file)[0]
+    #             temperstEngineTimeout= 20000 # seconds
+    #             one_plan_or_multiple='multiple'
+    #             print(f"Running ARCH headless  {output_dir_name}")
+    #             main(json_file_path, output_dir_name, temperstEngineTimeout, one_plan_or_multiple)
     

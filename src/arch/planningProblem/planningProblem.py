@@ -41,7 +41,7 @@ class PlanningProblem:
         return elapsed_time
 
     #-------------------------------------------------------
-
+    # Other methods to set and get problem specifications, steepness, etc.
     def set(self, json_file_path, output_dir_name, temperstEngineTimeout, one_plan_or_multiple):
         self.json_file_path = json_file_path
         self.output_dir_name = output_dir_name
@@ -67,9 +67,9 @@ class PlanningProblem:
         ''' Returns steepness for agent and task instance. '''
         agent_id = agent_id.strip()
         task_instance_id = task_instance_id.strip()
-        print("HII",agent_id, task_instance_id)
         key = (agent_id, task_instance_id)
         steepness = self.steepness_map.get(key)
+        # print(f"[PlanningProblem] agent: {agent_id}, task: {task_instance_id}, steepness: {steepness}")
         if steepness is None:
             print(f"[WARNING] No steepness found for {key}")
         return steepness
