@@ -184,14 +184,23 @@ def build_scenario() -> tuple[list[TaskSpec], list[AgentSpec], list[BranchGroup]
                  deadline=122.0),
     ]
 
+    # A BranchGroup declares that exactly ONE of two alternative task chains
+    # will be executed for a given delivery leg.  CP-SAT picks the branch
+    # that minimises the overall makespan.
+    #
+    # Branch 0 = direct carry (human walks grapes all the way to l5).
+    # Branch 1 = handover path (human drops at l6, drone flies to l5).
+    #
+    # Any task whose depends_on lists the group NAME will wait for whichever
+    # branch actually runs — you never need to know in advance which one wins.
     branch_groups = [
         BranchGroup('r1_delivery', {
-            0: ['carry_r1_direct'],
-            1: ['carry_r1_handover', 'drone_r1'],
+            0: ['carry_r1_direct'],             # path A: human carries l2→l5
+            1: ['carry_r1_handover', 'drone_r1'],  # path B: human→l6, drone→l5
         }),
         BranchGroup('r2_delivery', {
-            0: ['carry_r2_direct'],
-            1: ['carry_r2_handover', 'drone_r2'],
+            0: ['carry_r2_direct'],             # path A: human carries l4→l5
+            1: ['carry_r2_handover', 'drone_r2'],  # path B: human→l6, drone→l5
         }),
     ]
 
