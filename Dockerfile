@@ -1,12 +1,30 @@
 FROM python:3.11-slim
 
-# Install Java (needed by EvoChecker), git (for PySMT), and build tools
+
+RUN apt-get update 
+
+
+# Install Java 17:  (needed by EvoChecker/ENHSP, which was compiled for Java 17)
+# 1 check if Java 17 is already installed (e.g., by a base image)
+# 2 if not, try installing openjdk-17-jdk from the default repos
+# 3 if that fails (e.g., due to an older Debian version), add the Adoptium repository and install temurin-17-jdk
+RUN java -version 2>&1 | grep -q "17" || \
+    apt-get install -y openjdk-17-jdk || \
+    (apt-get install -y --no-install-recommends wget gnupg && \
+    mkdir -p /etc/apt/keyrings && \
+    wget -qO /etc/apt/keyrings/adoptium.asc https://packages.adoptium.net/artifactory/api/gpg/key/public && \
+    echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb bookworm main" \
+        > /etc/apt/sources.list.d/adoptium.list && \
+    apt-get update && apt-get install -y --no-install-recommends temurin-17-jdk && \
+    rm -rf /var/lib/apt/lists/*)
+
+# Install git (for PySMT), and build tools
 RUN apt-get update && apt-get install -y \
-    openjdk-17-jre \
     git \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
-#Note: ENHSP was compiled for Java 17 
+
+
 
 WORKDIR /app
 
@@ -25,7 +43,11 @@ RUN git clone --depth 1 --branch evoCheckerJar \
 RUN pip install --no-cache-dir src/arch/apps/tempest/
 
 # Install remaining requirements without tempest and conflicting pysmt (installed by tempest)
-RUN sed -i '/^PySMT/d; /^tempest/d' src/arch/requirements.txt && \
+# Explanation of sed command:
+# /^PySMT/d — delete lines starting with PySMT
+# /^tempest/d — delete lines starting with tempest
+# /^\.\/apps\/tempest/d — delete lines starting with ./apps/tempest
+RUN sed -i '/^PySMT/d; /^tempest/d; /^\.\/apps\/tempest/d' src/arch/requirements.txt && \
     pip install --no-cache-dir -r src/arch/requirements.txt
 
 # Install PySMT Z3 solver
