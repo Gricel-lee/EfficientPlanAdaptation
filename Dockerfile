@@ -18,7 +18,8 @@ COPY config.ini ./
 RUN git clone --depth 1 --branch evoCheckerJar \
     https://github.com/gerasimou/EvoChecker.git \
     src/arch/apps/EvoChecker && \
-    chmod +x src/arch/apps/EvoChecker/EvoChecker-1.1.0.jar
+    chmod +x src/arch/apps/EvoChecker/EvoChecker-1.1.0.jar && \
+    cp -r src/arch/apps/EvoChecker/libs src/libs
 
 # Install tempest first so it pulls the pysmt version it requires
 RUN pip install --no-cache-dir src/arch/apps/tempest/

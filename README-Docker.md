@@ -2,7 +2,7 @@
 
 ARCH contains a Dockerfile to ease deployment and running the application. It is tested in Ubuntu distributions.
 
-**NOTE**: So far, the UI requires the JSON file to be searched in "Select a Different File", and files generated are ONLY saved in the container. To see the files ```sudo docker exec -it arch bash``` after running the container.
+**NOTE**: The UI requires the JSON file to be selected via "Select a Different File". Output data (EvoChecker results, temp files) is written to `output/data/` and `output/temp/` on the host via bind mounts.
 
 
 ## Prerequerements
@@ -12,15 +12,13 @@ ARCH contains a Dockerfile to ease deployment and running the application. It is
 
 ## Run ARCH
 
-1. To build and run the Dockerfile:
+1. To build and run the Dockerfile (run from the project root):
 ```bash
   sudo docker run -p 8001:8001 \
-    -v /home/gricel/Documents/GitHub/EfficientPlanAdaptation/assets:/home/gricel/Documents/GitHub/EfficientPlanAdaptation/assets \
+    -v $(pwd)/assets:/app/src/assets \
     --mount type=bind,src=$(pwd)/output/data,dst=/app/src/data,bind-create-src \
-    --mount type=bind,src=$(pwd)/output/libs,dst=/app/src/libs,bind-create-src \
     --mount type=bind,src=$(pwd)/output/temp,dst=/app/temp,bind-create-src \
     --name arch arch-planner
-
 ```
 
 This command joins:
@@ -28,14 +26,15 @@ This command joins:
   1.1 Build the image (required only once):
   ```sudo docker build -t arch-planner .```
 
-  1.2. Run the container ```cd src/ && sudo docker run -p 8001:8001 -v $(pwd)/assets:/app/src/assets --name arch arch-planner```
+  1.2. Run the container (from the project root):
+  ```sudo docker run -p 8001:8001 -v $(pwd)/assets:/app/src/assets --name arch arch-planner```
   
   where:
   - `sudo docker run` — creates and starts a new container
   - `-p 8001:8001` — maps port 8001 from container to host machine where RESTAPI is running
-  - `-v $(pwd)/assets:/app/src/assets` — mounts local assets folder into container. The `assets/` folder (containing JSON planning problems) is not baked into the Docker image (can be by adding `COPY assets/planningProblem ./assets/planningProblem` in Dockerfile). Instead, mount it at runtime using a **volume bind mount** (`-v`), which maps a folder from your host machine into the container:
-  - `--name arch` -- add a name to the container created from a Docker image.
-  - `arch-planner` — the Docker image (see Dockerfile file)
+  - `-v $(pwd)/assets:/app/src/assets` — mounts the `assets/` folder (containing JSON planning problems) from the host into the container at runtime. It is not baked into the image so that problems can be added without rebuilding.
+  - `--name arch` — name for the container.
+  - `arch-planner` — the Docker image name (see Dockerfile)
 
 
 
