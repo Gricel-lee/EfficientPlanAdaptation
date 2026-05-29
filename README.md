@@ -1,8 +1,11 @@
-# Efficient task planning adaptation under uncertainty
+# ARCH (Adaptive Robot–Human Collaboration using Hybrid Planning)
 
 ## Abstract
 
-A hybrid approach that effectively solves the task planning problem by decomposing it into two intertwined parts, starting with the identification of a feasible plan and followed by its uncertainty augmentation and verification yielding a set of Pareto optimal plans. To enhance its robustness, adaptation tactics are devised for the evolving system requirements and agent’s capabilities. We demonstrate our approach through an industrial case study involving workers and robots undertaking activities within a vineyard, showcasing the benefits of our hybrid approach both in the generation of feasible solutions and scalability compared to native planners.
+ARCH is a framework for the synthesis of verified task plans, adaptation of plans after deployment, and the generation of adaptive plan explanations.
+
+ARCH uses a hybrid approach that effectively solves the task planning problem by decomposing it into two intertwined parts, starting with the identification of a feasible (deterministic) plans and followed by its uncertainty augmentation and verification yielding a set of Pareto optimal plans. To enhance its robustness, adaptation tactics are devised for the evolving system requirements and agent’s capabilities. ARCH can generate explanations for a generated plan tailored to user preferences of tone, format and level of detail, as well as the user profile. 
+
 
 ![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/overview.jpg)
 
