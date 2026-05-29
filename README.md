@@ -10,12 +10,14 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 
 ### Using Docker 
 
-Refer to [README-Docker](README-Docker.md) for instruction to run as a Docker container. Skip the next steps until ARCH UI. 
+Refer to [README-Docker](README-Docker.md) for instructions to create and run ARCH as a Docker container. Skip the next steps until ARCH UI. 
 
 
-### Install and Run ARCH hybrid planner locally
+### Local installation
 
-#### Install ARCH locally
+#### Install and run ARCH locally
+
+Jump to 4) to run ARCH. To install:
 
 1) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
 ![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dirFiles.png)
@@ -38,24 +40,21 @@ cd ../..
 
 3) Make run_task.sh executable by running ```chmod +x run.sh```. 
 
-Continue with Running ARCH UI instructions. This will run the run.sh file.
 
+4) Run ARCH locally
 
-#### Running ARCH UI locally
-
-**Run** one of the following from terminal.
-For arch--hybrid planner:
+**Run** from terminal.
 ```
 ./run.sh
 ```
-This will automatically activate the Python environment, FastAPI, and the web app.
+This will automatically activate the Python environment, Rest API, and the web app.
 
 
 ## ARCH UI
 
 The API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
 
-Note: To test and submit a planning problem directly throught the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
+Note: To test and submit a pl;anning problem directly throught the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
 
 ## Interacting with web app
 
