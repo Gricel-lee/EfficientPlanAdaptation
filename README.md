@@ -9,7 +9,7 @@ ARCH uses a hybrid approach that effectively solves the task planning problem by
 
 ![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/overview.jpg)
 
-## Install and Run ARCH hybrid planner
+## 1 Install and Run ARCH hybrid planner
 
 **Modify** ```config.ini``` file path
 
@@ -20,21 +20,21 @@ HP_PATH = /home/{your_path}/EfficientPlanAdaptation/src
 Install and run ARCH Docker or locally.
 
 
-### Using Docker 
+### 1.1 Using Docker 
 
 Refer to [README-Docker](README-Docker.md) for instructions to create and run ARCH as a Docker container. Skip the next steps until ARCH UI. 
 
 
-### Local installation
+### 1.2 Local installation
 
 #### Install and run ARCH locally
 
-Jump to 4) to run ARCH. To install:
+Jump to d) to run ARCH. To install:
 
-1) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
+a) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
 ![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dirFiles.png)
 
-2) Create a **python environment** from src/arch/requirements.txt file:
+b) Create a **python environment** from src/arch/requirements.txt file:
 ```
 cd src/arch
 python3 -m venv prj-venv
@@ -50,10 +50,10 @@ cd ../..
 (or pip3). For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-environments/
 
 
-3) Make run_task.sh executable by running ```chmod +x run.sh```. 
+c) Make run_task.sh executable by running ```chmod +x run.sh```. 
 
 
-4) Run ARCH locally
+d) Run ARCH locally
 
 **Run** from terminal.
 ```
@@ -62,7 +62,7 @@ cd ../..
 This will automatically activate the Python environment, Rest API, and the web app.
 
 
-## ARCH UI
+## 2 ARCH UI
 
 The API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
 
@@ -88,63 +88,34 @@ And delete a planning problem:
 
 Note: When a new planning problem is added, the Hybrid planner is started under-the-hood using our API. For example, the status of all jobs are available at ```http://127.0.0.1:8001/api/problems/```.
 
-#### Generated files
+## 3 Read output files
 
-At completion, the hybrid planner generates data in the following locations depending on the input:
+At completion, the hybrid planner generates data in the following locations depending on the planning problem input:
 
-- From JSON: creates a folder at the same path as the input .JSON file ```output_{name_of_JSON_file}_{problem_random_id}```
-- From natural language: creates a folder at ```/output/temp/output_generated_problem_{json_random_id}{problem_random_id}```
+- From **JSON**: creates a folder at the same path as the input .JSON file ```output_{name_of_JSON_file}_{problem_random_id}```
+- From **natural language**: creates a folder at ```/output/temp/output_generated_problem_{json_random_id}{problem_random_id}```
 
-The data contains:
+The folder contains:
 - Data from numerical planner: PDDL files, plan, EvoChecker files, execution times per run
 - Data from uncertainty augmentation: Pareto front and set obtained per run, execution times per run
 
+## 4 Configuration
+
+To configure the EvoChecker settings **modify** ```config.ini``` file parameters of population size and iterations as needed. 
+Do not modify Python path, except if running local Python instead of venv.
 
 
 **Enjoy!**
 
-# Configuration
-
-## Configuring EvoChecker
-
-1) **Modify** ```config.ini``` file with EvoChecker parameters. 
-Do not modify Python path, except if running local Python instead of venv.
 
 
 
 
+# ------- Q&A ------------
 
-# Additional notes
+This section contains some possible errors that might be encountered during installation and how to solve them.
 
-## Full-MDP
-To create a full-MDP PRISM file from a JSON file, go to:
-```src/aux/fullMDP```
-
-
-## Git commit note (for devs)
-To submit changes, add .gitignore to avoid committing large files, python environment, etc. Optionally, avoid large files by:
-```
-git add .
-git reset src/prj-venv src/apps/EvoChecker/
-git commit -m "."
-git push
-```
-
-If hard reset is required due to trying to commit a large file (an error will appear), make a copy of the folder, then go back n commits, e.g., 1 commit behind:
-```
-git reset --hard HEAD~1
-```
-Go back to the last commit that was able to push without large files.
-
-## Architecture notes
-
-ARCH uses REST API. The src/restapi/ folder contains the API logic (routes, models, services). By default, FastAPI handles the HTTP server.
-
-
-
-# Q&A
-
-### Error when installing the python environment.
+### 1 Error when installing the python environment.
 If the python environment initialisation fails, try replacing ```src/requirements.txt``` content for:
 ```
 fastapi==0.116.1
@@ -162,7 +133,7 @@ up-symk==1.3.1
 matplotlib==3.7.3
 ```
 
-### When creating the virtual environment, ERROR: pip's dependencies
+### 2 ERROR: pip's dependencies when creating the virtual environment
 This error can be ignored:
 ```
 ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
@@ -172,7 +143,7 @@ generate-parameter-library-py 0.4.0 requires typeguard, which is not installed.
 
 
 
-### Error: ModuleNotFoundError: No module named 'tempest' (detailed)
+### 3 Error: ModuleNotFoundError: No module named 'tempest' (detailed)
 
 The TempEST solver library has not been installed (or the python environment has not been configured properly). To install the TempEST solver library, first activate the python environment:
 ```
