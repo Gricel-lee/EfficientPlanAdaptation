@@ -8,6 +8,15 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 
 ## Install and Run ARCH hybrid planner
 
+**Modify** ```config.ini``` file path
+
+```
+HP_PATH = /home/{your_path}/EfficientPlanAdaptation/src
+```
+
+Install and run ARCH Docker or locally.
+
+
 ### Using Docker 
 
 Refer to [README-Docker](README-Docker.md) for instructions to create and run ARCH as a Docker container. Skip the next steps until ARCH UI. 
@@ -54,11 +63,11 @@ This will automatically activate the Python environment, Rest API, and the web a
 
 The API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
 
-Note: To test and submit a pl;anning problem directly throught the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
+Note: To test and submit a planning problem directly through the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
 
 ## Interacting with web app
 
-The web app allows you to submit planning problems (a description and the path to the JSON path with the planning problem). 
+The web app allows you to submit planning problems (a description and the path to the JSON file with the planning problem). 
 <img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard.png"/>
 
 Check the Pareto front results when a planning problem is completed.
@@ -69,19 +78,27 @@ Check failure messages:
 
 <img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard-failed.png"/>
 
-And delete planning problem:
+And delete a planning problem:
 
 <img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard-delete.png"/>
 
 
-Note: When a new planning problem is added, the Hybrid planner is started under-the-hood using our API. For example, the status of all jobs are avaialble at ```http://127.0.0.1:8001/api/problems/```.
- At completion, the hybrid planner should create a folder in the input .JSON file directory, with the generated data:
+Note: When a new planning problem is added, the Hybrid planner is started under-the-hood using our API. For example, the status of all jobs are available at ```http://127.0.0.1:8001/api/problems/```.
+
+#### Generated files
+
+At completion, the hybrid planner generates data in the following locations depending on the input:
+
+- From JSON: creates a folder at the same path as the input .JSON file ```output_{name_of_JSON_file}_{problem_random_id}```
+- From natural language: creates a folder at ```/output/temp/output_generated_problem_{json_random_id}{problem_random_id}```
+
+The data contains:
 - Data from numerical planner: PDDL files, plan, EvoChecker files, execution times per run
 - Data from uncertainty augmentation: Pareto front and set obtained per run, execution times per run
 
-## Running ARCH from headless 
+## Running ARCH in headless mode
 
-This function is underdevelopment.
+This function is still **under development**.
 
 1) Activate the python environment:
 ```
@@ -121,7 +138,7 @@ To create a full-MDP PRISM file from a JSON file, go to:
 
 
 ## Git commit note (for devs)
-To submit changes, add .gitignore to avoid commiting large files, python environment, etc. Optionally, avoid large files by:
+To submit changes, add .gitignore to avoid committing large files, python environment, etc. Optionally, avoid large files by:
 ```
 git add .
 git reset src/prj-venv src/apps/EvoChecker/
@@ -129,7 +146,7 @@ git commit -m "."
 git push
 ```
 
-If hard reset is required due to trying to commit a large file (an error will appear), make copy of folder, then go back n commits, e.g., 1 commit behind:
+If hard reset is required due to trying to commit a large file (an error will appear), make a copy of the folder, then go back n commits, e.g., 1 commit behind:
 ```
 git reset --hard HEAD~1
 ```
@@ -144,7 +161,7 @@ ARCH uses REST API. The src/restapi/ folder contains the API logic (routes, mode
 # Q&A
 
 ### Error when installing the python environment.
-If the python environment initialisation fails, try replace ```src/requirements.txt``` content for:
+If the python environment initialisation fails, try replacing ```src/requirements.txt``` content for:
 ```
 fastapi==0.116.1
 fastapi-cli==0.0.8
@@ -161,37 +178,17 @@ up-symk==1.3.1
 matplotlib==3.7.3
 ```
 
-### When creating the virtual environment,ERROR: pip's dependencies
-This Error can be ignored:
-```ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+### When creating the virtual environment, ERROR: pip's dependencies
+This error can be ignored:
+```
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
 generate-parameter-library-py 0.4.0 requires jinja2, which is not installed.
-generate-parameter-library-py 0.4.0 requires typeguard, which is not installed.```
-
-
-### Error: ModuleNotFoundError: No module named 'tempest'
-
-The TempEST solver library has not been installed (or the python environment has not been configured properly). To add it to the python environment, first activate it:
-```
-source src/arch/prj-venv/bin/activate
+generate-parameter-library-py 0.4.0 requires typeguard, which is not installed.
 ```
 
-TemPEST relies on [PySMT](https://github.com/pysmt/pysmt) to interface with SMT/OMT solvers. You must install PySMT and at least one solver (e.g., Z3):
-```
-pip3 install --pre pysmt
-pysmt-install --z3
-```
-Then install TemPEST
-```
-cd src/arch/apps/tempest/
-pip install .
-```
-Try running ARCH again, e.g., headless:
-```
-cd ../../../
-python3 run_SHARP_headless.py
-```
 
-### Error: ModuleNotFoundError: No module named 'tempest'
+
+### Error: ModuleNotFoundError: No module named 'tempest' (detailed)
 
 The TempEST solver library has not been installed (or the python environment has not been configured properly). To install the TempEST solver library, first activate the python environment:
 ```
