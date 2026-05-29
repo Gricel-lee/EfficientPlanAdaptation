@@ -22,7 +22,6 @@ If it is already running, first stop the previous run by ```sudo docker rm arch`
 ```bash
     sudo docker run --rm -p 8001:8001 \
     --mount type=bind,src=$(pwd)/assets,dst=/app/assets \
-    --mount type=bind,src=$(pwd)/output/data,dst=/app/src/data,bind-create-src \
     --mount type=bind,src=$(pwd)/output/temp,dst=/app/temp,bind-create-src \
     --name arch arch-planner
 ```
@@ -31,7 +30,7 @@ Explanation:
   - `sudo docker run` — creates and starts a new container
   - ```--rm``` — the docker container is automatically removed when it stops, so it won't hit a name conflict.
   - `-p 8001:8001` — maps port 8001 from container to host machine where RESTAPI is running
-  - `-v $(pwd)/assets:/app/src/assets` — mounts the `assets/` folder (containing JSON planning problems) from the host into the container at runtime. It is not baked into the image so that problems can be added without rebuilding.
+  - `-mount type=bind, src=$(pwd)/assets,dst=/app/assets` — mounts the `assets/` folder (containing JSON planning problems) from the host into the container at runtime. It is not baked into the image so that problems can be added without rebuilding.
   - `--name arch` — name for the container.
   - `arch-planner` — the Docker image name (see Dockerfile)
 

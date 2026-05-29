@@ -96,25 +96,6 @@ The data contains:
 - Data from numerical planner: PDDL files, plan, EvoChecker files, execution times per run
 - Data from uncertainty augmentation: Pareto front and set obtained per run, execution times per run
 
-## Running ARCH in headless mode
-
-This function is still **under development**.
-
-1) Activate the python environment:
-```
-source src/arch/prj-venv/bin/activate
-```
-
-2) Change paths to your problem in ```arch/runHeadLess.py```, then run:
-```
-cd src
-python3 run_SHARP_headless.py
-```
-
-*Note: To avoid Java errors, before running the python file, run from terminal or add to .bashrc in Linux:*
-*for NIX/AMD64 systems*```export LD_LIBRARY_PATH="/<path to ultimate>/ULTIMATE_MODEL_MANAGER/libs/runtime"```; 
-*for macOS/ARM: ```export DYLD_LIBRARY_PATH="/<path to ultimate>/ULTIMATE_MODEL_MANAGER/libs/runtime```*.
-
 
 
 **Enjoy!**
@@ -204,9 +185,8 @@ Then install TemPEST from the following directory:
 cd src/arch/apps/tempest/
 pip install .
 ```
-Finally, either deactivate the python env.:
-```deactivate``` or try running ARCH again, e.g., headless: 
+Finally, deactivate the python env: 
 ```
-cd ../../../
-python3 run_SHARP_headless.py
+deactivate
 ```
+and try running ARCH again.

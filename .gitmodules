@@ -1,6 +1,0 @@
-[submodule "tampest"]
-	path = tampest
-	url = https://github.com/fbk-pso/tampest.git
-[submodule "src/arch/apps/tampest"]
-	path = src/arch/apps/tampest
-	url = https://github.com/fbk-pso/tampest.git
