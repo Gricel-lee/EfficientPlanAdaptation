@@ -1,1 +1,0 @@
-[RunPlanner]: Time elapsed for construction_input-1: 1.43 seconds
