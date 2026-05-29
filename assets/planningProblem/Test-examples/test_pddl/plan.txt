@@ -1,5 +1,0 @@
-SequentialPlan:
-    do_task(worker1, t1)
-    do_task(robot, t3)
-    reset_all_agents_to_pick_action(robot, worker1)
-    do_task(worker1, t2)
