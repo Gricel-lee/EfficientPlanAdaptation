@@ -6,14 +6,16 @@ A hybrid approach that effectively solves the task planning problem by decomposi
 
 ![image](https://github.com/user-attachments/assets/a1ac9011-b261-4b4b-8350-0241fd0ffc89)
 
-## Install ARCH hybrid planner
+## Install and Run ARCH hybrid planner
 
 ### Using Docker 
 
 Refer to [README-Docker](README-Docker.md) for instruction to run as a Docker container. Skip the next steps until ARCH UI. 
 
 
-### Installing ARCH hybrid planner locally
+### Install and Run ARCH hybrid planner locally
+
+#### Install ARCH locally
 
 1) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
 ![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dirFiles.png)
@@ -39,7 +41,7 @@ cd ../..
 Continue with Running ARCH UI instructions. This will run the run.sh file.
 
 
-## Running ARCH UI
+#### Running ARCH UI locally
 
 **Run** one of the following from terminal.
 For arch--hybrid planner:
@@ -51,7 +53,7 @@ This will automatically activate the Python environment, FastAPI, and the web ap
 
 ## ARCH UI
 
-After running this script, the API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
+The API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
 
 Note: To test and submit a planning problem directly throught the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
 
@@ -80,6 +82,8 @@ Note: When a new planning problem is added, the Hybrid planner is started under-
 
 ## Running ARCH from headless 
 
+This function is underdevelopment.
+
 1) Activate the python environment:
 ```
 source src/arch/prj-venv/bin/activate
@@ -103,7 +107,7 @@ python3 run_SHARP_headless.py
 
 ## Configuring EvoChecker
 
-2) **Modify** ```config.ini``` file with EvoChecker parameters. 
+1) **Modify** ```config.ini``` file with EvoChecker parameters. 
 Do not modify Python path, except if running local Python instead of venv.
 
 

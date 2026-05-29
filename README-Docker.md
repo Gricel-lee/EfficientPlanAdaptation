@@ -11,11 +11,9 @@ ARCH contains a Dockerfile to ease deployment and running the application. It is
 ```sudo snap install docker```
 
 ## Build Docker "arch-planner"
-Build the image (required only once):
+Build the image (required only once) from the directory containing the Dockerfile:
 
-```
-sudo docker build -t arch-planner .
-```
+```sudo docker build -t arch-planner .```
 
 ## Run container
 If it is already running, first stop the previous run by ```sudo docker rm arch```.
@@ -23,7 +21,7 @@ If it is already running, first stop the previous run by ```sudo docker rm arch`
 
 ```bash
     sudo docker run --rm -p 8001:8001 \
-    -v $(pwd)/assets:/app/src/assets \
+    --mount type=bind,src=$(pwd)/assets,dst=/app/assets \
     --mount type=bind,src=$(pwd)/output/data,dst=/app/src/data,bind-create-src \
     --mount type=bind,src=$(pwd)/output/temp,dst=/app/temp,bind-create-src \
     --name arch arch-planner
@@ -31,7 +29,7 @@ If it is already running, first stop the previous run by ```sudo docker rm arch`
 
 Explanation:
   - `sudo docker run` — creates and starts a new container
-  - ```--rm``` — the docker container is automatically removed when it stops, so you won't hit the name conflict again.
+  - ```--rm``` — the docker container is automatically removed when it stops, so it won't hit a name conflict.
   - `-p 8001:8001` — maps port 8001 from container to host machine where RESTAPI is running
   - `-v $(pwd)/assets:/app/src/assets` — mounts the `assets/` folder (containing JSON planning problems) from the host into the container at runtime. It is not baked into the image so that problems can be added without rebuilding.
   - `--name arch` — name for the container.
@@ -40,6 +38,9 @@ Explanation:
 
 
 2. Access the app at http://localhost:8001 with API docs at http://localhost:8001/docs
+
+
+3. After running a planning problem, the generated files will be saved in ```/app/temp```
 
 
 # Developer notes
@@ -51,6 +52,17 @@ To find the container name:
 
 - If the Docker changes, rebuild the image.
 
+## Re-build 
+When changes to the docker project run:
+```
+sudo docker build -t arch-planner .
+```
+
+## To remove 
+To remove all docker containers:
+```
+sudo docker system prune -a
+```
 
 
 # Q&A
@@ -70,3 +82,4 @@ If a container named arch was already created, first delete it to create a new o
 
 While the container is running you can open a shell inside it:
 ```sudo docker exec -it arch bash```
+ 

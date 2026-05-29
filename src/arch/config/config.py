@@ -12,7 +12,8 @@ config.read(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../../c
 # - the section [PARAMS] contains required parameters
 
 # Read paths and variables from the config file
-HP_PATH =  os.path.abspath(config['PATHS']['HP_PATH'])
+# First checks the environment variable HP_PATH (set in the Dockerfile) and if not found, uses the value from config.ini
+HP_PATH = os.path.abspath(os.environ.get('HP_PATH', config['PATHS']['HP_PATH']))
 # @depricated INPUT_DIR = Input dir is now instantiated from the fastapi json file received
 PYTHON_SCRIPT_TP = os.path.join(HP_PATH, "runPlanner.py")
 PYTHON_SCRIPT_EVO = os.path.join(HP_PATH, "runEvo.py")

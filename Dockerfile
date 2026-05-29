@@ -53,13 +53,15 @@ RUN sed -i '/^PySMT/d; /^tempest/d; /^\.\/apps\/tempest/d' src/arch/requirements
 # Install PySMT Z3 solver
 RUN pysmt-install --z3 --confirm-agreement
 
-# Update config.ini with Docker paths
-# sed -i: in-place editing of files
-# 's|HP_PATH = .*|HP_PATH = /app/src|': replaces any HP_PATH value with /app/src (| used as delimiter)
-# src/config.ini: target config file
-RUN sed -i 's|HP_PATH = .*|HP_PATH = /app/src|' config.ini
+# Replace in config.ini the Docker paths
+# Explanation of sed command:
+#   sed -i: in-place editing of files
+#   's|HP_PATH = .*|HP_PATH = /app/src|': replaces any HP_PATH value with /app/src (| used as delimiter)
+#   src/config.ini: target config file
+# RUN sed -i 's|HP_PATH = .*|HP_PATH = /app/src|' config.ini
 
-# Set runtime library path for EvoChecker (PRISM Linux .so files)
+# Set paths for Docker environment
+ENV HP_PATH=/app/src
 ENV LD_LIBRARY_PATH=/app/src/arch/apps/EvoChecker/libs/runtime
 
 EXPOSE 8001
