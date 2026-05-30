@@ -32,7 +32,7 @@ Refer to [README-Docker](README-Docker.md) for instructions to create and run AR
 Jump to d) to run ARCH. To install:
 
 a) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
-![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dirFiles.png)
+![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/dirFiles.png)
 
 b) Create a **python environment** from src/arch/requirements.txt file:
 ```
