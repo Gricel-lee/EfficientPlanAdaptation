@@ -70,23 +70,35 @@ Note: To test and submit a planning problem directly through the API try ```http
 
 ## Interacting with web app
 
-The web app allows you to submit planning problems (a description and the path to the JSON file with the planning problem). 
-<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard.png"/>
+The web app allows you to submit and manage multiple planning problems.
+<img width="585" height="593" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/ui-dashboard.png"/>
+Launch a new planning problem by setting a description and the path to the JSON file. Press Create Problem.
+
+The planning problem can also be defined in natural language. This automatically creates a JSON file.
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/ui-text-problem.png"/>
 
 Check the Pareto front results when a planning problem is completed.
 
-<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard-completed.png"/>
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/ui-pareto.png"/>
 
-Check failure messages:
+Generate an explanation by selecting one of the solutions in the Pareto front. Change the user preferences at the bottom as desired. 
 
-<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard-failed.png"/>
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/ui-press-explain.png"/>
 
-And delete a planning problem:
+Generate an explanation for a selected solution from the Pareto front. User preferences can be customised at the bottom.
 
-<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/multiplePlans/assets/images/dashboard-delete.png"/>
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/ui-gantt-JSONplan-explanation.png"/>
+
+Explanations can also be tailored to different user profiles.
+
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/ui-user-roles.png"/>
 
 
-Note: When a new planning problem is added, the Hybrid planner is started under-the-hood using our API. For example, the status of all jobs are available at ```http://127.0.0.1:8001/api/problems/```.
+Delete a planning problem if needed.
+
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/dashboard-delete.png"/>
+
+
 
 ## 3 Read output files
 
@@ -99,7 +111,20 @@ The folder contains:
 - Data from numerical planner: PDDL files, plan, EvoChecker files, execution times per run
 - Data from uncertainty augmentation: Pareto front and set obtained per run, execution times per run
 
-## 4 Configuration
+## 4 Interact with ARCH
+
+Interact with ARCH using **curl**. For available endpoints see ```http://127.0.0.1:8001/docs```.
+
+For example, when a new planning problem is added, ARCH RestAPI create a new problem accesible at ```http://127.0.0.1:8001/api/problems/``` using ```curl -X 'GET'```. In this example, only one problem Agri-001 is available in the database: 
+
+<img width="585" height="413" alt="image" src="https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/curl.png"/>
+
+
+
+For more information see https://www.geeksforgeeks.org/linux-unix/using-curl-to-make-rest-api-requests/
+
+
+## 5 Configuration
 
 To configure the EvoChecker settings **modify** ```config.ini``` file parameters of population size and iterations as needed. 
 Do not modify Python path, except if running local Python instead of venv.
