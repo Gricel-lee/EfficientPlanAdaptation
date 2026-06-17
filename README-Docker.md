@@ -42,17 +42,20 @@ Explanation:
 3. After running a planning problem, the generated files will be saved in ```/app/temp```
 
 
-# Developer notes
 
-#### Container name
+# ---- Q&A ----
+
+#### Error: container already created
+If the container name "/arch" is already in use, first delete it to create a new one:
+```sudo docker rm arch```
+
+## Container name
 To find the container name:
   
 ```sudo docker ps```
 
-- If the Docker changes, rebuild the image.
-
 ## Re-build 
-When changes to the docker project run:
+After changes to the docker or project run:
 ```
 sudo docker build -t arch-planner .
 ```
@@ -64,21 +67,7 @@ sudo docker system prune -a
 ```
 
 
-# Q&A
+## Access docker files
 
-#### Error
-Remember to add sudo or error ***permission denied while trying to connect to the docker API at unix:///var/run/docker.sock*** might appear.
-
-
-#### Error or to remove an already created container 
-Error: docker: **Error response from daemon: Conflict. The container name "/arch" is already in use by container**
-
-If a container named arch was already created, first delete it to create a new one:
-
-```sudo docker rm arch```
-
-#### Access files
-
-While the container is running you can open a shell inside it:
+While the container is running you can open a shell inside it to inspect files:
 ```sudo docker exec -it arch bash```
- 
