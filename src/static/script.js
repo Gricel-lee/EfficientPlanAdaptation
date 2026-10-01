@@ -786,10 +786,16 @@ function renderTimeline(timelineData) {
         
         if (end_time > maxTime) maxTime = end_time;
         
+        // A "dotask" moves the agent too when its from/to locations differ (e.g. a Google
+        // OR-Tools task like "deliver box"); a PDDL task never does (from === to there).
+        const dotaskMoves = action === 'dotask' && details.from !== details.to;
+
         const barLabel = action === 'move'
             ? `Move: ${details.from} → ${details.to}`
-            : `Task: ${details.task_id}`;
-        
+            : dotaskMoves
+                ? `Task: ${details.task_id} (${details.from} → ${details.to})`
+                : `Task: ${details.task_id}`;
+
         // HTML tooltip that appears on hover
         const tooltipContent = `
             <div class="p-2 text-sm" style="min-width: 160px;">
@@ -799,8 +805,10 @@ function renderTimeline(timelineData) {
                 <div><strong>Time:</strong> ${start_time.toFixed(1)} to ${end_time.toFixed(1)}</div>
                 ${action === 'move' ? `<div><strong>From:</strong> ${details.from}</div>` : ''}
                 ${action === 'move' ? `<div><strong>To:</strong> ${details.to}</div>` : '' }
-                ${action === 'dotask' ? `<div><strong>Location:</strong> ${details.location}</div>` : ''}
                 ${action === 'dotask' ? `<div><strong>Task ID:</strong> ${details.task_id}</div>` : ''}
+                ${action === 'dotask' && !dotaskMoves ? `<div><strong>Location:</strong> ${details.location}</div>` : ''}
+                ${action === 'dotask' && dotaskMoves ? `<div><strong>From:</strong> ${details.from}</div>` : ''}
+                ${action === 'dotask' && dotaskMoves ? `<div><strong>To:</strong> ${details.to}</div>` : ''}
             </div>`;
         
         return [agent, barLabel, tooltipContent, start_time, end_time];

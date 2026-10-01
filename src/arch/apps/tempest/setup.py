@@ -9,7 +9,12 @@ setup(name='tempest',
       author_email='tamer@fbk.eu',
       packages=['tempest', 'tempest.encoders'],
       python_requires='>=3.10',
-      install_requires=["pysmt @ git+https://github.com/pysmt/pysmt"],
+      # Pinned to a known-good commit: base_encoder.py relies on `pysmt.optimization.goal`'s
+      # import chain having the side effect of loading `pysmt.solvers` (used in a type
+      # annotation as `pysmt.solvers.solver.Model`). Unpinned, pip pulls pysmt's current
+      # default-branch HEAD, which may no longer have that side effect and breaks the import
+      # with `AttributeError: module 'pysmt' has no attribute 'solvers'`.
+      install_requires=["pysmt @ git+https://github.com/pysmt/pysmt@4a59e6a75f151a2cc29cbbfa47fa2934324a4607"],
       license="LGPLv3",
       classifiers=["License :: GNU Lesser General Public License v3.0"],
 )

@@ -180,7 +180,7 @@
           {
             "type": "t1",
             "probability_of_success": 0.98,
-            "cost": 4,
+            "fatigue": 4,
             "duration": 6,
             "number_of_retries": 3
           }
@@ -194,7 +194,7 @@
           {
             "type": "t1",
             "probability_of_success": 0.95,
-            "cost": 1,
+            "fatigue": 1,
             "duration": 4,
             "number_of_retries": 10
           }
@@ -208,14 +208,14 @@
           {
             "type": "t2",
             "probability_of_success": 0.99,
-            "cost": 1,
+            "fatigue": 1,
             "duration": 5,
             "number_of_retries": 10
           },
           {
             "type": "t3",
             "probability_of_success": 0.97,
-            "cost": 1,
+            "fatigue": 1,
             "duration": 3,
             "number_of_retries": 10
           }
@@ -229,7 +229,7 @@
           {
             "type": "t3",
             "probability_of_success": 0.96,
-            "cost": 1,
+            "fatigue": 1,
             "duration": 3,
             "number_of_retries": 10
           }

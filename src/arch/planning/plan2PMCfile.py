@@ -1,121 +1,180 @@
 import os
+import re
 import sys
-from typing import Union
 from typing import List
 import traceback
 from unified_planning.engines.results import PlanGenerationResult
-import unified_planning.plans as plans
-import unified_planning.plans as sequential_plan
-import unified_planning.plans.sequential_plan as SequentialPlan
 import unified_planning.plans.plan as Plan
 
 from arch.config.config import EVO_LIBRARY_PATH
 
-from arch.planningProblem.planningProblem import planning_problem
+from arch.planningProblem.planningProblem import planning_problem, get_agent_task_entries, get_agent_travel_durations
 
 
 
-def get_agents_in_plan(plan:PlanGenerationResult):
-    '''Get agents in plan'''
-    actions: List["plans.plan.ActionInstance"] = plan.plan.actions
-    plan_agents_set = set()
-    for action in actions:
-        action: Plan.ActionInstance
-        plan_agents_set.add(action.actual_parameters[0])
-    return plan_agents_set
-
-
-def get_tasks_allocated_per_agent(plan:PlanGenerationResult):
-    '''Get tasks allocated per agent'''
-    actions: List["plans.plan.ActionInstance"] = plan.plan.actions
-    # intialise dictionary
-    plan_task_per_agent = dict()
-    plan_agents_set = get_agents_in_plan(plan)
-    for agent in plan_agents_set:
-        plan_task_per_agent[agent] = []
-    # add tasks to dictionary
-    for action in actions:
-        action: Plan.ActionInstance
-        agent = action.actual_parameters[0]
-        action_name = action._action.name
-        if action_name == "dotask":
-            task = action.actual_parameters[1]
-            plan_task_per_agent[agent].append(task)
-    return plan_task_per_agent
-
-def get_actions_per_agent(plan:PlanGenerationResult):
-    '''Get actions per agent'''
-    actions: List["plans.plan.ActionInstance"] = plan.plan.actions
-    # intialise dictionary
-    plan_actions_per_agent = dict()
-    plan_agents_set = get_agents_in_plan(plan)
-    for agent in plan_agents_set:
-        plan_actions_per_agent[agent] = []
-    # add tasks to dictionary
-    for action in actions:
-        action: Plan.ActionInstance
-        agent = action.actual_parameters[0]
-        plan_actions_per_agent[agent].append(action)
-    return plan_actions_per_agent
-
-
-def parsePlan(plan:PlanGenerationResult):
-    # Get plan data
-    sequentialPlan:SequentialPlan = plan.plan
-    actions: List["plans.plan.ActionInstance"] = plan.plan.actions
-    environment = sequentialPlan.environment
-    
-    plan_agents_set = get_agents_in_plan(plan)
-    plan_task_per_agent = get_tasks_allocated_per_agent(plan)
-    plan_actions_per_agent = get_actions_per_agent(plan)
-    
-    return [plan_agents_set, plan_task_per_agent, plan_actions_per_agent]
+#   (The previous UP-object-based get_agents_in_plan/get_tasks_allocated_per_agent/
+#   get_actions_per_agent/parsePlan helpers were removed - format_plan_with_timestamps now
+#   gets everything it needs from _schedule_plan_actions below, which walks plan.plan.actions
+#   directly in their original global order, rather than pre-splitting per agent.)
 
 
 def _get_prob(data):
-    '''Get probability of success for agent and task'''
-    # Add task probabilities
+    '''Get probability of success for agent and task. Works for either JSON schema (PDDL
+    type/instances, or Google OR-Tools flat tasks) via get_agent_task_entries().'''
     prob_agent_dic = dict()
-    for agent in data['agents']:
-        # for each existing task
-        for t in data['tasks']:
-            # if agent has the task
-            types = [task['type'] for task in agent['tasks']]
-            if t['id'] in types:
-                task = [task for task in agent['tasks'] if task['type'] == t['id']][0]
-                for instance in t['instances']:
-                    prob_agent_dic[(agent['id'],instance['id'])] = task['probability_of_success']
+    for agent_id, task_instance_id, agent_task in get_agent_task_entries(data):
+        prob_agent_dic[(agent_id, task_instance_id)] = agent_task['probability_of_success']
     return prob_agent_dic
 
 def _get_retries(data):
-    '''Get num of retries for agent and task'''
-    # Add retries
+    '''Get num of retries for agent and task. Works for either JSON schema via
+    get_agent_task_entries().'''
     retry_agent_dic = dict()
-    for agent in data['agents']:
-        # for each existing task
-        for t in data['tasks']:
-            # if agent has the task
-            types = [task['type'] for task in agent['tasks']]
-            if t['id'] in types:
-                task = [task for task in agent['tasks'] if task['type'] == t['id']][0]
-                for instance in t['instances']:
-                    retry_agent_dic[(agent['id'],instance['id'])] = task['number_of_retries']
+    for agent_id, task_instance_id, agent_task in get_agent_task_entries(data):
+        retry_agent_dic[(agent_id, task_instance_id)] = agent_task['number_of_retries']
     return retry_agent_dic
 
 
+def _get_task_duration(data):
+    '''Get per-agent task duration (mirrors _get_prob/_get_retries/_get_cost). Works for either
+    JSON schema via get_agent_task_entries().'''
+    duration_agent_dic = dict()
+    for agent_id, task_instance_id, agent_task in get_agent_task_entries(data):
+        duration_agent_dic[(agent_id, task_instance_id)] = agent_task['duration']
+    return duration_agent_dic
+
+
+def _get_path_durations(data):
+    '''Per-agent, bidirectional map of direct-path travel durations: {agent_id: {(from, to):
+    duration}}. Works for either JSON schema via get_agent_travel_durations() - PDDL's shared
+    paths[].distance (same for every agent) or Google OR-Tools' per-agent agents[].travel[].
+    "move" actions only ever happen between directly-connected locations (the PDDL domain's
+    precondition requires a "path" fact, and Google OR-Tools' plan.txt already resolved any
+    multi-hop travel into direct hops when it was generated), so no shortest-path search is
+    needed here.'''
+    return get_agent_travel_durations(data)
+
+
+def _schedule_plan_actions(plan: PlanGenerationResult, task_duration_dic: dict, path_duration_dic: dict) -> dict:
+    '''
+    Walks the plan's actions in their ORIGINAL (global, interleaved) order - the order ENHSP/
+    TEMPest found valid - and assigns each one real [start, end] times, respecting:
+      - each agent's own clock (can't start its next action before finishing its last one);
+      - location occupancy for "move": the PDDL domain requires a location to be `empty`
+        before an agent can move into it (and frees the one it leaves), so the classical plan
+        is already conflict-free in DISCRETE step order - whoever vacates a location always
+        appears earlier in the sequence than whoever moves into it next. But converting that
+        to REAL time per-agent independently can violate it: agent B's real-time departure from
+        a location can land later than agent A would otherwise be ready to arrive there, even
+        though B's departure is earlier in the plan's step order. Agent A still departs and
+        travels on its own schedule (its move's own [start, end] always spans exactly its real
+        travel time); if it then arrives before the location is actually free, it waits there
+        - an idle gap AFTER that move, before its next line - until it's allowed in. If the
+        travel alone takes long enough to cover the remaining occupancy, there's no wait at
+        all: e.g. a robot travelling as long as another one's task takes simply arrives to
+        find the location already free.
+      - "dotask" never needs this: once an agent is at a location (via its own earlier move),
+        doing a task there doesn't claim or release occupancy of anywhere else.
+
+    @return {agent_id: [scheduled_action, ...]}, each a dict with keys action_type, task_id
+        (None for "move"), from_loc, to_loc, start, end - in that agent's own chronological
+        order (which is automatically preserved, as a subsequence of the global order walked).
+        A "move"'s [start, end] is always exactly its real travel time; any wait for the
+        destination to free up shows up as a gap before the agent's NEXT line, not inside it.
+    '''
+    agent_clock: dict = {}          # {agent_id: time its last action ended}
+    location_freed_at: dict = {}    # {location_id: time it was last vacated (defaults to 0:
+                                     # free since the start, matching the PDDL init's "empty")}
+    scheduled_per_agent: dict = {}
+
+    for action in plan.plan.actions:
+        action: Plan.ActionInstance
+        action_name = action._action.name
+        if action_name == "move":
+            agent_id, from_loc, to_loc = (str(p) for p in action.actual_parameters)
+            dur = int(path_duration_dic[agent_id][(from_loc, to_loc)])
+
+            # Depart immediately (no waiting before departure) and travel for the real
+            # duration - the move's own bar is exactly this, [start, travel_end], regardless
+            # of whether the destination is free yet.
+            start = agent_clock.get(agent_id, 0)
+            travel_end = start + dur
+
+            # The agent vacates `from_loc` the moment it departs: it's in transit from then
+            # on, so another agent can move into `from_loc` starting from that point.
+            location_freed_at[from_loc] = start
+
+            scheduled_per_agent.setdefault(agent_id, []).append({
+                "action_type": "move", "task_id": None,
+                "from_loc": from_loc, "to_loc": to_loc, "start": start, "end": travel_end,
+            })
+
+            # The agent isn't actually AT `to_loc` (free to act next) until BOTH travel is
+            # done AND whoever was there before has vacated it in real time - which can be
+            # later than `travel_end`, even though the classical plan's step order already
+            # puts that departure earlier (see docstring). If travel alone takes long enough
+            # to cover the remaining occupancy, there's no extra wait at all - e.g. a robot
+            # travelling as long as another one's task takes arrives to find the location
+            # already free. Any wait needed happens AFTER the travel bar, not before it: the
+            # move's own [start, end] above still only spans the real travel, so a leftover
+            # wait shows up as a gap between this line and the agent's next one, not as a
+            # stretched-out bar.
+            agent_clock[agent_id] = max(travel_end, location_freed_at.get(to_loc, 0))
+
+        elif action_name == "dotask":
+            agent_id, task_id, loc = (str(p) for p in action.actual_parameters)
+            dur = int(task_duration_dic[(agent_id, task_id)])
+
+            start = agent_clock.get(agent_id, 0)
+            end = start + dur
+
+            scheduled_per_agent.setdefault(agent_id, []).append({
+                "action_type": "dotask", "task_id": task_id,
+                "from_loc": loc, "to_loc": loc, "start": start, "end": end,
+            })
+            agent_clock[agent_id] = end
+
+    return scheduled_per_agent
+
+
+def format_plan_with_timestamps(plan: PlanGenerationResult, json_data) -> str:
+    '''
+    Render a PDDL SequentialPlan as text in the same format used for Google OR-Tools plans:
+    "move" and "dotask" lines are annotated with "[start, end]", and "dotask" repeats its
+    location as both start and end locations (a PDDL task doesn't change the agent's location,
+    unlike a Google OR-Tools task). Times are computed by _schedule_plan_actions() - each
+    agent's own clock PLUS cross-agent location-occupancy waits (see its docstring) - so an
+    agent waiting for a location to free up shows up as a gap between two of its lines, with
+    no line of its own (the UI's Gantt chart renders this as empty space for that agent).
+
+    @param plan: PlanGenerationResult (e.g. the result of runENHSP, or one TEMPest solution)
+    @param json_data: the parsed problem JSON (same input used to generate the PDDL files)
+    @return: the formatted plan text, e.g.:
+        SequentialPlan:
+            move(worker2, l1, l4) [00, 05]
+            dotask(worker2, t1l4, l4, l4) [05, 10]
+    '''
+    task_duration_dic = _get_task_duration(json_data)
+    path_duration_dic = _get_path_durations(json_data)
+    scheduled_per_agent = _schedule_plan_actions(plan, task_duration_dic, path_duration_dic)
+
+    lines = ["SequentialPlan:"]
+    for agent_id, actions in scheduled_per_agent.items():
+        for a in actions:
+            start, end = a["start"], a["end"]
+            if a["action_type"] == "move":
+                lines.append(f"    move({agent_id}, {a['from_loc']}, {a['to_loc']}) [{start:02d}, {end:02d}]")
+            else:
+                lines.append(f"    dotask({agent_id}, {a['task_id']}, {a['from_loc']}, {a['to_loc']}) [{start:02d}, {end:02d}]")
+    return "\n".join(lines) + "\n"
+
+
 def _get_cost(data):
-    '''Get cost for agent and task'''
-    # Add cost
+    '''Get cost ("fatigue" in the JSON - both schemas use that field name) for agent and task.
+    Works for either JSON schema via get_agent_task_entries().'''
     cost_agent_dic = dict()
-    for agent in data['agents']:
-        # for each existing task
-        for t in data['tasks']:
-            # if agent has the task
-            types = [task['type'] for task in agent['tasks']]
-            if t['id'] in types:
-                task = [task for task in agent['tasks'] if task['type'] == t['id']][0]
-                for instance in t['instances']:
-                    cost_agent_dic[(agent['id'],instance['id'])] = task['cost']
+    for agent_id, task_instance_id, agent_task in get_agent_task_entries(data):
+        cost_agent_dic[(agent_id, task_instance_id)] = agent_task['fatigue']
     return cost_agent_dic
 
 
@@ -129,16 +188,92 @@ def _extract_uncertainty_data(data):
 
 
 
-def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, population=10, max_evals=100, planNumber=""):
+# ── Plan-file (plan.txt) parsing ──────────────────────────────────────────────
+# Google OR-Tools and PDDL/TEMPest both now write the same plan.txt text format:
+#     SequentialPlan:
+#         move(agent, from_loc, to_loc) [start, end]
+#         dotask(agent, task_id, from_loc, to_loc) [start, end]
+# createPRISMfile() below is driven entirely off this text file, not off a live
+# unified_planning plan object (that object only exists for the PDDL/ENHSP/TEMPest
+# path; the Google OR-Tools path never has one, since its solver runs as generated,
+# standalone Python code). The UP-object-based helpers above (get_agents_in_plan,
+# get_tasks_allocated_per_agent, get_actions_per_agent, parsePlan, used by
+# format_plan_with_timestamps) are kept as-is: they're still needed to WRITE
+# plan.txt in the first place, from the PDDL side's live plan object.
+
+_PLAN_LINE_RE = re.compile(
+    r'^\s*(?P<name>\w+)\((?P<args>[^)]*)\)\s*\[\s*(?P<start>\d+)\s*,\s*(?P<end>\d+)\s*\]\s*$'
+)
+
+
+def parse_plan_file(plan_file_path: str) -> List[dict]:
     '''
-    Create EvoChecker or PRISM file from PDDL plan
+    Parse a plan.txt file into an ordered list of action dicts, each with keys:
+    agent, action_type ("move"|"dotask"), task_id (None for "move"), from_loc, to_loc, start, end.
+    '''
+    actions = []
+    with open(plan_file_path) as f:
+        for line_no, raw_line in enumerate(f, start=1):
+            line = raw_line.strip()
+            if not line or line.startswith("SequentialPlan"):
+                continue
+            match = _PLAN_LINE_RE.match(line)
+            if not match:
+                raise ValueError(f"[plan2PMCfile] Could not parse plan line {line_no} in {plan_file_path}: {raw_line!r}")
+            name = match.group("name")
+            args = [a.strip() for a in match.group("args").split(",")]
+            start, end = int(match.group("start")), int(match.group("end"))
+            if name == "move":
+                if len(args) != 3:
+                    raise ValueError(f"[plan2PMCfile] Expected 3 args for 'move', got {args} on line {line_no}: {raw_line!r}")
+                agent, from_loc, to_loc = args
+                task_id = None
+            elif name == "dotask":
+                if len(args) != 4:
+                    raise ValueError(f"[plan2PMCfile] Expected 4 args for 'dotask', got {args} on line {line_no}: {raw_line!r}")
+                agent, task_id, from_loc, to_loc = args
+            else:
+                raise ValueError(f"[plan2PMCfile] Unknown action type '{name}' on line {line_no}: {raw_line!r}")
+            actions.append({
+                "agent": agent,
+                "action_type": name,
+                "task_id": task_id,
+                "from_loc": from_loc,
+                "to_loc": to_loc,
+                "start": start,
+                "end": end,
+            })
+    return actions
+
+
+def parsePlanFile(plan_file_path: str) -> list:
+    '''
+    File-based counterpart of parsePlan(): parses plan_file_path (a plan.txt, from either
+    planner) and returns [plan_agents_set, plan_task_per_agent, plan_actions_per_agent],
+    same shape as parsePlan(), but each "action" is a dict (see parse_plan_file) instead
+    of a unified_planning ActionInstance.
+    '''
+    actions = parse_plan_file(plan_file_path)
+    plan_agents_set = {a["agent"] for a in actions}
+    plan_task_per_agent = {agent: [] for agent in plan_agents_set}
+    plan_actions_per_agent = {agent: [] for agent in plan_agents_set}
+    for a in actions:
+        plan_actions_per_agent[a["agent"]].append(a)
+        if a["action_type"] == "dotask":
+            plan_task_per_agent[a["agent"]].append(a["task_id"])
+    return [plan_agents_set, plan_task_per_agent, plan_actions_per_agent]
+
+
+def createPRISMfile(output_dir, name_file, plan_file, json_data, evoChecker=False, population=10, max_evals=100, planNumber=""):
+    '''
+    Create EvoChecker or PRISM file from a plan.txt file (Google OR-Tools or PDDL/TEMPest format)
         @param output_dir: output directory
-        @param plan: PDDL plan generated
+        @param plan_file: path to the plan.txt file to read (NOT a unified_planning plan object)
         @param json_data: json parsed data
         @param evoChecker: if True, create EvoChecker files; if False, create PRISM files
         @return: path to config.props file (only needed for EvoChecker)
-    
-    
+
+
     '''
     # File names (with plan number if multiple plans)
     fname_model = f'datamodelEvo{planNumber}.pm'
@@ -149,7 +284,7 @@ def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, po
     try:
         '''Generate PRISM or Evochecker files'''
         # Info from plan
-        args = parsePlan(plan) # get plan data
+        args = parsePlanFile(plan_file) # get plan data from plan.txt
         plan_agents_set = args[0]
         plan_task_per_agent = args[1]
         plan_actions_per_agent = args[2]
@@ -243,11 +378,11 @@ def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, po
             # Transitions
             n_trans = 0
             for action in plan_actions_per_agent[agent]:
-                if action._action.name == "move":
-                    loc = str(action.actual_parameters[2])
+                if action["action_type"] == "move":
+                    loc = action["to_loc"]
                     s += f"  [{agent}move{loc}] {agent}={n_trans}-> 1:({agent}'={n_trans}+1);\n"
-                if action._action.name == "dotask":
-                    task = str(action.actual_parameters[1])
+                if action["action_type"] == "dotask":
+                    task = action["task_id"]
                     retry = retry_agent_dic[(str(agent), task)]
                     if retry > 0:
                         s += f"  [{agent}do{task}Retry] {agent}={n_trans} & {agent}retry_{task} < {agent}_maxRetry_{task} -> p_{agent}_{task} : ({agent}'={agent}+1) + (1-p_{agent}_{task}) : ({agent}'={agent}) & ({agent}retry_{task}' = {agent}retry_{task}+1);\n"
@@ -260,8 +395,8 @@ def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, po
         # Reward vals
         for agent in plan_agents_set:
             for action in plan_actions_per_agent[agent]:
-                if action._action.name == "dotask":
-                    task = str(action.actual_parameters[1])
+                if action["action_type"] == "dotask":
+                    task = action["task_id"]
                     cost = cost_agent_dic[(str(agent), task)]
                     # add cost original
                     s += f"formula r_{agent}_{task}_ORIGINAL = {cost};\n"
@@ -273,12 +408,12 @@ def createPRISMfile(output_dir, name_file, plan, json_data, evoChecker=False, po
         s += "\n\nrewards \"cost\"\n"
         for agent in plan_agents_set:
             for action in plan_actions_per_agent[agent]:
-                if action._action.name == "move":
-                    loc = str(action.actual_parameters[2])
+                if action["action_type"] == "move":
+                    loc = action["to_loc"]
                     cost = 1  # Cost set to 1
                     s += f"  [{agent}move{loc}] true:{cost};\n"
-                if action._action.name == "dotask":
-                    task = str(action.actual_parameters[1])
+                if action["action_type"] == "dotask":
+                    task = action["task_id"]
                     cost = cost_agent_dic[(str(agent), task)]
                     s += f"  [{agent}do{task}] true:{cost};\n"
                     retry = retry_agent_dic[(str(agent), task)]

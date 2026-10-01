@@ -22,6 +22,8 @@ from functools import lru_cache
 from abc import ABC, abstractmethod
 import warnings
 import pysmt
+import pysmt.solvers.solver  # explicit: the `pysmt.solvers.solver.Model` annotation below needs
+                              # this submodule loaded; don't rely on another import's side effect.
 from pysmt.optimization.goal import MaxSMTGoal, MinimizationGoal
 
 import unified_planning as up

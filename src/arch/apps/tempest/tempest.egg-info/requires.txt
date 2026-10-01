@@ -1,1 +1,1 @@
-pysmt@ git+https://github.com/pysmt/pysmt
+pysmt@ git+https://github.com/pysmt/pysmt@4a59e6a75f151a2cc29cbbfa47fa2934324a4607

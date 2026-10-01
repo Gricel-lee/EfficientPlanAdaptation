@@ -59,55 +59,63 @@ def runPlanner(f_domain, f_problem, output_directory, jsondata, timeout, headles
                                 os.path.join(output_directory, f_problem))
     problem.clear_quality_metrics()
     
+    # jsondata source differs between headless (singleton) and non-headless (passed-in) modes;
+    # used to compute plan timestamps (move/task durations) consistently everywhere below.
+    plan_jsondata = planning_problem.json_data if headless else jsondata
+
     # ---- First, run ENHSP ----
     k = 1
     print(f"[pddlplanner] Running ENHSP as first solver...")
-    plan = runENHSP(problem, output_directory)
+    plan = runENHSP(problem, output_directory, plan_jsondata)
 
     if plan.plan is None:
         print(f"[pddlplanner] ERROR: ENHSP found no plan (status: {plan.status}). Aborting.")
         return plans_obj_found
+    else:
+        print(f"[pddlplanner] ENHSP found a plan: {plan.plan}")
 
+    # NOTE: PRISM/EvoChecker generation is no longer done here. It's now centralized in
+    # runPlanner.get_evochecker_and_prism_files(), called once from runPlanner.main() after
+    # whichever planner (this one or the Google OR-Tools one) produces its plan.txt file.
+    # savePRISMEvochekerFiles() below is kept for reference/headless use but is no longer
+    # called from this active path, and is incompatible with createPRISMfile's new file-based
+    # signature (it still passes a live plan object, not a plan.txt path).
     if headless:
-        # Save PRISM/Evochecker files
-        savePRISMEvochekerFiles(planning_problem.json_data, planning_problem.output_dir_name, k, plan, headless=True)
         # save time
         planning_problem.save_timer(label="ENHSP Planning Time Plan1")
-    else:
-        # Save PRISM/Evochecker files
-        savePRISMEvochekerFiles(jsondata, output_directory, k, plan, headless=False)
 
      #TODO: replace plan.txt with plan_<k>.txt in UI code if needed to support multiple plans, for now keep plan.txt for compatibility
     # save plan.txt for UI compatibility (first plan from ENHSP)
+    # formatted to match the Google OR-Tools plan.txt format (per-agent clocks, [start, end] timestamps)
     with open(f"{output_directory}/plan.txt", "w") as f:
-        f.write(str(plan.plan))
+        f.write(plan2PMCfile.format_plan_with_timestamps(plan, plan_jsondata))
 
     # Save the plan
     plans_found.add(plan.plan)
     plans_obj_found.append(plan)
 
     # ----- Then, run TEMPest to generate multiple plans ------
-    print(f"[pddlplanner] Running TEMPest to generate multiple plans...")
-    # 'incremental': True is faster but may generate more similar plans
-    with AnytimePlanner(name="tempest", params={'incremental': False}) as p:
-        for i, res in enumerate(p.get_solutions(problem, timeout=timeout)):
-            if res.plan and res.plan not in plans_found:
-                plans_found.add(res.plan)
-                plans_obj_found.append(res)
-                print(res.plan)
-                k = i + 2
-                if k>20:
-                    break
-                with open(f"{output_directory}/plan_{k}.txt", "w") as f:
-                    print(f"[pddlplanner] Saving TEMPest plan {k} to file: {output_directory}/plan_{k}.txt")
-                    f.write(str(res.plan))
-                # Save PRISM/Evochecker files
-                if headless:
-                    savePRISMEvochekerFiles(planning_problem.json_data, planning_problem.output_dir_name, k, res, headless=True)
-                    # save time
-                    planning_problem.save_timer(label=f"TEMPest Planning Time for Plan{k}")
-                else:
-                    savePRISMEvochekerFiles(jsondata, output_directory, k, res, headless=False)
+    # print(f"[pddlplanner] Running TEMPest to generate multiple plans...")
+    # # 'incremental': True is faster but may generate more similar plans
+    # with AnytimePlanner(name="tempest", params={'incremental': False}) as p:
+    #     for i, res in enumerate(p.get_solutions(problem, timeout=timeout)):
+    #         if res.plan and res.plan not in plans_found:
+    #             plans_found.add(res.plan)
+    #             plans_obj_found.append(res)
+    #             print(res.plan)
+    #             k = i + 2
+    #             if k>20:
+    #                 break
+    #             with open(f"{output_directory}/plan_{k}.txt", "w") as f:
+    #                 print(f"[pddlplanner] Saving TEMPest plan {k} to file: {output_directory}/plan_{k}.txt")
+    #                 f.write(plan2PMCfile.format_plan_with_timestamps(res, plan_jsondata))
+    #             # Save PRISM/Evochecker files
+    #             if headless:
+    #                 savePRISMEvochekerFiles(planning_problem.json_data, planning_problem.output_dir_name, k, res, headless=True)
+    #                 # save time
+    #                 planning_problem.save_timer(label=f"TEMPest Planning Time for Plan{k}")
+    #             else:
+    #                 savePRISMEvochekerFiles(jsondata, output_directory, k, res, headless=False)
     return plans_obj_found
 
 
@@ -151,9 +159,10 @@ def savePRISMEvochekerFiles(jsondata, output_dir_param, k, plan, headless=True):
 
 
 
-def runENHSP(problem, data_output_dir):
+def runENHSP(problem, data_output_dir, json_data):
     '''
     Run the ENHSP planner as first solver (TAMPER as second).
+    @param json_data: parsed problem JSON, used to compute plan timestamps when saving plan_1.txt.
     '''
     print(f"[pddlplanner] Running planner with problem at: {data_output_dir}")  # Debugging line
     
@@ -199,23 +208,24 @@ def runENHSP(problem, data_output_dir):
 
     # Save
     file_name = 'plan_1.txt'
-    savePlan(data_output_dir, plan, file_name)
-    
+    savePlan(data_output_dir, plan, file_name, json_data)
+
     # Print
     print(f"[pddlplanner] Plan generated successfully. Saved in {file_name}")
-    
+
     return plan
 
 
-def savePlan(path, result, file_name):
+def savePlan(path, result, file_name, json_data):
 
     # Debugging: Check the path used for saving
     print(f"[pddlplanner] Saving plan to file: {os.path.join(path, file_name)}")
-    
-    # Save plan to txt file
+
+    # Save plan to txt file, formatted to match the Google OR-Tools plan.txt format
+    # (per-agent clocks, [start, end] timestamps, dotask repeating its location)
     with open(os.path.join(path, file_name), 'w') as f:
-        f.write(str(result.plan))
-    
+        f.write(plan2PMCfile.format_plan_with_timestamps(result, json_data))
+
     print(f"[pddlplanner] Plan saved to file {path}")
 
 

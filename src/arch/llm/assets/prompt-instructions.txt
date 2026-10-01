@@ -81,7 +81,7 @@ This is a list of all available agents (e.g., workers, robots) that can perform 
 -   `tasks`: A list of the task types this agent is capable of performing, along with agent-specific parameters for each task.
 -   `type`: The id of the task type (e.g., "t1").
 -   `probability_of_success`: A float between 0.0 and 1.0.
--   `cost`: The numerical cost for this agent to perform this task type.
+-   `fatigue`: The numerical fatigue/effort cost for this agent to perform this task type.
 -   `duration`: The time it takes for this specific agent to perform this task type.
 -   `number_of_retries`: The maximum number of times the agent can retry the task upon failure.
 Example`:
@@ -94,7 +94,7 @@ JSON
 {
 "type": "t1",
 "probability_of_success": 1.00,
-"cost": 3,
+"fatigue": 3,
 "duration": 5,
 "number_of_retries": 5
 }

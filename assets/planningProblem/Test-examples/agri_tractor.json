@@ -1,0 +1,754 @@
+{
+  "_comment": "Locations",
+  "locations": [
+    {
+      "id": "l1",
+      "description": "Row1 low end",
+      "coordinates": {
+        "x": 0.91,
+        "y": 0.76
+      }
+    },
+    {
+      "id": "l2",
+      "description": "Row1 high end",
+      "coordinates": {
+        "x": 2.29,
+        "y": 1.09
+      }
+    },
+    {
+      "id": "l3",
+      "description": "Row2 low end",
+      "coordinates": {
+        "x": 0.64,
+        "y": 1.17
+      }
+    },
+    {
+      "id": "l4",
+      "description": "Row2 high end",
+      "coordinates": {
+        "x": 1.95,
+        "y": 1.52
+      }
+    },
+    {
+      "id": "l5",
+      "description": "Row3 low end",
+      "coordinates": {
+        "x": 0.53,
+        "y": 1.68
+      }
+    },
+    {
+      "id": "l6",
+      "description": "Row3 high end",
+      "coordinates": {
+        "x": 1.83,
+        "y": 2.18
+      }
+    },
+    {
+      "id": "l7",
+      "description": "Row4 low end",
+      "coordinates": {
+        "x": 0.38,
+        "y": 2.23
+      }
+    },
+    {
+      "id": "l8",
+      "description": "Row4 high end",
+      "coordinates": {
+        "x": 1.78,
+        "y": 2.78
+      }
+    },
+    {
+      "id": "l9",
+      "description": "Collection point",
+      "coordinates": {
+        "x": 0.84,
+        "y": 2.84
+      }
+    },
+    {
+      "id": "l10",
+      "description": "Handover point",
+      "coordinates": {
+        "x": 1.33,
+        "y": 3.1
+      }
+    },
+    {
+      "id": "l11",
+      "description": "Final destination",
+      "coordinates": {
+        "x": 2.61,
+        "y": 3.88
+      }
+    }
+  ],
+  "paths": [
+    {
+      "id": "l1l2",
+      "start_location": "l1",
+      "end_location": "l2"
+    },
+    {
+      "id": "l3l4",
+      "start_location": "l3",
+      "end_location": "l4"
+    },
+    {
+      "id": "l5l6",
+      "start_location": "l5",
+      "end_location": "l6"
+    },
+    {
+      "id": "l7l8",
+      "start_location": "l7",
+      "end_location": "l8"
+    },
+    {
+      "id": "l2l9",
+      "start_location": "l2",
+      "end_location": "l9"
+    },
+    {
+      "id": "l4l9",
+      "start_location": "l4",
+      "end_location": "l9"
+    },
+    {
+      "id": "l6l9",
+      "start_location": "l6",
+      "end_location": "l9"
+    },
+    {
+      "id": "l8l9",
+      "start_location": "l8",
+      "end_location": "l9"
+    },
+    {
+      "id": "l2l10",
+      "start_location": "l2",
+      "end_location": "l10"
+    },
+    {
+      "id": "l4l10",
+      "start_location": "l4",
+      "end_location": "l10"
+    },
+    {
+      "id": "l6l10",
+      "start_location": "l6",
+      "end_location": "l10"
+    },
+    {
+      "id": "l8l10",
+      "start_location": "l8",
+      "end_location": "l10"
+    },
+    {
+      "id": "l10l9",
+      "start_location": "l10",
+      "end_location": "l9"
+    },
+    {
+      "id": "l9l10",
+      "start_location": "l9",
+      "end_location": "l10"
+    },
+    {
+      "id": "l9l11",
+      "start_location": "l9",
+      "end_location": "l11"
+    },
+    {
+      "id": "l2l3",
+      "start_location": "l2",
+      "end_location": "l3"
+    },
+    {
+      "id": "l4l5",
+      "start_location": "l4",
+      "end_location": "l5"
+    },
+    {
+      "id": "l6l7",
+      "start_location": "l6",
+      "end_location": "l7"
+    },
+    {
+      "id": "l9l3",
+      "start_location": "l9",
+      "end_location": "l3"
+    },
+    {
+      "id": "l9l5",
+      "start_location": "l9",
+      "end_location": "l5"
+    },
+    {
+      "id": "l9l7",
+      "start_location": "l9",
+      "end_location": "l7"
+    },
+    {
+      "id": "l10l3",
+      "start_location": "l10",
+      "end_location": "l3"
+    },
+    {
+      "id": "l10l5",
+      "start_location": "l10",
+      "end_location": "l5"
+    },
+    {
+      "id": "l10l7",
+      "start_location": "l10",
+      "end_location": "l7"
+    }
+  ],
+  "_comment2": "Tasks — start/end_location are the agent's physical start and end of each task",
+  "tasks": [
+    {
+      "id": "Harvest_Row1",
+      "start_location": "l1",
+      "end_location": "l2",
+      "start_end_location_interchangeable": true
+    },
+    {
+      "id": "Harvest_Row2",
+      "start_location": "l3",
+      "end_location": "l4",
+      "start_end_location_interchangeable": true
+    },
+    {
+      "id": "Harvest_Row3",
+      "start_location": "l5",
+      "end_location": "l6",
+      "start_end_location_interchangeable": true
+    },
+    {
+      "id": "Harvest_Row4",
+      "start_location": "l7",
+      "end_location": "l8",
+      "start_end_location_interchangeable": true
+    },
+    {
+      "id": "Deliver_Box1_CP",
+      "start_location": "l2",
+      "end_location": "l9",
+      "start_end_location_interchangeable": false,
+      "description": "Human carries box from row1 end to collection point"
+    },
+    {
+      "id": "Deliver_Box1_HP",
+      "start_location": "l2",
+      "end_location": "l10",
+      "start_end_location_interchangeable": false,
+      "description": "Human carries box from row1 end to handover point"
+    },
+    {
+      "id": "Deliver_Box2_CP",
+      "start_location": "l4",
+      "end_location": "l9",
+      "start_end_location_interchangeable": false,
+      "description": "Human carries box from row2 end to collection point"
+    },
+    {
+      "id": "Deliver_Box2_HP",
+      "start_location": "l4",
+      "end_location": "l10",
+      "start_end_location_interchangeable": false,
+      "description": "Human carries box from row2 end to handover point"
+    },
+    {
+      "id": "Deliver_Box3_CP",
+      "start_location": "l6",
+      "end_location": "l9",
+      "start_end_location_interchangeable": false,
+      "description": "Human carries box from row3 end to collection point"
+    },
+    {
+      "id": "Deliver_Box3_HP",
+      "start_location": "l6",
+      "end_location": "l10",
+      "start_end_location_interchangeable": false,
+      "description": "Human carries box from row3 end to handover point"
+    },
+    {
+      "id": "Deliver_Box4_CP",
+      "start_location": "l8",
+      "end_location": "l9",
+      "start_end_location_interchangeable": false,
+      "description": "Human carries box from row4 end to collection point"
+    },
+    {
+      "id": "Deliver_Box4_HP",
+      "start_location": "l8",
+      "end_location": "l10",
+      "start_end_location_interchangeable": false,
+      "description": "Human carries box from row4 end to handover point"
+    },
+    {
+      "id": "Drone_Relay_Box1",
+      "start_location": "l10",
+      "end_location": "l9",
+      "start_end_location_interchangeable": false,
+      "description": "Drone carries boxes 1+2 from handover to collection"
+    },
+    {
+      "id": "Drone_Relay_Box2",
+      "start_location": "l10",
+      "end_location": "l9",
+      "start_end_location_interchangeable": false,
+      "description": "Drone carries boxes 3+4 from handover to collection (drone returns l9→l10 automatically between trips)"
+    },
+    {
+      "id": "Drone_Relay_Box3",
+      "start_location": "l10",
+      "end_location": "l9",
+      "start_end_location_interchangeable": false,
+      "description": "Drone carries boxes from handover to collection"
+    },
+    {
+      "id": "Drone_Relay_Box4",
+      "start_location": "l10",
+      "end_location": "l9",
+      "start_end_location_interchangeable": false,
+      "description": "Drone carries boxes from handover to collection "
+    },
+    {
+      "id": "Tractor_Final",
+      "start_location": "l9",
+      "end_location": "l11",
+      "start_end_location_interchangeable": false,
+      "description": "Tractor delivers all boxes to final destination"
+    }
+  ],
+  "task_graph": {
+    "Harvest_Row1": {
+      "depends_on": [],
+      "dependency_type": "AND"
+    },
+    "Deliver_Box1": {
+      "depends_on": [
+        "Deliver_Box1_CP",
+        "Deliver_Box1_HP"
+      ],
+      "dependency_type": "OR",
+      "comment": "virtual task added to only add one of these two tasks"
+    },
+    "Deliver_Box1_CP": {
+      "depends_on": [
+        "Harvest_Row1"
+      ],
+      "dependency_type": "AND"
+    },
+    "Deliver_Box1_HP": {
+      "depends_on": [
+        "Harvest_Row1"
+      ],
+      "dependency_type": "AND"
+    },
+    "Harvest_Row2": {
+      "depends_on": [],
+      "dependency_type": "AND"
+    },
+    "Deliver_Box2": {
+      "depends_on": [
+        "Deliver_Box2_CP",
+        "Deliver_Box2_HP"
+      ],
+      "dependency_type": "OR"
+    },
+    "Deliver_Box2_CP": {
+      "depends_on": [
+        "Harvest_Row2"
+      ],
+      "dependency_type": "AND"
+    },
+    "Deliver_Box2_HP": {
+      "depends_on": [
+        "Harvest_Row2"
+      ],
+      "dependency_type": "AND"
+    },
+    "Harvest_Row3": {
+      "depends_on": [],
+      "dependency_type": "AND"
+    },
+    "Deliver_Box3": {
+      "depends_on": [
+        "Deliver_Box3_CP",
+        "Deliver_Box3_HP"
+      ],
+      "dependency_type": "OR"
+    },
+    "Deliver_Box3_CP": {
+      "depends_on": [
+        "Harvest_Row3"
+      ],
+      "dependency_type": "AND"
+    },
+    "Deliver_Box3_HP": {
+      "depends_on": [
+        "Harvest_Row3"
+      ],
+      "dependency_type": "AND"
+    },
+    "Harvest_Row4": {
+      "depends_on": [
+        "Deliver_Box3"
+      ],
+      "dependency_type": "AND"
+    },
+    "Deliver_Box4": {
+      "depends_on": [
+        "Deliver_Box4_CP",
+        "Deliver_Box4_HP"
+      ],
+      "dependency_type": "OR"
+    },
+    "Deliver_Box4_CP": {
+      "depends_on": [
+        "Harvest_Row4"
+      ],
+      "dependency_type": "AND"
+    },
+    "Deliver_Box4_HP": {
+      "depends_on": [
+        "Harvest_Row4"
+      ],
+      "dependency_type": "AND"
+    },
+    "Drone_Relay_Box1": {
+      "depends_on": [
+        "Deliver_Box1_HP"
+      ],
+      "dependency_type": "AND"
+    },
+    "Drone_Relay_Box2": {
+      "depends_on": [
+        "Deliver_Box2_HP"
+      ],
+      "dependency_type": "AND"
+    },
+    "Drone_Relay_Box3": {
+      "depends_on": [
+        "Deliver_Box3_HP"
+      ],
+      "dependency_type": "AND"
+    },
+    "Drone_Relay_Box4": {
+      "depends_on": [
+        "Deliver_Box4_HP"
+      ],
+      "dependency_type": "AND"
+    },
+    "Row1_done": {
+      "depends_on": [
+        "Drone_Relay_Box1",
+        "Deliver_Box1"
+      ],
+      "dependency_type": "OR"
+    },
+    "Row2_done": {
+      "depends_on": [
+        "Drone_Relay_Box2",
+        "Deliver_Box2"
+      ],
+      "dependency_type": "OR"
+    },
+    "Row3_done": {
+      "depends_on": [
+        "Drone_Relay_Box3",
+        "Deliver_Box3"
+      ],
+      "dependency_type": "OR"
+    },
+    "Row4_done": {
+      "depends_on": [
+        "Drone_Relay_Box4",
+        "Deliver_Box4"
+      ],
+      "dependency_type": "OR"
+    },
+    "Tractor_Final": {
+      "depends_on": [
+        "Row1_done",
+        "Row2_done",
+        "Row3_done",
+        "Row4_done"
+      ],
+      "dependency_type": "AND"
+    }
+  },
+  "_comment3": "Agents",
+  "agents": [
+    {
+      "id": "human1",
+      "description": "Human worker — harvests all rows sequentially and delivers boxes",
+      "initial_location": "l2",
+      "tasks": [
+        {
+          "id": "Harvest_Row1",
+          "duration": 2,
+          "fatigue": 3,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Harvest_Row2",
+          "duration": 2,
+          "fatigue": 3,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Harvest_Row3",
+          "duration": 2,
+          "fatigue": 3,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Harvest_Row4",
+          "duration": 2,
+          "fatigue": 3,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Deliver_Box1_CP",
+          "duration": 2,
+          "fatigue": 1,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Deliver_Box1_HP",
+          "duration": 2,
+          "fatigue": 1,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Deliver_Box2_CP",
+          "duration": 2,
+          "fatigue": 1,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Deliver_Box2_HP",
+          "duration": 2,
+          "fatigue": 1,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Deliver_Box3_CP",
+          "duration": 100,
+          "fatigue": 1,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Deliver_Box3_HP",
+          "duration": 2,
+          "fatigue": 1,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Deliver_Box4_CP",
+          "duration": 100,
+          "fatigue": 1,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Deliver_Box4_HP",
+          "duration": 2,
+          "fatigue": 1,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        }
+      ],
+      "travel": [
+        {
+          "id": "l1l2",
+          "duration": 1
+        },
+        {
+          "id": "l3l4",
+          "duration": 1
+        },
+        {
+          "id": "l5l6",
+          "duration": 1
+        },
+        {
+          "id": "l7l8",
+          "duration": 1
+        },
+        {
+          "id": "l2l9",
+          "duration": 5
+        },
+        {
+          "id": "l4l9",
+          "duration": 5
+        },
+        {
+          "id": "l6l9",
+          "duration": 5
+        },
+        {
+          "id": "l8l9",
+          "duration": 5
+        },
+        {
+          "id": "l2l10",
+          "duration": 8
+        },
+        {
+          "id": "l4l10",
+          "duration": 8
+        },
+        {
+          "id": "l6l10",
+          "duration": 8
+        },
+        {
+          "id": "l8l10",
+          "duration": 8
+        },
+        {
+          "id": "l2l3",
+          "duration": 2
+        },
+        {
+          "id": "l4l5",
+          "duration": 2
+        },
+        {
+          "id": "l6l7",
+          "duration": 2
+        },
+        {
+          "id": "l9l3",
+          "duration": 7
+        },
+        {
+          "id": "l9l5",
+          "duration": 7
+        },
+        {
+          "id": "l9l7",
+          "duration": 7
+        },
+        {
+          "id": "l10l3",
+          "duration": 9
+        },
+        {
+          "id": "l10l5",
+          "duration": 9
+        },
+        {
+          "id": "l10l7",
+          "duration": 9
+        }
+      ]
+    },
+    {
+      "id": "drone1",
+      "description": "Drone — relays boxes from handover (l10) to collection (l9), returns between trips",
+      "initial_location": "l10",
+      "tasks": [
+        {
+          "id": "Drone_Relay_Box1",
+          "duration": 2,
+          "fatigue": 0,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Drone_Relay_Box2",
+          "duration": 2,
+          "fatigue": 0,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Drone_Relay_Box3",
+          "duration": 2,
+          "fatigue": 0,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        },
+        {
+          "id": "Drone_Relay_Box4",
+          "duration": 2,
+          "fatigue": 0,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        }
+      ],
+      "travel": [
+        {
+          "id": "l10l9",
+          "duration": 1
+        },
+        {
+          "id": "l9l10",
+          "duration": 1
+        }
+      ]
+    },
+    {
+      "id": "tractor1",
+      "description": "Tractor — final delivery from collection point to destination",
+      "initial_location": "l9",
+      "tasks": [
+        {
+          "id": "Tractor_Final",
+          "duration": 15,
+          "fatigue": 0,
+          "probability_of_success": 1,
+          "number_of_retries": 3
+        }
+      ],
+      "travel": [
+        {
+          "id": "l9l11",
+          "duration": 15
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "mission_probability_of_success": 0.95,
+    "min_assignment_probability": 0.5,
+    "tasks_to_be_completed": [
+      "Tractor_Final"
+    ],
+    "max_duration": 350
+  },
+  "_comment4": "Background image shown in the editor canvas — not used by the solver. \"path\" is resolved relative to planning_editor.html on import; if it cannot be loaded there, the editor shows a small \"not found\" notice but keeps \"rect\" so re-uploading the same image snaps back into position.",
+  "background": {
+    "path": "../assests/qdc.jpg",
+    "rect": {
+      "x0": 0,
+      "y0": 0,
+      "x1": 1,
+      "y1": 1
+    }
+  }
+}

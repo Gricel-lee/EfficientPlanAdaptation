@@ -24,10 +24,9 @@ print("[LTA-API] Loading configuration from config.ini")
     
 
 def get_timeline_for_problem(problem_id: str):
-    problem = PROBLEM_DATABASE.get(problem_id)
     plan_file = os.path.join(PROBLEM_OUTPUT_DIR[problem_id], "plan.txt")
     print(f"[Service] Assembling timeline for problem {problem_id} from plan file: {plan_file}")
-    assemble_timeline = timeline.assemble_timeline(plan_file, problem.json_file)
+    assemble_timeline = timeline.assemble_timeline(plan_file)
     return assemble_timeline
     
 

@@ -72,15 +72,19 @@ def parse_plan(filepath):
 
     Args:
         filepath (str): The path to the input text file (e.g., 'plan.txt').
-    
+
     Returns:
         list: A list of action dictionaries.
     """
     plan_actions = []
-    
-    # Regular expressions to parse the two types of actions
+
+    # Regular expressions to parse the two types of actions. Both Google OR-Tools and
+    # PDDL/TEMPest plans now write a "[start, end]" timestamp suffix after the closing
+    # paren (ignored here, by not anchoring the match to end-of-line), and "dotask" now
+    # takes 4 args - agent, task_id, from_loc, to_loc (from_loc == to_loc for a PDDL task,
+    # since it doesn't move the agent; they may differ for a Google OR-Tools task).
     move_pattern = re.compile(r"^\s*move\(([^,]+),\s*([^,]+),\s*([^)]+)\)")
-    dotask_pattern = re.compile(r"^\s*dotask\(([^,]+),\s*([^,]+),\s*([^)]+)\)")
+    dotask_pattern = re.compile(r"^\s*dotask\(([^,]+),\s*([^,]+),\s*([^,]+),\s*([^)]+)\)")
 
     with open(filepath, 'r') as f:
         for line in f:
@@ -101,12 +105,12 @@ def parse_plan(filepath):
             # Attempt to match 'dotask' action
             dotask_match = dotask_pattern.match(line)
             if dotask_match:
-                agent, task_id, location = dotask_match.groups()
+                agent, task_id, from_loc, to_loc = dotask_match.groups()
                 action = {
                     "name": "dotask",
                     "agent": agent.strip(),
-                    "initialLocation": location.strip(),
-                    "endLocation": None,
+                    "initialLocation": from_loc.strip(),
+                    "endLocation": to_loc.strip(),
                     "taskId": task_id.strip()
                 }
                 plan_actions.append(action)
