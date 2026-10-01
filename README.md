@@ -39,7 +39,7 @@ b) Create a **python environment** from src/arch/requirements.txt file:
 cd src/arch
 python3 -m venv prj-venv
 ```
-(or python)
+(or python. I used Python 3.10).
 
 ```
 source prj-venv/bin/activate
