@@ -6,6 +6,7 @@ This script is used to run the entire process of generating PRISM/Evochecker fil
 It processes each JSON file in the input directory and generates the corresponding PRISM/Evochecker files.
 No other .json files should be present in the input directory.
 '''
+import json
 import sys
 import arch.planning.json2pddl as json2pddl
 
@@ -17,7 +18,103 @@ import os
 import time
 from arch.config.config import *
 
+from arch.planning.planner_google_or.gen_google_problem import load as json_load
+from arch.planning.planner_google_or.gen_google_problem import generate as google_generate
+
+
 def main(problem_id, json_file_path):
+    # Two problems supported: 
+    # CP-SAT (solved with Google OR-Tools) and PDDL (solved with ENHSP)
+    # - check type:
+    planning_type = check_json_file_4type(json_file_path)
+
+    if planning_type == "google":
+        print(f"[RunPlanner] Detected Google OR-Tools problem for {json_file_path}.")
+        _run_google_problem(problem_id, json_file_path)
+
+    elif planning_type == "pddl":
+        print(f"[RunPlanner] Detected PDDL problem for {json_file_path}.")
+        _run_pddl_problem(problem_id, json_file_path)
+        
+    
+
+def check_json_file_4type(json_file_path):
+    with open(json_file_path, 'r') as f:
+        data = json.load(f)
+        if "task_graph" in data:
+            return "google"
+        return "pddl"
+        
+
+def _run_google_problem(problem_id, json_file_path):
+    '''
+    Args:
+        problem_id: Unique identifier for the planning problem.
+        json_file_path: The path to the JSON file to be processed.
+    Returns:
+        None
+    '''
+    # Process each JSON file in the input directory
+    print("\n----Starting task planning...")
+    
+    # Set variables
+    name_file = os.path.splitext(os.path.basename(json_file_path))[0] # get file name without extension
+    INPUT_DIR = os.path.dirname(json_file_path)
+    output_dir = os.path.join(INPUT_DIR, f"output_{name_file}_{problem_id}") # save to global variable
+    PROBLEM_OUTPUT_DIR[problem_id] = output_dir
+
+    # Global variables
+    verbose = VERBOSE
+
+    if not os.path.isfile(json_file_path):
+        raise FileNotFoundError(f"File not found: {json_file_path}")
+        # sys.exit(1)
+    else:
+        if verbose: print(f"[RunPlanner] Processing file: {json_file_path}")
+    
+    print(f"[RunPlanner] Creating output folder: {output_dir}")
+    auxiliary.createFolder(output_dir)
+
+    try:
+        # Load the Google OR-Tools problem from the JSON file
+        print(f"[RunPlanner]: Loading Google OR-Tools problem for {name_file}...")
+        json_problem = json_load(json_file_path)
+
+        #create folder for Google OR-Tools (python instance) problem file
+        googleORs_dir = os.path.join(output_dir, "googleORs")
+        auxiliary.createFolder(googleORs_dir)
+
+        # create Google OR-Tools (python) problem string
+        google_problem_str =google_generate(json_problem, json_file_path)
+        google_file = os.path.join(googleORs_dir, f"problem.py")
+        with open(google_file, 'w') as f:
+            f.write(google_problem_str)
+
+        # run generated python file "google_file" containing the Google OR-Tools planning problem
+        google_globals = {"__name__": "__main__", "__file__": google_file}
+        exec(compile(open(google_file).read(), google_file, 'exec'), google_globals)
+
+        
+        # Generate PRISM/Evochecker files from the Google OR-Tools problem
+        print(f"[RunPlanner]: Generating PRISM/Evochecker files for {name_file}...")
+        
+
+        
+        
+        
+
+        
+
+    except FileNotFoundError as e:
+        print(f"File not found: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error processing {json_file_path}: {e}")
+        sys.exit(1)
+
+
+
+def _run_pddl_problem(problem_id, json_file_path):
     '''
     Args:
         problem_id: Unique identifier for the planning problem.
@@ -105,4 +202,3 @@ def main(problem_id, json_file_path):
         except Exception as e:
             print(f"Error processing {json_file_path} on Run {run}: {e}")
             sys.exit(1)
-    
