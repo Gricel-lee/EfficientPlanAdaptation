@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Planning Problem Editor</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; background: #0f1117; color: #e2e8f0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+/* ── Header ── */
+header { background: #1a1f2e; border-bottom: 1px solid #2d3748; padding: 8px 14px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+header h1 { font-size: 14px; font-weight: 700; color: #e2e8f0; margin-right: auto; letter-spacing: -0.01em; }
+header h1 span { color: #3b82f6; }
+.btn { padding: 5px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; transition: opacity .15s; white-space: nowrap; }
+.btn:hover { opacity: .82; }
+.btn-primary   { background: #3b82f6; color: #fff; }
+.btn-success   { background: #10b981; color: #fff; }
+.btn-secondary { background: #334155; color: #cbd5e1; }
+.btn-danger    { background: #ef4444; color: #fff; }
+.btn-sm { padding: 3px 8px; font-size: 11px; }
+.divider { width: 1px; height: 20px; background: #2d3748; margin: 0 2px; }
+
+/* ── Layout ── */
+main { display: flex; flex: 1; overflow: hidden; }
+
+/* ── Sidebar ── */
+aside { width: 310px; background: #1a1f2e; border-right: 1px solid #2d3748; display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0; }
+.tabs { display: flex; background: #12161f; border-bottom: 1px solid #2d3748; flex-shrink: 0; }
+.tab { padding: 8px 0; flex: 1; text-align: center; cursor: pointer; font-size: 10px; font-weight: 600; color: #64748b; border-bottom: 2px solid transparent; text-transform: uppercase; letter-spacing: .04em; transition: all .15s; }
+.tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+.tab:hover:not(.active) { color: #94a3b8; }
+.panel { flex: 1; overflow-y: auto; padding: 10px; display: none; flex-direction: column; gap: 8px; }
+.panel.active { display: flex; }
+
+/* ── Cards ── */
+.card { background: #212840; border: 1px solid #2d3748; border-radius: 8px; padding: 10px; }
+.card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }
+.card-title { font-weight: 600; font-size: 12px; color: #e2e8f0; }
+.card-sub { font-size: 10px; color: #64748b; margin-top: 2px; }
+.card-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.tag { display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 10px; background: #2d3748; color: #94a3b8; margin: 1px; }
+.tag-blue  { background: #1e3a5f; color: #60a5fa; }
+.tag-green { background: #14432a; color: #34d399; }
+.tag-amber { background: #451f08; color: #fb923c; }
+
+/* ── Add forms ── */
+.add-form { background: #1a2540; border: 1px solid #3b82f6; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 7px; }
+.add-form h3 { font-size: 11px; font-weight: 600; color: #60a5fa; text-transform: uppercase; letter-spacing: .04em; }
+.row { display: flex; gap: 6px; }
+.fg { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.fg label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: .04em; }
+.fg input, .fg select, .fg textarea {
+  background: #0f1117; border: 1px solid #374151; border-radius: 4px;
+  padding: 5px 7px; color: #e2e8f0; font-size: 12px; width: 100%; font-family: inherit;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus { outline: none; border-color: #3b82f6; }
+.fg textarea { resize: vertical; min-height: 44px; }
+.form-actions { display: flex; justify-content: flex-end; gap: 5px; }
+select option { background: #1a1f2e; }
+.checkbox-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #94a3b8; }
+.checkbox-row input[type=checkbox] { accent-color: #3b82f6; }
+
+/* ── Section header ── */
+.sec-hdr { display: flex; align-items: center; justify-content: space-between; }
+.sec-title { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+
+/* ── Canvas area ── */
+.canvas-area { flex: 1; position: relative; overflow: hidden; }
+#map-canvas { display: block; cursor: default; }
+.canvas-toolbar { position: absolute; top: 10px; left: 10px; display: flex; gap: 5px; background: rgba(255,255,255,.95); border-radius: 8px; padding: 5px; box-shadow: 0 2px 10px rgba(0,0,0,.18); }
+.tool-btn { padding: 5px 10px; border: 1px solid #e2e8f0; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 500; background: white; color: #374151; transition: all .15s; }
+.tool-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+.tool-btn:hover:not(.active) { background: #f1f5f9; }
+.canvas-hint { position: absolute; bottom: 10px; left: 10px; background: rgba(255,255,255,.9); border-radius: 6px; padding: 6px 10px; font-size: 11px; color: #64748b; }
+.legend { position: absolute; bottom: 10px; right: 10px; background: rgba(255,255,255,.95); border-radius: 8px; padding: 8px 12px; box-shadow: 0 2px 8px rgba(0,0,0,.12); font-size: 10px; color: #374151; }
+.legend-item { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.legend-item:last-child { margin-bottom: 0; }
+.leg-circle { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── Modal ── */
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.65); display: none; align-items: center; justify-content: center; z-index: 200; }
+.modal-bg.open { display: flex; }
+.modal { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 12px; padding: 20px; width: 500px; max-height: 85vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+.modal h2 { font-size: 14px; font-weight: 700; color: #e2e8f0; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+.sub-list { display: flex; flex-direction: column; gap: 5px; }
+.sub-item { background: #212840; border: 1px solid #2d3748; border-radius: 6px; padding: 7px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11px; }
+.sub-item-content { flex: 1; }
+.sub-add { background: #0f1117; border: 1px dashed #374151; border-radius: 6px; padding: 6px 10px; font-size: 11px; color: #64748b; cursor: pointer; text-align: center; }
+.sub-add:hover { border-color: #3b82f6; color: #60a5fa; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #374151; border-radius: 2px; }
+
+/* ── Tooltip ── */
+#tooltip { position: fixed; background: rgba(15,17,23,.92); color: #e2e8f0; padding: 6px 10px; border-radius: 6px; font-size: 11px; pointer-events: none; display: none; z-index: 100; max-width: 220px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div id="tooltip"></div>
+
+<header>
+  <h1>Planning <span>Problem Editor</span></h1>
+  <input type="file" id="bg-upload"   hidden accept="image/*">
+  <input type="file" id="json-import" hidden accept=".json">
+  <button class="btn btn-secondary" onclick="document.getElementById('bg-upload').click()">🖼 Background</button>
+  <div class="divider"></div>
+  <button class="btn btn-secondary" onclick="document.getElementById('json-import').click()">📂 Import JSON</button>
+  <button class="btn btn-success"   onclick="exportJSON()">💾 Export JSON</button>
+  <div class="divider"></div>
+  <button class="btn btn-primary"   onclick="useThisProblem()">✅ Use This Problem</button>
+</header>
+
+<main>
+  <aside>
+    <div class="tabs">
+      <div class="tab active"  data-tab="locations"   onclick="switchTab('locations')">Locs</div>
+      <div class="tab"         data-tab="paths"        onclick="switchTab('paths')">Paths</div>
+      <div class="tab"         data-tab="tasks"        onclick="switchTab('tasks')">Tasks</div>
+      <div class="tab"         data-tab="agents"       onclick="switchTab('agents')">Agents</div>
+      <div class="tab"         data-tab="constraints"  onclick="switchTab('constraints')">Config</div>
+    </div>
+
+    <!-- LOCATIONS -->
+    <div id="panel-locations" class="panel active">
+      <div class="add-form" id="form-loc">
+        <h3>Add Location</h3>
+        <div class="row">
+          <div class="fg"><label>ID</label><input id="loc-id" placeholder="l8"></div>
+          <div class="fg"><label>Description</label><input id="loc-desc" placeholder="Field corner"></div>
+        </div>
+        <div class="row">
+          <div class="fg"><label>X</label><input id="loc-x" type="number" step="any" placeholder="0"></div>
+          <div class="fg"><label>Y</label><input id="loc-y" type="number" step="any" placeholder="0"></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary btn-sm" onclick="addLocation()">Add</button>
+        </div>
+      </div>
+      <div id="loc-list"></div>
+    </div>
+
+    <!-- PATHS -->
+    <div id="panel-paths" class="panel">
+      <div class="add-form" id="form-path">
+        <h3>Add Path</h3>
+        <div class="fg"><label>ID</label><input id="path-id" placeholder="l1l8"></div>
+        <div class="row">
+          <div class="fg"><label>From</label><select id="path-from"></select></div>
+          <div class="fg"><label>To</label><select id="path-to"></select></div>
+        </div>
+        <div class="fg"><label>Description</label><input id="path-desc" placeholder="Path from l1 to l8"></div>
+        <div class="form-actions">
+          <button class="btn btn-primary btn-sm" onclick="addPath()">Add</button>
+        </div>
+      </div>
+      <div id="path-list"></div>
+    </div>
+
+    <!-- TASKS -->
+    <div id="panel-tasks" class="panel">
+      <div class="add-form">
+        <h3>Add Task</h3>
+        <div class="fg"><label>ID</label><input id="task-id" placeholder="Harvest_Row3"></div>
+        <div class="row">
+          <div class="fg"><label>Start Location</label><select id="task-start"></select></div>
+          <div class="fg"><label>End Location</label><select id="task-end"></select></div>
+        </div>
+        <div class="fg"><label>Description</label><input id="task-desc" placeholder="Optional description"></div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="task-interchangeable">
+          <label for="task-interchangeable">Start/end interchangeable</label>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary btn-sm" onclick="addTask()">Add</button>
+        </div>
+      </div>
+
+      <div class="add-form" style="border-color:#fb923c">
+        <h3 style="color:#fb923c">Add Virtual Task (OR choice)</h3>
+        <p style="font-size:10px;color:#64748b;margin-top:-3px">No location/agent of its own — represents "pick exactly one of these alternatives". Set which tasks it depends on via Edit below.</p>
+        <div class="fg"><label>ID</label><input id="vtask-id" placeholder="Deliver_Box1"></div>
+        <div class="form-actions">
+          <button class="btn btn-secondary btn-sm" onclick="addVirtualTaskSidebar()">Add</button>
+        </div>
+      </div>
+
+      <div class="sec-hdr" style="margin-top:4px">
+        <span class="sec-title">Task Graph (Dependencies)</span>
+        <button class="btn btn-secondary btn-sm" onclick="openTaskGraphModal()">Edit</button>
+      </div>
+      <div id="task-list"></div>
+    </div>
+
+    <!-- AGENTS -->
+    <div id="panel-agents" class="panel">
+      <div class="add-form">
+        <h3>Add Agent</h3>
+        <div class="row">
+          <div class="fg"><label>ID</label><input id="agent-id" placeholder="human2"></div>
+          <div class="fg"><label>Description</label><input id="agent-desc" placeholder="worker 2"></div>
+        </div>
+        <div class="fg"><label>Initial Location</label><select id="agent-init-loc"></select></div>
+        <div class="form-actions">
+          <button class="btn btn-primary btn-sm" onclick="addAgent()">Add</button>
+        </div>
+      </div>
+      <div id="agent-list"></div>
+    </div>
+
+    <!-- CONSTRAINTS -->
+    <div id="panel-constraints" class="panel">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Mission Constraints</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+          <div class="fg"><label>Max Duration (min)</label><input id="c-max-dur" type="number" min="0" oninput="updateConstraint('max_duration', +this.value)"></div>
+          <div class="fg"><label>Mission Probability of Success</label><input id="c-mission-prob" type="number" min="0" max="1" step="0.01" oninput="updateConstraint('mission_probability_of_success', +this.value)"></div>
+          <div class="fg"><label>Min Assignment Probability</label><input id="c-min-prob" type="number" min="0" max="1" step="0.01" oninput="updateConstraint('min_assignment_probability', +this.value)"></div>
+          <div class="fg"><label>Target Tasks</label>
+            <div id="c-targets-list" style="max-height:220px;overflow-y:auto;background:#0f1117;border:1px solid #374151;border-radius:4px;padding:8px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="canvas-area">
+    <canvas id="map-canvas"></canvas>
+    <div class="canvas-toolbar">
+      <button class="tool-btn active" id="tool-select"  onclick="setTool('select')">&#9654; Select</button>
+      <button class="tool-btn"        id="tool-addLoc"  onclick="setTool('addLoc')">+ Location</button>
+      <button class="tool-btn"        id="tool-addPath" onclick="setTool('addPath')">&#8594; Path</button>
+      <div class="divider"></div>
+      <button class="tool-btn" onclick="zoomBy(1/1.25)" title="Zoom out">&minus;</button>
+      <button class="tool-btn" id="zoom-label" onclick="resetView()" title="Reset zoom &amp; pan">100%</button>
+      <button class="tool-btn" onclick="zoomBy(1.25)" title="Zoom in">+</button>
+    </div>
+    <div class="canvas-hint" id="canvas-hint">Drag locations to position them</div>
+    <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%)">
+      <button class="tool-btn" onclick="openBackgroundSettingsModal()">⚙ Background Settings</button>
+    </div>
+    <div id="bg-not-found" style="display:none;position:absolute;bottom:1px;left:50%;transform:translateX(-50%);font-size:9px;color:#94a3b8;background:rgba(255,255,255,.85);padding:1px 6px;border-radius:3px;white-space:nowrap"></div>
+    <div class="legend">
+      <div class="legend-item"><div class="leg-circle" style="background:#3b82f6"></div>Location</div>
+      <div class="legend-item"><div class="leg-circle" style="background:#f59e0b"></div>Selected</div>
+      <div class="legend-item"><div class="leg-circle" style="background:#10b981;border-radius:0"></div>Task start</div>
+      <div class="legend-item"><div class="leg-circle" style="background:#ef4444;border-radius:0"></div>Task end</div>
+    </div>
+  </div>
+</main>
+
+<!-- ── MODAL ── -->
+<div class="modal-bg" id="modal-bg" onclick="bgClick(event)">
+  <div class="modal" id="modal-inner"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════════
+const state = {
+  locations:   [],
+  paths:       [],
+  tasks:       [],
+  task_graph:  {},
+  agents:      [],
+  constraints: { mission_probability_of_success: 0.95, min_assignment_probability: 0.5, tasks_to_be_completed: [], max_duration: 100 }
+};
+
+// Canvas positions: locId → {x,y} in [0..1] normalised
+const pos = {};
+
+// View transform: screenPx = worldPx * zoom + {panX, panY}. All existing drawing
+// code (px(), bgRect * canvas.width, etc.) produces "world" pixel coordinates —
+// canvasXY() converts screen coordinates back into that same world space, so
+// no other hit-testing/dragging code needs to know zoom/pan exist at all.
+let zoom = 1;
+let panX = 0;
+let panY = 0;
+let panning = null;  // {startScreenX, startScreenY, startPanX, startPanY} while middle-drag panning
+
+let bgImage    = null;
+let bgImagePath = '';      // path used to (re)load the background image, round-tripped via export/import.
+                            // Browsers never expose a <input type=file>'s real filesystem path — only its
+                            // bare filename — so this is editable in Background Settings so you can point
+                            // it at e.g. "assets/my-map.png" (relative to this HTML file) for it to survive re-import.
+let bgLoadFailed = false;  // true once an import's attempt to auto-load bgImagePath has failed
+let bgRect     = { x0: 0, y0: 0, x1: 1, y1: 1 };  // background image rect, normalised [0..1]
+let bgResizeMode = false;   // when true, bgRect's 4 corners (and body) become draggable
+let bgDragCorner = null;    // 'tl'|'tr'|'bl'|'br' currently being dragged, or null
+let bgDragMove   = null;    // {ox, oy} pixel offset from mouse to bgRect's top-left, while translating the whole image
+let showGrid   = true;      // coordinate-aligned grid overlay
+let gridSpacing = 0.1;      // grid line spacing, in the same units as loc.coordinates
+let selLoc     = null;   // selected location id
+let hovTask    = null;   // hovered task id (for start/end highlight)
+let tool       = 'select';
+let pathStart  = null;   // first loc when drawing a path
+let dragging   = null;   // {id, ox, oy}  offset within node
+
+// ══════════════════════════════════════════════════════════════════════
+// CANVAS SETUP & RESIZE
+// ══════════════════════════════════════════════════════════════════════
+const canvas = document.getElementById('map-canvas');
+const ctx    = canvas.getContext('2d');
+
+function resizeCanvas() {
+  const area = canvas.parentElement;
+  canvas.width  = area.clientWidth;
+  canvas.height = area.clientHeight;
+  render();
+}
+window.addEventListener('resize', resizeCanvas);
+
+// ══════════════════════════════════════════════════════════════════════
+// ZOOM / PAN
+// ══════════════════════════════════════════════════════════════════════
+const ZOOM_MIN = 0.2, ZOOM_MAX = 8;
+
+function updateZoomLabel() {
+  const el = document.getElementById('zoom-label');
+  if (el) el.textContent = Math.round(zoom * 100) + '%';
+}
+
+// Zoom by `factor`, keeping the point at screen position (cx, cy) — the
+// toolbar buttons pass the canvas centre; wheel zoom passes the cursor.
+function zoomBy(factor, cx, cy) {
+  if (cx === undefined) { cx = canvas.width / 2; cy = canvas.height / 2; }
+  const worldX = (cx - panX) / zoom, worldY = (cy - panY) / zoom;
+  zoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, zoom * factor));
+  panX = cx - worldX * zoom;
+  panY = cy - worldY * zoom;
+  updateZoomLabel();
+  render();
+}
+
+function resetView() {
+  zoom = 1; panX = 0; panY = 0;
+  updateZoomLabel();
+  render();
+}
+
+function updateBgNotFoundBanner() {
+  const el = document.getElementById('bg-not-found');
+  if (bgLoadFailed && bgImagePath) {
+    el.textContent = `Background image not found: ${bgImagePath}`;
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+// Attempts to (re)load the background image from `path` (relative to this
+// HTML file, e.g. "assets/my-map.png"), applying `rect` on success and
+// leaving bgLoadFailed set (for the bottom "not found" notice) on failure.
+function loadBgFromPath(path, rect) {
+  bgImagePath = path;
+  if (!path) { bgImage = null; bgLoadFailed = false; updateBgNotFoundBanner(); render(); return; }
+  const img = new Image();
+  img.onload = () => {
+    bgImage = img;
+    bgRect = rect || { x0: 0, y0: 0, x1: 1, y1: 1 };
+    bgLoadFailed = false;
+    updateBgNotFoundBanner();
+    render();
+  };
+  img.onerror = () => {
+    bgImage = null;
+    bgLoadFailed = true;
+    if (rect) bgRect = rect;  // keep the saved position so a later manual re-upload can reuse it
+    updateBgNotFoundBanner();
+    render();
+  };
+  img.src = path;
+}
+
+// Re-encodes the currently-loaded bgImage (however it was loaded — upload or
+// path) into a Blob, by drawing it onto an off-screen canvas. Works regardless
+// of load method since both end up as a plain <img>/Image object.
+function bgImageToBlob(mimeType, callback) {
+  const off = document.createElement('canvas');
+  off.width = bgImage.naturalWidth || bgImage.width;
+  off.height = bgImage.naturalHeight || bgImage.height;
+  off.getContext('2d').drawImage(bgImage, 0, 0);
+  off.toBlob(callback, mimeType);
+}
+
+function bgMimeAndExt() {
+  const m = /\.([a-z0-9]+)$/i.exec(bgImagePath || '');
+  const ext = (m ? m[1] : 'png').toLowerCase();
+  const mime = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', gif: 'image/gif' }[ext] || 'image/png';
+  return { ext, mime };
+}
+
+// Saves a copy of the current background image to assets/, so the path
+// stored in the exported JSON (../assets/<name>) actually resolves. Prefers
+// the File System Access API (Chrome/Edge) for a direct "Save As" into that
+// folder; falls back to a plain download (user must move the file manually)
+// in browsers that don't support it (Firefox, Safari).
+async function saveBackgroundCopy() {
+  if (!bgImage) return;
+  const { ext, mime } = bgMimeAndExt();
+  const currentName = (bgImagePath || '').split('/').pop() || `background.${ext}`;
+
+  bgImageToBlob(mime, async blob => {
+    if (!blob) { alert('Could not encode the background image.'); return; }
+
+    if (window.showSaveFilePicker) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: currentName,
+          types: [{ description: 'Image', accept: { [mime]: ['.' + ext] } }]
+        });
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        bgImagePath = '../assets/' + handle.name;
+        bgLoadFailed = false;
+        updateBgNotFoundBanner();
+        if (document.getElementById('bg-path')) openBackgroundSettingsModal();
+      } catch (err) {
+        if (err.name !== 'AbortError') alert('Save failed: ' + err.message);
+      }
+    } else {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = currentName;
+      a.click();
+      bgImagePath = '../assets/' + currentName;
+      if (document.getElementById('bg-path')) openBackgroundSettingsModal();
+      alert(`Downloaded "${currentName}". Your browser doesn't support saving directly into a folder, so move this file into the repo's assets/ folder yourself for the path to resolve.`);
+    }
+  });
+}
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const r = canvas.getBoundingClientRect();
+  const cx = e.clientX - r.left, cy = e.clientY - r.top;
+  zoomBy(e.deltaY < 0 ? 1.1 : 1 / 1.1, cx, cy);
+}, { passive: false });
+
+// Middle-mouse-button drag pans the view; left-click is reserved for the
+// existing select/addLoc/addPath tools, so this doesn't collide with them.
+canvas.addEventListener('mousedown', e => {
+  if (e.button !== 1) return;
+  e.preventDefault();
+  const r = canvas.getBoundingClientRect();
+  panning = { startScreenX: e.clientX - r.left, startScreenY: e.clientY - r.top, startPanX: panX, startPanY: panY };
+  canvas.style.cursor = 'grabbing';
+});
+window.addEventListener('mousemove', e => {
+  if (!panning) return;
+  const r = canvas.getBoundingClientRect();
+  panX = panning.startPanX + (e.clientX - r.left - panning.startScreenX);
+  panY = panning.startPanY + (e.clientY - r.top - panning.startScreenY);
+  render();
+});
+window.addEventListener('mouseup', e => {
+  if (e.button !== 1 || !panning) return;
+  panning = null;
+  canvas.style.cursor = tool === 'select' ? 'default' : 'crosshair';
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// RENDERING
+// ══════════════════════════════════════════════════════════════════════
+const AGENT_COLORS = ['#8b5cf6','#f59e0b','#10b981','#ef4444','#06b6d4','#ec4899'];
+const LOC_R = 20;
+
+function px(locId) {
+  const p = pos[locId];
+  if (!p) return null;
+  return { x: p.x * canvas.width, y: p.y * canvas.height };
+}
+
+// Coordinate units (same space as loc.coordinates) -> canvas pixels, using
+// the current layoutBounds transform (see recomputeLayout/posToCoordinate).
+function coordToNorm(cx, cy) {
+  const { minX, maxX, minY, maxY, pad } = layoutBounds;
+  const rx = maxX - minX || 1, ry = maxY - minY || 1;
+  return {
+    x: pad + ((cx - minX) / rx) * (1 - 2*pad),
+    y: pad + ((cy - minY) / ry) * (1 - 2*pad)
+  };
+}
+
+function coordToPx(cx, cy) {
+  const n = coordToNorm(cx, cy);
+  return { x: n.x * canvas.width, y: n.y * canvas.height };
+}
+
+function drawGrid() {
+  if (!showGrid || !(gridSpacing > 0)) return;
+  const tl = posToCoordinate({ x: 0, y: 0 });
+  const br = posToCoordinate({ x: 1, y: 1 });
+  const minX = Math.min(tl.x, br.x), maxX = Math.max(tl.x, br.x);
+  const minY = Math.min(tl.y, br.y), maxY = Math.max(tl.y, br.y);
+  const startX = Math.floor(minX / gridSpacing) * gridSpacing;
+  const startY = Math.floor(minY / gridSpacing) * gridSpacing;
+  ctx.save();
+  ctx.strokeStyle = bgImage ? 'rgba(255,255,255,0.35)' : '#e2e8f0';
+  ctx.lineWidth = 1;
+  for (let gx = startX; gx <= maxX; gx += gridSpacing) {
+    const p1 = coordToPx(gx, minY), p2 = coordToPx(gx, maxY);
+    ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+  }
+  for (let gy = startY; gy <= maxY; gy += gridSpacing) {
+    const p1 = coordToPx(minX, gy), p2 = coordToPx(maxX, gy);
+    ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function bgCorners() {
+  const W = canvas.width, H = canvas.height;
+  return {
+    tl: { x: bgRect.x0 * W, y: bgRect.y0 * H },
+    tr: { x: bgRect.x1 * W, y: bgRect.y0 * H },
+    bl: { x: bgRect.x0 * W, y: bgRect.y1 * H },
+    br: { x: bgRect.x1 * W, y: bgRect.y1 * H },
+  };
+}
+
+function bgPxRect() {
+  const W = canvas.width, H = canvas.height;
+  const x0 = bgRect.x0 * W, x1 = bgRect.x1 * W, y0 = bgRect.y0 * H, y1 = bgRect.y1 * H;
+  return { left: Math.min(x0,x1), right: Math.max(x0,x1), top: Math.min(y0,y1), bottom: Math.max(y0,y1) };
+}
+
+function hitBgHandle(x, y) {
+  const HANDLE = 9;
+  const hit = Object.entries(bgCorners()).find(([, c]) => Math.abs(x - c.x) <= HANDLE && Math.abs(y - c.y) <= HANDLE);
+  return hit ? hit[0] : null;
+}
+
+function hitBgBody(x, y) {
+  const r = bgPxRect();
+  return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+}
+
+function drawBgHandles() {
+  const W = canvas.width, H = canvas.height;
+  ctx.save();
+  ctx.setLineDash([6, 4]);
+  ctx.strokeStyle = '#f59e0b';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(bgRect.x0 * W, bgRect.y0 * H, (bgRect.x1 - bgRect.x0) * W, (bgRect.y1 - bgRect.y0) * H);
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#f59e0b';
+  ctx.strokeStyle = 'white';
+  ctx.lineWidth = 2;
+  for (const c of Object.values(bgCorners())) {
+    ctx.beginPath(); ctx.rect(c.x - 7, c.y - 7, 14, 14); ctx.fill(); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function agentEmoji(id) {
+  const l = id.toLowerCase();
+  if (l.includes('drone')) return '🚁';
+  if (l.includes('tractor') || l.includes('vehicle')) return '🚜';
+  if (l.includes('robot')) return '🤖';
+  return '🧑';
+}
+
+function render() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  ctx.save();
+  ctx.translate(panX, panY);
+  ctx.scale(zoom, zoom);
+
+  // Background
+  if (bgImage) {
+    ctx.globalAlpha = 0.85;
+    ctx.drawImage(bgImage, bgRect.x0 * W, bgRect.y0 * H, (bgRect.x1 - bgRect.x0) * W, (bgRect.y1 - bgRect.y0) * H);
+    ctx.globalAlpha = 1;
+  } else {
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(0, 0, W, H);
+  }
+  drawGrid();
+  if (bgResizeMode && bgImage) drawBgHandles();
+
+  // Paths
+  for (const path of state.paths) {
+    const a = px(path.start_location), b = px(path.end_location);
+    if (!a || !b) continue;
+    ctx.save();
+    ctx.setLineDash([6, 4]);
+    if (bgImage) {
+      // Dark outline first so the white dashes stay visible over light patches
+      // of the background image, then the bright white line on top.
+      ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+      ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3;
+    } else {
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 1.8;
+    }
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    ctx.restore();
+  }
+
+  // Hovered task: highlight start=green, end=red
+  if (hovTask) {
+    const t = state.tasks.find(t => t.id === hovTask);
+    if (t) {
+      [t.start_location, t.end_location].forEach((lid, i) => {
+        const p = px(lid); if (!p) return;
+        ctx.save();
+        ctx.beginPath(); ctx.arc(p.x, p.y, LOC_R + 5, 0, Math.PI*2);
+        ctx.fillStyle = i === 0 ? 'rgba(16,185,129,.25)' : 'rgba(239,68,68,.25)';
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+  }
+
+  // Path-drawing preview
+  if (tool === 'addPath' && pathStart) {
+    const a = px(pathStart);
+    if (a) {
+      ctx.save();
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y);
+      if (_mousePos) ctx.lineTo(_mousePos.x, _mousePos.y);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  // Locations
+  for (const loc of state.locations) {
+    const p = px(loc.id); if (!p) continue;
+    const isSel = selLoc === loc.id;
+
+    // Shadow
+    ctx.save();
+    ctx.shadowColor = isSel ? '#f59e0b' : '#3b82f6';
+    ctx.shadowBlur  = isSel ? 12 : 6;
+    ctx.beginPath(); ctx.arc(p.x, p.y, LOC_R, 0, Math.PI*2);
+    ctx.fillStyle = isSel ? '#f59e0b' : '#3b82f6';
+    ctx.fill();
+    ctx.restore();
+
+    ctx.beginPath(); ctx.arc(p.x, p.y, LOC_R, 0, Math.PI*2);
+    ctx.strokeStyle = 'white'; ctx.lineWidth = 2; ctx.stroke();
+
+    // ID inside
+    ctx.fillStyle = 'white'; ctx.font = 'bold 11px system-ui';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(loc.id, p.x, p.y);
+
+    // Description below
+    if (loc.description) {
+      ctx.fillStyle = bgImage ? 'rgba(255,255,255,.95)' : '#374151';
+      ctx.font = '10px system-ui'; ctx.textBaseline = 'top';
+      if (bgImage) {
+        const tw = ctx.measureText(loc.description).width;
+        ctx.fillStyle = 'rgba(0,0,0,.45)';
+        ctx.fillRect(p.x - tw/2 - 3, p.y + LOC_R + 3, tw + 6, 13);
+        ctx.fillStyle = 'white';
+      }
+      ctx.fillText(loc.description, p.x, p.y + LOC_R + 4);
+    }
+  }
+
+  // Agents at initial locations (offset if multiple share a location)
+  const agentsByLoc = {};
+  for (const ag of state.agents) {
+    if (!ag.initial_location) continue;
+    (agentsByLoc[ag.initial_location] = agentsByLoc[ag.initial_location] || []).push(ag);
+  }
+  for (const [locId, ags] of Object.entries(agentsByLoc)) {
+    const p = px(locId); if (!p) continue;
+    ags.forEach((ag, i) => {
+      const angle = (i / ags.length) * Math.PI * 2 - Math.PI / 2;
+      const dist  = ags.length > 1 ? 38 : 34;
+      const ex = p.x + Math.cos(angle) * dist;
+      const ey = p.y + Math.sin(angle) * dist;
+      ctx.font = '18px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(agentEmoji(ag.id), ex, ey);
+      ctx.font = '9px system-ui'; ctx.fillStyle = bgImage ? '#fff' : '#1e293b';
+      ctx.textBaseline = 'top'; ctx.fillText(ag.id, ex, ey + 11);
+    });
+  }
+  ctx.restore();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// MOUSE / DRAG
+// ══════════════════════════════════════════════════════════════════════
+let _mousePos = null;
+
+// Returns WORLD pixel coordinates (same space as px()/bgRect*canvas.width),
+// i.e. the screen position with the current zoom/pan already undone — so
+// every other hit-test/drag function keeps working unmodified at any zoom.
+function canvasXY(e) {
+  const r = canvas.getBoundingClientRect();
+  const sx = e.clientX - r.left, sy = e.clientY - r.top;
+  return { x: (sx - panX) / zoom, y: (sy - panY) / zoom };
+}
+
+function hitLoc(mx, my) {
+  for (const loc of state.locations) {
+    const p = px(loc.id); if (!p) continue;
+    if (Math.hypot(mx - p.x, my - p.y) <= LOC_R + 4) return loc;
+  }
+  return null;
+}
+
+canvas.addEventListener('mousemove', e => {
+  if (panning) return;  // the window-level pan handler owns the view while middle-dragging
+  const {x, y} = canvasXY(e);
+  _mousePos = {x, y};
+  if (bgDragCorner) {
+    const nx = Math.max(0, Math.min(1, x / canvas.width));
+    const ny = Math.max(0, Math.min(1, y / canvas.height));
+    if (bgDragCorner === 'tl') { bgRect.x0 = nx; bgRect.y0 = ny; }
+    if (bgDragCorner === 'tr') { bgRect.x1 = nx; bgRect.y0 = ny; }
+    if (bgDragCorner === 'bl') { bgRect.x0 = nx; bgRect.y1 = ny; }
+    if (bgDragCorner === 'br') { bgRect.x1 = nx; bgRect.y1 = ny; }
+    render(); return;
+  }
+  if (bgDragMove) {
+    const w = bgRect.x1 - bgRect.x0, h = bgRect.y1 - bgRect.y0;
+    const nx0 = (x - bgDragMove.ox) / canvas.width;
+    const ny0 = (y - bgDragMove.oy) / canvas.height;
+    bgRect = { x0: nx0, y0: ny0, x1: nx0 + w, y1: ny0 + h };
+    render(); return;
+  }
+  if (dragging) {
+    pos[dragging.id] = { x: (x - dragging.ox) / canvas.width, y: (y - dragging.oy) / canvas.height };
+    pos[dragging.id].x = Math.max(0.01, Math.min(0.99, pos[dragging.id].x));
+    pos[dragging.id].y = Math.max(0.01, Math.min(0.99, pos[dragging.id].y));
+    render(); return;
+  }
+  if (bgResizeMode && bgImage) {
+    const CURSORS = { tl: 'nwse-resize', br: 'nwse-resize', tr: 'nesw-resize', bl: 'nesw-resize' };
+    const handle = hitBgHandle(x, y);
+    if (handle) { canvas.style.cursor = CURSORS[handle]; return; }
+    if (hitBgBody(x, y)) { canvas.style.cursor = 'move'; return; }
+  }
+  // Tooltip on hover
+  const loc = hitLoc(x, y);
+  const tt = document.getElementById('tooltip');
+  if (loc) {
+    canvas.style.cursor = tool === 'select' ? 'grab' : 'crosshair';
+    const tasks = state.tasks.filter(t => t.start_location === loc.id || t.end_location === loc.id);
+    const agents = state.agents.filter(a => a.initial_location === loc.id);
+    let html = `<b>${loc.id}</b>${loc.description ? ': ' + loc.description : ''}`;
+    if (tasks.length) html += '<br>Tasks: ' + tasks.map(t => t.id).join(', ');
+    if (agents.length) html += '<br>Agents: ' + agents.map(a => a.id).join(', ');
+    tt.innerHTML = html;
+    tt.style.display = 'block';
+    tt.style.left = (e.clientX + 14) + 'px';
+    tt.style.top  = (e.clientY + 14) + 'px';
+  } else {
+    canvas.style.cursor = tool === 'addLoc' ? 'crosshair' : 'default';
+    tt.style.display = 'none';
+  }
+  if (tool === 'addPath') render();
+});
+
+canvas.addEventListener('mouseleave', () => {
+  document.getElementById('tooltip').style.display = 'none';
+  _mousePos = null;
+  render();
+});
+
+canvas.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  const {x, y} = canvasXY(e);
+
+  if (bgResizeMode && bgImage) {
+    const handle = hitBgHandle(x, y);
+    if (handle) { bgDragCorner = handle; return; }
+    if (hitBgBody(x, y)) {
+      const r = bgPxRect();
+      bgDragMove = { ox: x - r.left, oy: y - r.top };
+      return;
+    }
+  }
+
+  const loc = hitLoc(x, y);
+
+  if (tool === 'select') {
+    if (loc) {
+      selLoc = loc.id;
+      const p = px(loc.id);
+      dragging = { id: loc.id, ox: x - p.x, oy: y - p.y };
+      canvas.style.cursor = 'grabbing';
+    } else {
+      selLoc = null;
+    }
+    render();
+  } else if (tool === 'addLoc') {
+    const id = prompt('Location ID (e.g. l8):');
+    if (!id || !id.trim()) return;
+    if (state.locations.find(l => l.id === id.trim())) { alert('ID already exists'); return; }
+    const desc = prompt('Description (optional):') || '';
+    const coords = posToCoordinate({ x: x / canvas.width, y: y / canvas.height });
+    state.locations.push({ id: id.trim(), description: desc, coordinates: coords });
+    recomputeLayout();
+    refreshAll();
+  } else if (tool === 'addPath') {
+    if (!loc) return;
+    if (!pathStart) {
+      pathStart = loc.id;
+      document.getElementById('canvas-hint').textContent = `Click another location to complete the path from ${loc.id}`;
+    } else if (loc.id !== pathStart) {
+      prefillPathForm(pathStart, loc.id);
+      pathStart = null;
+      setTool('select');
+      switchTab('paths');
+    }
+  }
+});
+
+canvas.addEventListener('mouseup', () => {
+  if (bgDragCorner) { bgDragCorner = null; return; }
+  if (bgDragMove) { bgDragMove = null; return; }
+  if (dragging) {
+    const l = state.locations.find(l => l.id === dragging.id);
+    if (l) {
+      l.coordinates = posToCoordinate(pos[dragging.id]);
+      renderLocList();
+    }
+  }
+  dragging = null;
+  canvas.style.cursor = tool === 'select' ? 'default' : 'crosshair';
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// TOOLS
+// ══════════════════════════════════════════════════════════════════════
+const HINTS = {
+  select:  'Drag locations to reposition them',
+  addLoc:  'Click on the map to place a new location',
+  addPath: 'Click a start location, then an end location'
+};
+
+function setTool(t) {
+  tool = t; pathStart = null;
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tool-' + t)?.classList.add('active');
+  document.getElementById('canvas-hint').textContent = HINTS[t];
+  canvas.style.cursor = t === 'select' ? 'default' : 'crosshair';
+}
+
+function prefillPathForm(from, to) {
+  document.getElementById('path-id').value   = from.replace(/\s/g,'') + to.replace(/\s/g,'');
+  document.getElementById('path-from').value = from;
+  document.getElementById('path-to').value   = to;
+  document.getElementById('path-desc').value = `Path from ${from} to ${to}`;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════════════════════
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
+  if (name === 'paths') refreshLocSelects();
+  if (name === 'tasks') refreshLocSelects();
+  if (name === 'agents') refreshLocSelects();
+  if (name === 'constraints') loadConstraintsForm();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// LOCATIONS
+// ══════════════════════════════════════════════════════════════════════
+function addLocation() {
+  const id   = document.getElementById('loc-id').value.trim();
+  const desc = document.getElementById('loc-desc').value.trim();
+  const x    = parseFloat(document.getElementById('loc-x').value) || 0;
+  const y    = parseFloat(document.getElementById('loc-y').value) || 0;
+  if (!id) return;
+  if (state.locations.find(l => l.id === id)) { alert('Location ID already exists'); return; }
+  state.locations.push({ id, description: desc, coordinates: { x, y } });
+  document.getElementById('loc-id').value = '';
+  document.getElementById('loc-desc').value = '';
+  document.getElementById('loc-x').value = '';
+  document.getElementById('loc-y').value = '';
+  recomputeLayout();
+  refreshAll();
+}
+
+function setLocCoordinate(id, axis, val) {
+  const l = state.locations.find(l => l.id === id);
+  if (!l) return;
+  l.coordinates = l.coordinates || { x: 0, y: 0 };
+  l.coordinates[axis] = parseFloat(val) || 0;
+  recomputeLayout();
+  render();
+}
+
+function deleteLocation(id) {
+  if (!confirm(`Delete location "${id}"?`)) return;
+  state.locations = state.locations.filter(l => l.id !== id);
+  delete pos[id];
+  // Clean up references
+  state.paths  = state.paths.filter(p => p.start_location !== id && p.end_location !== id);
+  state.tasks  = state.tasks.filter(t => t.start_location !== id && t.end_location !== id);
+  for (const ag of state.agents) { if (ag.initial_location === id) ag.initial_location = ''; }
+  refreshAll();
+}
+
+function renderLocList() {
+  const el = document.getElementById('loc-list');
+  el.innerHTML = state.locations.map(l => {
+    const c = l.coordinates || { x: 0, y: 0 };
+    return `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">${l.id}</div>
+          <div class="card-sub">${l.description || '—'}</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary btn-sm" onclick="selLoc='${l.id}';render()">Focus</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteLocation('${l.id}')">✕</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <div class="fg"><label>X</label><input type="number" step="any" value="${c.x}" onchange="setLocCoordinate('${l.id}','x',this.value)"></div>
+        <div class="fg"><label>Y</label><input type="number" step="any" value="${c.y}" onchange="setLocCoordinate('${l.id}','y',this.value)"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// PATHS
+// ══════════════════════════════════════════════════════════════════════
+function addPath() {
+  const id   = document.getElementById('path-id').value.trim();
+  const from = document.getElementById('path-from').value;
+  const to   = document.getElementById('path-to').value;
+  const desc = document.getElementById('path-desc').value.trim();
+  if (!id || !from || !to) return;
+  if (state.paths.find(p => p.id === id)) { alert('Path ID already exists'); return; }
+  state.paths.push({ id, start_location: from, end_location: to, path_description: desc });
+  document.getElementById('path-id').value = '';
+  document.getElementById('path-desc').value = '';
+  refreshAll();
+}
+
+function deletePath(id) {
+  state.paths = state.paths.filter(p => p.id !== id);
+  refreshAll();
+}
+
+function renderPathList() {
+  const el = document.getElementById('path-list');
+  el.innerHTML = state.paths.map(p => `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">${p.id}</div>
+          <div class="card-sub">${p.start_location} → ${p.end_location}</div>
+          ${p.path_description ? `<div class="card-sub">${p.path_description}</div>` : ''}
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-danger btn-sm" onclick="deletePath('${p.id}')">✕</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// TASKS
+// ══════════════════════════════════════════════════════════════════════
+function addTask() {
+  const id    = document.getElementById('task-id').value.trim();
+  const start = document.getElementById('task-start').value;
+  const end   = document.getElementById('task-end').value;
+  const desc  = document.getElementById('task-desc').value.trim();
+  const inter = document.getElementById('task-interchangeable').checked;
+  if (!id) return;
+  if (state.tasks.find(t => t.id === id)) { alert('Task ID already exists'); return; }
+  state.tasks.push({ id, start_location: start, end_location: end, start_end_location_interchangeable: inter, ...(desc && { description: desc }) });
+  if (!state.task_graph[id]) state.task_graph[id] = { depends_on: [], dependency_type: 'AND' };
+  document.getElementById('task-id').value = '';
+  document.getElementById('task-desc').value = '';
+  document.getElementById('task-interchangeable').checked = false;
+  refreshAll();
+}
+
+function deleteTask(id) {
+  state.tasks = state.tasks.filter(t => t.id !== id);
+  delete state.task_graph[id];
+  for (const k of Object.keys(state.task_graph)) {
+    state.task_graph[k].depends_on = state.task_graph[k].depends_on.filter(d => d !== id);
+  }
+  refreshAll();
+}
+
+function renderTaskList() {
+  const el = document.getElementById('task-list');
+  const concreteHtml = state.tasks.map(t => {
+    const g = state.task_graph[t.id] || {};
+    return `
+    <div class="card" onmouseenter="hovTask='${t.id}';render()" onmouseleave="hovTask=null;render()">
+      <div class="card-header">
+        <div>
+          <div class="card-title">${t.id}</div>
+          <div class="card-sub">${t.start_location || '?'} → ${t.end_location || '?'}</div>
+          ${t.description ? `<div class="card-sub">${t.description}</div>` : ''}
+          <div style="margin-top:4px">
+            <span class="tag tag-blue">${g.dependency_type || 'AND'}</span>
+            ${t.start_end_location_interchangeable ? '<span class="tag tag-amber">⇄ interchangeable</span>' : ''}
+            ${(g.depends_on||[]).map(d => `<span class="tag">${d}</span>`).join('')}
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary btn-sm" onclick="openTaskEditModal('${t.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteTask('${t.id}')">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Virtual tasks: task_graph entries with no matching concrete task — no
+  // location/agent of their own, always OR, depends_on = the alternatives.
+  const virtualIds = Object.keys(state.task_graph).filter(id => isVirtual(id));
+  const virtualHtml = virtualIds.map(id => {
+    const g = state.task_graph[id] || { depends_on: [] };
+    return `
+    <div class="card" style="border-color:#fb923c">
+      <div class="card-header">
+        <div>
+          <div class="card-title">${id}</div>
+          <div class="card-sub">Virtual — choose one alternative</div>
+          <div style="margin-top:4px">
+            <span class="tag tag-amber">VIRTUAL · OR</span>
+            ${(g.depends_on||[]).length ? (g.depends_on||[]).map(d => `<span class="tag">${d}</span>`).join('') : '<span class="tag" style="color:#ef4444">no alternatives set!</span>'}
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary btn-sm" onclick="openVirtualNodeEditModal('${id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteTask('${id}')">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = concreteHtml + (virtualIds.length ? `<div class="sec-title" style="margin:6px 0 2px">Virtual Tasks</div>${virtualHtml}` : '');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// AGENTS
+// ══════════════════════════════════════════════════════════════════════
+function addAgent() {
+  const id   = document.getElementById('agent-id').value.trim();
+  const desc = document.getElementById('agent-desc').value.trim();
+  const loc  = document.getElementById('agent-init-loc').value;
+  if (!id) return;
+  if (state.agents.find(a => a.id === id)) { alert('Agent ID already exists'); return; }
+  state.agents.push({ id, description: desc, initial_location: loc, tasks: [], travel: [] });
+  document.getElementById('agent-id').value = '';
+  document.getElementById('agent-desc').value = '';
+  refreshAll();
+}
+
+function deleteAgent(id) {
+  if (!confirm(`Delete agent "${id}"?`)) return;
+  state.agents = state.agents.filter(a => a.id !== id);
+  refreshAll();
+}
+
+function renderAgentList() {
+  const el = document.getElementById('agent-list');
+  el.innerHTML = state.agents.map(ag => `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">${agentEmoji(ag.id)} ${ag.id}</div>
+          <div class="card-sub">${ag.description || ''}</div>
+          <div class="card-sub">Initial: <b>${ag.initial_location || '—'}</b></div>
+          <div style="margin-top:4px">${(ag.tasks||[]).map(t=>`<span class="tag tag-green">${t.id}</span>`).join('')}</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary btn-sm" onclick="openAgentModal('${ag.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteAgent('${ag.id}')">✕</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// CONSTRAINTS
+// ══════════════════════════════════════════════════════════════════════
+function loadConstraintsForm() {
+  const c = state.constraints;
+  document.getElementById('c-max-dur').value     = c.max_duration ?? 100;
+  document.getElementById('c-mission-prob').value = c.mission_probability_of_success ?? 0.95;
+  document.getElementById('c-min-prob').value    = c.min_assignment_probability ?? 0.5;
+
+  const allIds = [...new Set([...state.tasks.map(t=>t.id), ...Object.keys(state.task_graph)])];
+  const targets = c.tasks_to_be_completed || [];
+  const el = document.getElementById('c-targets-list');
+  el.innerHTML = allIds.length ? allIds.map(id => `
+    <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#94a3b8;text-transform:none;letter-spacing:normal;width:100%;padding:3px 0">
+      <input type="checkbox" ${targets.includes(id)?'checked':''} onchange="toggleTarget('${id}',this.checked)">
+      ${id}${isVirtual(id) ? ' <span class="tag tag-amber">virtual</span>' : ''}
+    </label>`).join('') : '<span style="color:#64748b;font-size:11px">No tasks defined yet</span>';
+}
+function updateConstraint(key, val) { state.constraints[key] = val; }
+function toggleTarget(id, checked) {
+  const targets = new Set(state.constraints.tasks_to_be_completed || []);
+  if (checked) targets.add(id); else targets.delete(id);
+  state.constraints.tasks_to_be_completed = [...targets];
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════════════════════════════════════
+function openModal(html) {
+  document.getElementById('modal-inner').innerHTML = html;
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal-bg').classList.remove('open');
+  refreshAll();
+}
+function bgClick(e) { if (e.target === document.getElementById('modal-bg')) closeModal(); }
+
+// Task edit modal (locations + dependencies)
+function openTaskEditModal(tid) {
+  const t = state.tasks.find(t => t.id === tid);
+  if (!t) return;
+  if (!state.task_graph[tid]) state.task_graph[tid] = { depends_on: [], dependency_type: 'AND' };
+  const g = state.task_graph[tid];
+  // Concrete tasks (agent-assignable, real start/end locations) must always
+  // combine dependencies with AND — "OR" is reserved for virtual tasks. Self-
+  // correct here in case bad data (e.g. an old import) set it otherwise.
+  g.dependency_type = 'AND';
+  const locOpts = state.locations.map(l => `<option value="${l.id}" ${l.id===t.start_location?'selected':''}>${l.id}</option>`).join('');
+  const locOptsE = state.locations.map(l => `<option value="${l.id}" ${l.id===t.end_location?'selected':''}>${l.id}</option>`).join('');
+  const allTaskIds = [...new Set([...state.tasks.map(t=>t.id), ...Object.keys(state.task_graph)])].filter(id => id !== tid);
+  const depsHtml = allTaskIds.map(id => `
+    <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#94a3b8;padding:3px 0">
+      <input type="checkbox" ${g.depends_on.includes(id)?'checked':''} onchange="toggleDep('${tid}','${id}',this.checked)">
+      ${id}
+    </label>`).join('');
+
+  openModal(`
+    <h2>Edit Task: ${tid}</h2>
+    <div class="fg"><label>Start Location</label>
+      <select id="te-start" onchange="state.tasks.find(t=>t.id==='${tid}').start_location=this.value;render()">${locOpts}</select>
+    </div>
+    <div class="fg"><label>End Location</label>
+      <select id="te-end" onchange="state.tasks.find(t=>t.id==='${tid}').end_location=this.value;render()">${locOptsE}</select>
+    </div>
+    <div class="fg"><label>Description</label>
+      <input value="${t.description||''}" oninput="state.tasks.find(t=>t.id==='${tid}').description=this.value">
+    </div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#94a3b8">
+      <input type="checkbox" ${t.start_end_location_interchangeable?'checked':''} onchange="state.tasks.find(t=>t.id==='${tid}').start_end_location_interchangeable=this.checked">
+      Start/end interchangeable
+    </label>
+    <div style="margin-top:4px">
+      <div class="sec-title" style="margin-bottom:6px">Dependencies</div>
+      <p style="font-size:10px;color:#64748b;margin-bottom:6px">Concrete tasks always combine dependencies with <b>AND</b> (must-finish-first). To model "either of these" alternatives, use a virtual task instead.</p>
+      <div style="max-height:160px;overflow-y:auto;background:#12161f;border-radius:6px;padding:8px">${depsHtml||'<span style="color:#64748b;font-size:11px">No other tasks defined yet</span>'}</div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-primary" onclick="closeModal()">Done</button></div>
+  `);
+}
+
+function toggleDep(tid, dep, checked) {
+  if (!state.task_graph[tid]) state.task_graph[tid] = { depends_on: [], dependency_type: 'AND' };
+  const g = state.task_graph[tid];
+  if (checked && !g.depends_on.includes(dep)) g.depends_on.push(dep);
+  if (!checked) g.depends_on = g.depends_on.filter(d => d !== dep);
+}
+
+// Virtual tasks have no agent/location of their own — their depends_on IS the
+// list of concrete alternatives to choose exactly one of, always via OR.
+function isVirtual(id) {
+  return !state.tasks.find(t => t.id === id);
+}
+
+function openVirtualNodeEditModal(vid) {
+  if (!state.task_graph[vid]) state.task_graph[vid] = { depends_on: [], dependency_type: 'OR' };
+  const g = state.task_graph[vid];
+  g.dependency_type = 'OR'; // always OR for virtual tasks — no dropdown needed
+  const allTaskIds = [...new Set([...state.tasks.map(t=>t.id), ...Object.keys(state.task_graph)])].filter(id => id !== vid);
+  const depsHtml = allTaskIds.map(id => `
+    <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#94a3b8;padding:3px 0">
+      <input type="checkbox" ${g.depends_on.includes(id)?'checked':''} onchange="toggleDep('${vid}','${id}',this.checked)">
+      ${id}
+    </label>`).join('');
+
+  openModal(`
+    <h2>Edit Virtual Task: ${vid}</h2>
+    <p style="font-size:11px;color:#64748b;margin-bottom:8px">Virtual tasks have no location or agent of their own. Check the concrete alternatives below — exactly one will be chosen at solve time (combinator is always <b>OR</b>).</p>
+    <div style="max-height:200px;overflow-y:auto;background:#12161f;border-radius:6px;padding:8px">${depsHtml||'<span style="color:#64748b;font-size:11px">No other tasks defined yet</span>'}</div>
+    <div class="modal-actions"><button class="btn btn-primary" onclick="closeModal()">Done</button></div>
+  `);
+}
+
+function editTaskOrVirtual(id) {
+  if (isVirtual(id)) openVirtualNodeEditModal(id);
+  else openTaskEditModal(id);
+}
+
+// Task graph modal (for virtual nodes)
+function openTaskGraphModal() {
+  const allIds = [...new Set([...state.tasks.map(t=>t.id), ...Object.keys(state.task_graph)])];
+  const rows = allIds.map(id => {
+    const g = state.task_graph[id] || { depends_on: [], dependency_type: isVirtual(id) ? 'OR' : 'AND' };
+    return `<div class="sub-item"><div class="sub-item-content">
+      <b>${id}</b> <span class="tag ${isVirtual(id)?'tag-amber':'tag-blue'}">${isVirtual(id) ? 'VIRTUAL · OR' : 'AND'}</span><br>
+      <span style="font-size:10px;color:#64748b">→ ${g.depends_on.join(', ')||'(none)'}</span>
+    </div>
+    <button class="btn btn-secondary btn-sm" onclick="closeModal();editTaskOrVirtual('${id}')">Edit</button>
+    </div>`;
+  }).join('');
+  openModal(`
+    <h2>Task Graph</h2>
+    <p style="font-size:11px;color:#64748b;margin-bottom:8px">Click Edit on any task to modify its dependencies. Add virtual nodes (abstract groupings) below.</p>
+    <div class="sub-list">${rows}</div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <input id="vnode-id" class="fg" placeholder="Virtual node ID (e.g. Deliver_Box1)" style="background:#0f1117;border:1px solid #374151;border-radius:4px;padding:5px 8px;color:#e2e8f0;flex:1">
+      <button class="btn btn-secondary btn-sm" onclick="addVirtualNode()">Add</button>
+    </div>
+    <div class="modal-actions"><button class="btn btn-primary" onclick="closeModal()">Close</button></div>
+  `);
+}
+
+// Shared validation for creating a virtual node (id with no concrete task
+// behind it — see isVirtual()). Returns true if created, false if rejected.
+function createVirtualNode(id) {
+  if (!id) return false;
+  if (state.task_graph[id] || state.tasks.find(t => t.id === id)) { alert('A task with this ID already exists'); return false; }
+  state.task_graph[id] = { depends_on: [], dependency_type: 'OR' };
+  return true;
+}
+
+function addVirtualNode() {
+  const id = document.getElementById('vnode-id').value.trim();
+  if (!createVirtualNode(id)) return;
+  document.getElementById('vnode-id').value = '';
+  openTaskGraphModal(); // refresh
+}
+
+// "Add Virtual Task" form in the Tasks sidebar — same underlying node as
+// addVirtualNode(), just reachable without opening the Task Graph modal.
+function addVirtualTaskSidebar() {
+  const id = document.getElementById('vtask-id').value.trim();
+  if (!createVirtualNode(id)) return;
+  document.getElementById('vtask-id').value = '';
+  refreshAll();
+  openVirtualNodeEditModal(id); // jump straight to picking its alternatives
+}
+
+// Background settings modal: grid spacing/visibility, and enabling the
+// background image's 4 corner resize handles.
+function applyBgSize() {
+  const x = parseFloat(document.getElementById('bg-x').value) || 0;
+  const y = parseFloat(document.getElementById('bg-y').value) || 0;
+  const w = parseFloat(document.getElementById('bg-w').value) || 1;
+  const h = parseFloat(document.getElementById('bg-h').value) || 1;
+  const tl = coordToNorm(x, y);
+  const br = coordToNorm(x + w, y + h);
+  bgRect = { x0: tl.x, y0: tl.y, x1: br.x, y1: br.y };
+  render();
+}
+
+function openBackgroundSettingsModal() {
+  const tlCoord = bgImage ? posToCoordinate({ x: bgRect.x0, y: bgRect.y0 }) : { x: 0, y: 0 };
+  const brCoord = bgImage ? posToCoordinate({ x: bgRect.x1, y: bgRect.y1 }) : { x: 1, y: 1 };
+  const bgSizeFields = bgImage ? `
+    <div class="sec-title" style="margin-top:6px">Background Position &amp; Size (same units as location X/Y)</div>
+    <div class="row">
+      <div class="fg"><label>X</label><input type="number" step="any" id="bg-x" value="${tlCoord.x}" oninput="applyBgSize()"></div>
+      <div class="fg"><label>Y</label><input type="number" step="any" id="bg-y" value="${tlCoord.y}" oninput="applyBgSize()"></div>
+    </div>
+    <div class="row">
+      <div class="fg"><label>Width</label><input type="number" step="any" id="bg-w" value="${(brCoord.x - tlCoord.x).toFixed(2)}" oninput="applyBgSize()"></div>
+      <div class="fg"><label>Height</label><input type="number" step="any" id="bg-h" value="${(brCoord.y - tlCoord.y).toFixed(2)}" oninput="applyBgSize()"></div>
+    </div>
+    <p style="font-size:10px;color:#64748b">Or drag the corner handles on the canvas directly, when enabled below.</p>
+  ` : '';
+  openModal(`
+    <h2>Background Settings</h2>
+    <div class="fg"><label>Background Image Path</label>
+      <input type="text" id="bg-path" placeholder="../assets/my-map.png" value="${bgImagePath}">
+    </div>
+    <p style="font-size:10px;color:#64748b;margin-top:-4px">
+      Resolved relative to <b>this HTML file's own folder</b> (<code>static_ui/</code>) on
+      import — since <code>assets/</code> is a sibling folder, not a child, paths need
+      to start with <code>../</code>, e.g. <code>../assets/my-map.png</code>.
+      A file you pick below only gives its bare filename, not a full path.
+    </p>
+    <div class="form-actions" style="justify-content:flex-start;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" onclick="loadBgFromPath(document.getElementById('bg-path').value, bgRect);openBackgroundSettingsModal()">Load from this path</button>
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('bg-upload').click()">🖼 Upload image…</button>
+      ${bgImage ? `<button class="btn btn-secondary btn-sm" onclick="saveBackgroundCopy()">💾 Save a copy to assets/</button>` : ''}
+    </div>
+    ${bgLoadFailed ? `<p style="font-size:10px;color:#ef4444">⚠ Could not load image from "${bgImagePath}".</p>` : ''}
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#94a3b8">
+      <input type="checkbox" ${showGrid?'checked':''} onchange="showGrid=this.checked;render()">
+      Show grid
+    </label>
+    <div class="fg"><label>Grid Spacing (same units as location X/Y)</label>
+      <input type="number" step="any" min="0.01" value="${gridSpacing}" oninput="gridSpacing=parseFloat(this.value)||0.1;render()">
+    </div>
+    ${bgSizeFields}
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#94a3b8">
+      <input type="checkbox" ${bgResizeMode?'checked':''} ${bgImage?'':'disabled'} onchange="bgResizeMode=this.checked;render()">
+      Enable background image resize handles${bgImage?'':' (upload a background image first)'}
+    </label>
+    ${bgResizeMode && bgImage ? '<p style="font-size:10px;color:#64748b">Drag a corner handle to resize, or drag anywhere inside the image to move it.</p>' : ''}
+    ${bgImage ? `<button class="btn btn-secondary btn-sm" onclick="bgRect={x0:0,y0:0,x1:1,y1:1};openBackgroundSettingsModal()">Reset image to full canvas</button>` : ''}
+    <div class="modal-actions"><button class="btn btn-primary" onclick="closeModal()">Done</button></div>
+  `);
+}
+
+// Agent modal
+function openAgentModal(agId) {
+  const ag = state.agents.find(a => a.id === agId);
+  if (!ag) return;
+
+  const locOpts = state.locations.map(l => `<option value="${l.id}" ${l.id===ag.initial_location?'selected':''}>${l.id} – ${l.description||''}</option>`).join('');
+  const taskCapabilities = (ag.tasks || []);
+  const travelList = (ag.travel || []);
+
+  const allTaskIds = state.tasks.map(t => t.id);
+  const assignedIds = taskCapabilities.map(t => t.id);
+
+  const numField = (agId, i, field, value, w, step, min, max) => `
+    <input type="number" step="${step}" ${min!==undefined?`min="${min}"`:''} ${max!==undefined?`max="${max}"`:''}
+      value="${value}" style="background:#0f1117;border:1px solid #374151;border-radius:4px;padding:3px 5px;color:#e2e8f0;font-size:10px;width:${w}px"
+      onchange="setAgentTaskField('${agId}',${i},'${field}',this.value)">`;
+
+  const taskRows = taskCapabilities.map((t, i) => `
+    <div class="sub-item">
+      <div class="sub-item-content">
+        <b>${t.id}</b>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap">
+          <label style="font-size:10px;color:#64748b">dur (min) ${numField(agId,i,'duration',t.duration,60,'1',0)}</label>
+          <label style="font-size:10px;color:#64748b">fatigue ${numField(agId,i,'fatigue',t.fatigue??0,60,'any')}</label>
+          <label style="font-size:10px;color:#64748b">p(success) ${numField(agId,i,'probability_of_success',t.probability_of_success??1,60,'0.01',0,1)}</label>
+          <label style="font-size:10px;color:#64748b">retries ${numField(agId,i,'number_of_retries',t.number_of_retries??1,50,'1',0)}</label>
+        </div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="removeAgentTask('${agId}',${i});openAgentModal('${agId}')">✕</button>
+    </div>`).join('');
+
+  // Each field is its own label+input column (rather than a separate header
+  // row above a separate input row) so that in the narrow sidebar, flex-wrap
+  // keeps a label glued to its own field instead of the two rows wrapping
+  // independently and drifting out of alignment.
+  const miniLbl = 'font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.04em';
+  const miniInput = 'background:#0f1117;border:1px solid #374151;border-radius:4px;padding:4px 6px;color:#e2e8f0;font-size:11px;width:100%';
+  const atCol = (label, w, inner) => `
+    <div style="display:flex;flex-direction:column;gap:2px;width:${w}">
+      <span style="${miniLbl}">${label}</span>
+      ${inner}
+    </div>`;
+
+  const unassigned = allTaskIds.filter(id => !assignedIds.includes(id));
+  const addTaskRow = unassigned.length ? `
+    <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;align-items:flex-end">
+      ${atCol('Task', '110px', `<select id="at-task" style="${miniInput}">${unassigned.map(id=>`<option>${id}</option>`).join('')}</select>`)}
+      ${atCol('Dur (min)', '70px', `<input id="at-dur" type="number" min="0" style="${miniInput}">`)}
+      ${atCol('Fatigue', '65px', `<input id="at-fatigue" type="number" step="any" value="0" style="${miniInput}">`)}
+      ${atCol('P(success)', '75px', `<input id="at-prob" type="number" min="0" max="1" step="0.01" value="1" style="${miniInput}">`)}
+      ${atCol('Retries', '60px', `<input id="at-retries" type="number" min="0" step="1" value="1" style="${miniInput}">`)}
+      <button class="btn btn-secondary btn-sm" onclick="assignAgentTask('${agId}');openAgentModal('${agId}')">+ Assign</button>
+    </div>` : `<div class="card-sub" style="margin-top:4px">All tasks assigned.</div>`;
+
+  const travelRows = travelList.map((tr, i) => `
+    <div class="sub-item">
+      <div class="sub-item-content"><b>${tr.id}</b>  <span style="font-size:10px;color:#94a3b8">${tr.duration} min</span></div>
+      <button class="btn btn-danger btn-sm" onclick="removeAgentTravel('${agId}',${i});openAgentModal('${agId}')">✕</button>
+    </div>`).join('');
+
+  const pathOpts = state.paths.map(p => `<option value="${p.id}">${p.id} (${p.start_location}↔${p.end_location})</option>`).join('');
+  const addTravelRow = pathOpts ? `
+    <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap">
+      <select id="atr-path" style="background:#0f1117;border:1px solid #374151;border-radius:4px;padding:4px 6px;color:#e2e8f0;font-size:11px;flex:1">${pathOpts}</select>
+      <input id="atr-dur" type="number" min="0" placeholder="dur (min)" style="background:#0f1117;border:1px solid #374151;border-radius:4px;padding:4px 6px;color:#e2e8f0;font-size:11px;width:90px">
+      <button class="btn btn-secondary btn-sm" onclick="assignAgentTravel('${agId}');openAgentModal('${agId}')">+ Add</button>
+    </div>` : '';
+
+  openModal(`
+    <h2>${agentEmoji(agId)} ${agId}</h2>
+    <div class="fg"><label>Description</label>
+      <input value="${ag.description||''}" oninput="state.agents.find(a=>a.id==='${agId}').description=this.value">
+    </div>
+    <div class="fg"><label>Initial Location</label>
+      <select onchange="state.agents.find(a=>a.id==='${agId}').initial_location=this.value;render()">${locOpts}</select>
+    </div>
+    <div class="sec-title" style="margin-top:6px;margin-bottom:4px">Task Capabilities</div>
+    <div class="sub-list">${taskRows}</div>
+    ${addTaskRow}
+    <div class="sec-title" style="margin-top:10px;margin-bottom:4px">Travel Times</div>
+    <div class="sub-list">${travelRows}</div>
+    ${addTravelRow}
+    <div class="modal-actions"><button class="btn btn-primary" onclick="closeModal()">Done</button></div>
+  `);
+}
+
+function removeAgentTask(agId, idx) {
+  const ag = state.agents.find(a => a.id === agId);
+  if (ag) ag.tasks.splice(idx, 1);
+}
+function setAgentTaskField(agId, idx, field, value) {
+  const ag = state.agents.find(a => a.id === agId); if (!ag) return;
+  const t = ag.tasks[idx]; if (!t) return;
+  t[field] = (field === 'duration' || field === 'number_of_retries') ? (parseInt(value) || 0) : (parseFloat(value) || 0);
+}
+function assignAgentTask(agId) {
+  const ag = state.agents.find(a => a.id === agId); if (!ag) return;
+  const id = document.getElementById('at-task').value;
+  const dur = parseInt(document.getElementById('at-dur').value) || 0;
+  const fatigue = parseFloat(document.getElementById('at-fatigue').value) || 0;
+  const prob = document.getElementById('at-prob').value;
+  const probability_of_success = prob === '' ? 1.0 : (parseFloat(prob) || 0);
+  const retries = document.getElementById('at-retries').value;
+  const number_of_retries = retries === '' ? 1 : (parseInt(retries) || 0);
+  if (ag.tasks.find(t => t.id === id)) return;
+  ag.tasks.push({ id, duration: dur, fatigue, probability_of_success, number_of_retries });
+}
+function removeAgentTravel(agId, idx) {
+  const ag = state.agents.find(a => a.id === agId);
+  if (ag) ag.travel.splice(idx, 1);
+}
+function assignAgentTravel(agId) {
+  const ag = state.agents.find(a => a.id === agId); if (!ag) return;
+  const id = document.getElementById('atr-path').value;
+  const dur = parseInt(document.getElementById('atr-dur').value) || 0;
+  if (ag.travel.find(t => t.id === id)) { ag.travel.find(t=>t.id===id).duration = dur; return; }
+  ag.travel.push({ id, duration: dur });
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// REFRESH ALL PANELS
+// ══════════════════════════════════════════════════════════════════════
+function refreshLocSelects() {
+  const locOpts = ['<option value="">—</option>', ...state.locations.map(l => `<option value="${l.id}">${l.id} – ${l.description||''}</option>`)].join('');
+  ['path-from','path-to','task-start','task-end','agent-init-loc'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.innerHTML = locOpts;
+  });
+}
+
+function refreshAll() {
+  renderLocList();
+  renderPathList();
+  renderTaskList();
+  renderAgentList();
+  refreshLocSelects();
+  render();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// IMPORT / EXPORT
+// ══════════════════════════════════════════════════════════════════════
+document.getElementById('json-import').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      loadData(data);
+    } catch(err) { alert('Invalid JSON: ' + err.message); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+function loadData(data) {
+  state.locations  = data.locations   || [];
+  state.paths      = data.paths       || [];
+  state.tasks      = data.tasks       || [];
+  state.task_graph = data.task_graph  || {};
+  state.agents     = data.agents      || [];
+  state.constraints = { ...state.constraints, ...(data.constraints || {}) };
+
+  // Normalise agent tasks: support flat fields fallback
+  for (const ag of state.agents) {
+    ag.tasks = (ag.tasks || []).map(t => {
+      const dur = t.duration || t.metric_values?.duration || t.metric_values?.duration_direct || 0;
+      return { ...t, duration: dur };
+    });
+  }
+
+  // Sanitise dependency_type against the concrete/virtual split — imported
+  // data may predate this rule (concrete tasks must be AND, virtual OR).
+  for (const id of Object.keys(state.task_graph)) {
+    state.task_graph[id].dependency_type = isVirtual(id) ? 'OR' : 'AND';
+  }
+
+  // Background image: attempt to reload it from the saved path, applying the
+  // saved rect on success or showing the "not found" notice on failure.
+  if (data.background && data.background.path) {
+    loadBgFromPath(data.background.path, data.background.rect);
+  } else {
+    bgImage = null; bgImagePath = ''; bgLoadFailed = false;
+    bgRect = { x0: 0, y0: 0, x1: 1, y1: 1 };
+    updateBgNotFoundBanner();
+  }
+
+  recomputeLayout();
+  refreshAll();
+  loadConstraintsForm();
+}
+
+// layoutBounds records the coordinate→canvas normalisation currently in
+// effect, so canvas drags can be converted back into the same coordinate
+// units the user typed (or imported) rather than an arbitrary 0–100 scale.
+let layoutBounds = { minX: 0, maxX: 1, minY: 0, maxY: 1, pad: 0.12 };
+
+// Recompute every location's canvas position from its coordinates. Unlike
+// the old one-shot autoLayout(), this always re-derives pos so that typing
+// an exact X/Y in the sidebar (or adding a new location) repositions it
+// immediately, keeping coordinates as the single source of truth.
+function recomputeLayout() {
+  const locs = state.locations;
+  if (!locs.length) return;
+  const xs = locs.map(l => l.coordinates?.x ?? 0);
+  const ys = locs.map(l => l.coordinates?.y ?? 0);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const rx = maxX - minX || 1, ry = maxY - minY || 1;
+  const pad = 0.12;
+  layoutBounds = { minX, maxX: minX + rx, minY, maxY: minY + ry, pad };
+  for (const loc of locs) {
+    const x = loc.coordinates?.x ?? 0;
+    const y = loc.coordinates?.y ?? 0;
+    pos[loc.id] = {
+      x: pad + ((x - minX) / rx) * (1 - 2*pad),
+      y: pad + ((y - minY) / ry) * (1 - 2*pad)
+    };
+  }
+}
+
+// Inverse of recomputeLayout()'s transform: canvas-normalised pos -> the
+// same coordinate units as loc.coordinates, so dragging on the canvas
+// updates the authoritative coordinates (and the sidebar X/Y fields).
+function posToCoordinate(p) {
+  const { minX, maxX, minY, maxY, pad } = layoutBounds;
+  const rx = maxX - minX || 1, ry = maxY - minY || 1;
+  return {
+    x: parseFloat((minX + ((p.x - pad) / (1 - 2*pad)) * rx).toFixed(2)),
+    y: parseFloat((minY + ((p.y - pad) / (1 - 2*pad)) * ry).toFixed(2))
+  };
+}
+
+// Shared by exportJSON() (download) and useThisProblem() (send to the host app) so the
+// two never drift apart.
+function buildExportObject() {
+  return {
+    _comment: 'Locations',
+    locations:   state.locations,
+    paths:       state.paths,
+    _comment2:   'Tasks — start/end_location are the agent\'s physical start and end of each task',
+    tasks:       state.tasks,
+    task_graph:  state.task_graph,
+    _comment3:   'Agents',
+    agents:      state.agents,
+    constraints: state.constraints,
+    _comment4:   'Background image shown in the editor canvas — not used by the solver. ' +
+                 '"path" is resolved relative to planning_editor.html on import; if it ' +
+                 'cannot be loaded there, the editor shows a small "not found" notice but ' +
+                 'keeps "rect" so re-uploading the same image snaps back into position.',
+    background:  bgImagePath ? { path: bgImagePath, rect: bgRect } : null
+  };
+}
+
+// When embedded in the host app's Visual Editor popup, "Export" asks for a name and saves
+// the problem server-side (like the host's own "Select a Different File" button does),
+// then loads the result straight into the host's "JSON File Path" box - see the
+// "export-json" handling near the bottom of this file. Opened standalone (no host to save
+// through), it falls back to a plain browser download instead.
+function exportJSON() {
+  if (window.parent && window.parent !== window) {
+    const name = prompt('File name (no extension - a random suffix will be appended):', 'planning_problem');
+    if (!name || !name.trim()) return;
+    window.parent.postMessage({ type: 'export-json', filename: name.trim(), data: buildExportObject() }, window.location.origin);
+    return;
+  }
+  const out = buildExportObject();
+  const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'planning_problem.json';
+  a.click();
+}
+
+// Sends the current problem to the host app (the Create Problem page's Visual Editor
+// popup), which uploads it and fills in the "JSON File Path" box. Only meaningful when
+// this page is embedded in an iframe with a listening parent - see the "load-json" /
+// "editor-ready" handling near the bottom of this file.
+function useThisProblem() {
+  if (!window.parent || window.parent === window) {
+    alert('This button only works when the editor is opened from the planner\'s "Create New Problem" page. Use "Export JSON" to save a file instead.');
+    return;
+  }
+  window.parent.postMessage({ type: 'use-problem', data: buildExportObject() }, window.location.origin);
+}
+
+// Background image. Browsers never expose a <input type=file>'s real
+// filesystem path for security reasons — only file.name (bare filename, no
+// directory) — so that's used as a starting guess for bgImagePath. Fix it to
+// a proper relative path (e.g. "assets/my-map.png") in Background Settings
+// if you want the background to survive export → re-import.
+document.getElementById('bg-upload').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      bgImage = img;
+      // Guess the conventional location: planning_editor.html lives in static_ui/,
+      // sibling to assets/, so this is the path that'll actually resolve once a
+      // copy is saved there (via "Save a copy to assets/" below, or manually).
+      bgImagePath = '../assets/' + file.name;
+      bgLoadFailed = false;
+      bgRect = { x0: 0, y0: 0, x1: 1, y1: 1 };
+      updateBgNotFoundBanner();
+      render();
+      if (document.getElementById('bg-path')) openBackgroundSettingsModal();  // refresh the open modal, if any
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// HOST APP INTEGRATION (postMessage, when embedded in an iframe)
+// ══════════════════════════════════════════════════════════════════════
+// Host -> editor: {type: 'load-json', data} to pre-load an existing problem.
+window.addEventListener('message', (event) => {
+  if (!event.data || event.data.type !== 'load-json') return;
+  try {
+    loadData(event.data.data);
+  } catch (err) {
+    console.error('[VisualEditor] Failed to load JSON from host app:', err);
+  }
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════════════
+resizeCanvas();
+refreshAll();
+loadConstraintsForm();
+
+// Load example data automatically if available (nice onboarding)
+// Users can always import their own JSON
+
+// Editor -> host: {type: 'editor-ready'}, now that init above has fully finished, so the
+// host knows it's safe to postMessage a 'load-json' back in.
+if (window.parent && window.parent !== window) {
+  window.parent.postMessage({ type: 'editor-ready' }, window.location.origin);
+}
+</script>
+</body>
+</html>

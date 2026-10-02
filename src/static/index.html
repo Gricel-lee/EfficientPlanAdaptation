@@ -44,14 +44,22 @@
                     <div class="mb-4">
                         <label for="user-type" class="block text-gray-700 text-sm font-bold mb-2">Select User
                             Role:</label>
-                        <select id="user-type" name="user_type"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                            <option value="researcher">Researcher</option>
-                            <option value="practitioner">Industry</option>
-                            <option value="policy-maker">Policy Maker</option>
-                            <option value="non-expert">Non-expert (none of the above)</option>
+                        <div class="relative">
+                            <select id="user-type" name="user_type"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 pr-8 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                <option value="researcher">Researcher</option>
+                                <option value="practitioner">Industry</option>
+                                <option value="policy-maker">Policy Maker</option>
+                                <option value="non-expert">Non-expert (none of the above)</option>
 
-                        </select>
+                            </select>
+                            <svg class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -72,7 +80,7 @@
                             Path:</label>
                         <input type="text" id="problem-json-path" name="json_file_path"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-mono"
-                            value="../assets/planningProblem/Test-examples/example.json" required>
+                            value="../assets/planningProblem/Test-examples/uc_agr3.json" required>
 
                         <input type="file" id="json-file-selector" class="hidden" accept=".json">
 
@@ -82,6 +90,10 @@
                         </button>
                     </div>
                     <div class="flex items-center justify-end">
+                        <button type="button" id="open-visual-editor-btn"
+                            class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 mr-2">
+                            🗺️ Visual Problem Editor
+                        </button>
                         <button type="submit" id="create-problem-btn"
                             class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed">
                             Create Problem
@@ -147,6 +159,7 @@
                     const jsonFileSelector = document.getElementById('json-file-selector');
                     const browseFileBtn = document.getElementById('browse-file-btn');
                     const createProblemBtn = document.getElementById('create-problem-btn');
+                    const openVisualEditorBtn = document.getElementById('open-visual-editor-btn');
 
                     if (!wrapper || !checkbox) return;
 
@@ -161,6 +174,7 @@
                             if (jsonFileSelector) jsonFileSelector.style.display = 'none';
                             if (browseFileBtn) browseFileBtn.style.display = 'none';
                             if (createProblemBtn) createProblemBtn.style.display = 'none';
+                            if (openVisualEditorBtn) openVisualEditorBtn.style.display = 'none';
                         } else {
                             // Hide text form
                             wrapper.classList.add('hidden');
@@ -171,6 +185,7 @@
                             if (jsonFileSelector) jsonFileSelector.style.display = '';
                             if (browseFileBtn) browseFileBtn.style.display = '';
                             if (createProblemBtn) createProblemBtn.style.display = '';
+                            if (openVisualEditorBtn) openVisualEditorBtn.style.display = '';
                         }
                     };
 
@@ -367,6 +382,21 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Visual Problem Editor Modal -->
+    <div id="visual-editor-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl shadow-lg flex flex-col" style="width: 95vw; height: 92vh;">
+            <div class="flex items-center justify-between px-4 py-2 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-700">Visual Problem Editor</h3>
+                <button id="close-visual-editor-btn" type="button"
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded-md">
+                    ✕ Close
+                </button>
+            </div>
+            <iframe id="visual-editor-iframe" title="Visual Problem Editor"
+                class="flex-1 w-full border-0 rounded-b-xl"></iframe>
         </div>
     </div>
 

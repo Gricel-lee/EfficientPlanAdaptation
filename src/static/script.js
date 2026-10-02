@@ -909,6 +909,93 @@ document.getElementById('json-file-selector').addEventListener('change', async (
     }
 });
 
+// --- Visual Problem Editor Modal ---
+// Embeds planning_prob_visualizer/planning_editor.html (a standalone canvas-based JSON
+// editor) in an iframe popup. Communicates with it via postMessage:
+//   iframe -> parent: {type: 'editor-ready'}   once its own init has finished
+//   iframe -> parent: {type: 'use-problem', data}  "Use This Problem" clicked: save + close
+//   iframe -> parent: {type: 'export-json', filename, data}  "Export JSON" clicked: save,
+//                     keep editing (a checkpoint, not a "done" action)
+//   parent -> iframe: {type: 'load-json', data}     to pre-load an existing JSON into it
+const visualEditorModal  = document.getElementById('visual-editor-modal');
+const visualEditorIframe = document.getElementById('visual-editor-iframe');
+
+// Uploads a plain JS object (not a File) to the same /api/upload-json endpoint the
+// "Select a Different File" button uses, and returns the server-side path it was saved to.
+async function uploadJsonObjectAndGetPath(jsonData, filename = 'planning_problem.json') {
+    const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+    const formData = new FormData();
+    formData.append('file', blob, filename);
+
+    const response = await fetch('/api/upload-json', { method: 'POST', body: formData });
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ detail: 'Upload failed' }));
+        throw new Error(errorData.detail || `HTTP error ${response.status}`);
+    }
+    const result = await response.json();
+    return result.json_file_path;
+}
+
+function openVisualEditor() {
+    visualEditorModal.classList.remove('hidden');
+    // Always reload the editor fresh, so a previous session's in-popup edits don't linger.
+    visualEditorIframe.src = 'planning_prob_visualizer/planning_editor.html';
+}
+
+function closeVisualEditor() {
+    visualEditorModal.classList.add('hidden');
+    visualEditorIframe.src = 'about:blank';
+}
+
+window.addEventListener('message', async (event) => {
+    if (event.origin !== window.location.origin) return;
+    if (!event.data || typeof event.data !== 'object') return;
+
+    if (event.data.type === 'editor-ready') {
+        // Pre-load whatever's currently in the "JSON File Path" box, if there is one and
+        // it's readable - lets an existing/default problem be opened and edited directly.
+        const currentPath = document.getElementById('problem-json-path').value.trim();
+        if (!currentPath) return;
+        try {
+            const response = await fetch(`/api/read-json?path=${encodeURIComponent(currentPath)}`);
+            if (!response.ok) {
+                console.warn(`[VisualEditor] Could not pre-load "${currentPath}" (status ${response.status}); opening blank.`);
+                return;
+            }
+            const data = await response.json();
+            visualEditorIframe.contentWindow.postMessage({ type: 'load-json', data }, window.location.origin);
+        } catch (error) {
+            console.warn('[VisualEditor] Failed to pre-load current JSON path:', error);
+        }
+    } else if (event.data.type === 'use-problem') {
+        try {
+            const path = await uploadJsonObjectAndGetPath(event.data.data);
+            document.getElementById('problem-json-path').value = path;
+            console.log(`[VisualEditor] Problem saved and JSON File Path set to: ${path}`);
+            closeVisualEditor();
+        } catch (error) {
+            console.error('[VisualEditor] Failed to save edited problem:', error);
+            alert('Failed to save the edited problem. ' + error.message);
+        }
+    } else if (event.data.type === 'export-json') {
+        // Same save-to-server flow as "Select a Different File"/"Use This Problem" (goes
+        // through /api/upload-json, ending up named "<filename>_<random>.json"), but keeps
+        // the editor open - this is a checkpoint save, not a "done, close the popup" action.
+        try {
+            const filename = (event.data.filename || 'planning_problem') + '.json';
+            const path = await uploadJsonObjectAndGetPath(event.data.data, filename);
+            document.getElementById('problem-json-path').value = path;
+            console.log(`[VisualEditor] Exported and JSON File Path set to: ${path}`);
+        } catch (error) {
+            console.error('[VisualEditor] Failed to export problem:', error);
+            alert('Failed to export the problem. ' + error.message);
+        }
+    }
+});
+
+document.getElementById('open-visual-editor-btn').addEventListener('click', openVisualEditor);
+document.getElementById('close-visual-editor-btn').addEventListener('click', closeVisualEditor);
+
 createProblemForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const description = document.getElementById('problem-description').value;

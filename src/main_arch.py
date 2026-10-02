@@ -54,7 +54,14 @@ app.add_middleware(
 app.include_router(api_router)
 
 # --------------------------
-# 6. Mount Static Files Directory
-#    This must come AFTER all your API routes are included.
+# 6. Mount Static Files Directories
+#    These must come AFTER all your API routes are included. "/assets" (the repo-root
+#    assets/ folder, a sibling of src/ - outside src/static/) is mounted BEFORE the
+#    catch-all "/" mount below, since Starlette tries mounts in registration order and
+#    "/" would otherwise swallow every "/assets/..." request first. It's what lets the
+#    Visual Problem Editor's background-image paths like "../assets/background/qdc.jpg"
+#    actually resolve in the browser - without this mount, assets/ was never reachable
+#    over HTTP at all, regardless of what any JSON's "background.path" said.
 # --------------------------
+app.mount("/assets", StaticFiles(directory="../assets"), name="assets")
 app.mount("/", StaticFiles(directory="static", html=True), name="static")

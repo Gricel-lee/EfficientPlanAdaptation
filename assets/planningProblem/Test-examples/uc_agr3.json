@@ -743,7 +743,7 @@
   },
   "_comment4": "Background image shown in the editor canvas — not used by the solver. \"path\" is resolved relative to planning_editor.html on import; if it cannot be loaded there, the editor shows a small \"not found\" notice but keeps \"rect\" so re-uploading the same image snaps back into position.",
   "background": {
-    "path": "../assests/qdc.jpg",
+    "path": "../assets/background/qdc.jpg",
     "rect": {
       "x0": 0,
       "y0": 0,

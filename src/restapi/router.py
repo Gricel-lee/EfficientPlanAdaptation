@@ -89,6 +89,22 @@ async def explain_solution(problem_id: str, payload: dict):
 
 
 
+@api_router.get("/read-json")
+def read_json_file(path: str):
+    """Read a JSON file from a server-side path and return its parsed content.
+    Used by the visual problem editor popup to pre-load whatever's currently in
+    the "JSON File Path" box, so an existing problem can be opened and edited."""
+    if not path.lower().endswith(".json"):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Path must point to a .json file.")
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found: {path}")
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Invalid JSON in {path}: {e}")
+
+
 @api_router.post("/upload-json")
 async def upload_json_file(file: UploadFile = File(...)):
     """Upload a JSON file from the user's local machine and store it in the temp directory."""
