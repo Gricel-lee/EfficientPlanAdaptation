@@ -11,12 +11,6 @@ ARCH uses a hybrid approach that effectively solves the task planning problem by
 
 ## 1 Install and Run ARCH hybrid planner
 
-**Modify** ```config.ini``` file path
-
-```
-HP_PATH = /home/{your_path}/EfficientPlanAdaptation/src
-```
-
 Install and run ARCH Docker or locally.
 
 
@@ -31,23 +25,18 @@ Refer to [README-Docker](README-Docker.md) for instructions to create and run AR
 
 Jump to d) to run ARCH. To install:
 
-a) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
+a) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch_plan/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
 ![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/dirFiles.png)
 
-b) Create a **python environment** from src/arch/requirements.txt file:
+b) Create a **python environment** and install ARCH. The dependencies are declared in [pyproject.toml](pyproject.toml), at the root of the project. From the root of the project:
 ```
-cd src/arch
-python3 -m venv prj-venv
-```
-(or python. I used Python 3.10).
-
-```
-source prj-venv/bin/activate
-pip install -r requirements.txt
+python3 -m venv .venv
+source .venv/bin/activate
+pip install ./src/arch_plan/apps/tempest
+pip install -e .
 deactivate
-cd ../..
 ```
-(or pip3). For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-environments/
+(Python 3.10 or newer.) The first `pip install` installs the TemPEST solver together with the PySMT version it needs; the second installs ARCH and the rest of its dependencies. For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-environments/
 
 
 c) Make run_task.sh executable by running ```chmod +x run.sh```. 
@@ -127,7 +116,6 @@ For more information see https://www.geeksforgeeks.org/linux-unix/using-curl-to-
 ## 5 Configuration
 
 To configure the EvoChecker settings **modify** ```config.ini``` file parameters of population size and iterations as needed. 
-Do not modify Python path, except if running local Python instead of venv.
 
 
 **Enjoy!**
@@ -141,22 +129,19 @@ Do not modify Python path, except if running local Python instead of venv.
 This section contains some possible errors that might be encountered during installation and how to solve them.
 
 ### 1 Error when installing the python environment.
-If the python environment initialisation fails, try replacing ```src/requirements.txt``` content for:
+If the python environment initialisation fails because of a newer release of a dependency, pin the versions ARCH was tested with by replacing the corresponding entries of `dependencies` in ```pyproject.toml``` with:
 ```
-fastapi==0.116.1
-fastapi-cli==0.0.8
-fastapi-cloud-cli==0.1.5
-unified-planning==1.2.0
-up-aries==0.4.0
-up-enhsp==0.0.27
-up-fmap==0.0.13
-up-pyperplan==1.1.0
-up-symk==1.3.1
-#up-tamer==1.1.4
-#up_fast_downward==0.5.0
-#up_lpg==0.1.2
-matplotlib==3.7.3
+"fastapi[standard]==0.116.1",
+"unified-planning==1.2.0",
+"up-aries==0.4.0",
+"up-enhsp==0.0.27",
+"up-fmap==0.0.13",
+"up-pyperplan==1.1.0",
+"up-symk==1.3.1",
+"matplotlib==3.7.3",
+"numpy==1.26.4",
 ```
+and running ```pip install -e .``` again.
 
 ### 2 ERROR: pip's dependencies when creating the virtual environment
 This error can be ignored:
@@ -172,7 +157,7 @@ generate-parameter-library-py 0.4.0 requires typeguard, which is not installed.
 
 The TempEST solver library has not been installed (or the python environment has not been configured properly). To install the TempEST solver library, first activate the python environment:
 ```
-source src/arch/prj-venv/bin/activate
+source .venv/bin/activate
 ```
 TemPEST relies on [PySMT](https://github.com/pysmt/pysmt) to interface with SMT/OMT solvers. You must install PySMT and at least one solver (e.g., Z3):
 ```
@@ -181,8 +166,7 @@ pysmt-install --z3
 ```
 Then install TemPEST from the following directory:
 ```
-cd src/arch/apps/tempest/
-pip install .
+pip install ./src/arch_plan/apps/tempest
 ```
 Finally, deactivate the python env: 
 ```

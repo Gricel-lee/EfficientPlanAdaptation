@@ -6,7 +6,7 @@
 # chmod +x run.sh
 
 # ---- Instructions:
-# --- Set parameters in config.ini file (HP_PATH is set automatically)
+# --- Set parameters in config.ini file
 #---- Note: If evochecker stops in iterations, restart terminal and any IDEs ----
 #---- Note: All .json files in INPUT_DIR must be planning problems
 #---- Note: No folder called "data" must be present from which this .sh file is called (EvoChecker creates one and it will be deleted)
@@ -31,33 +31,31 @@ if [ -z "$JAVA_VERSION" ] || [ "$JAVA_VERSION" -lt 17 ] 2>/dev/null; then
 fi
 echo "Java version: $(java -version 2>&1 | head -1)"
 
-# 2 Set and update HP_PATH in config.ini to the src directory
-sed -i "s|HP_PATH = .*|HP_PATH = $SCRIPT_DIR/src|" "$SCRIPT_DIR/config.ini"
-HP_PATH=$SCRIPT_DIR/src
-echo "HP_PATH is: $HP_PATH"
+# 2 Folder of the arch_plan package
+PKG_DIR="$SCRIPT_DIR/src/arch_plan"
 
 # Python virtual environment
-SOURCE=$HP_PATH"/arch/prj-venv/bin/activate"
+SOURCE="$SCRIPT_DIR/.venv/bin/activate"
 
 #----- Activate python virtual environment
-source $SOURCE
+source "$SOURCE"
 echo "source $SOURCE" 
 
 # 3 Run Planner
 # ----------2.1 Run ARCH planner
 if [ "$MODE" == "arch" ]; then
 
-    LIBS_PATH=$HP_PATH"/arch/apps/EvoChecker/libs"
+    LIBS_PATH="$PKG_DIR/apps/EvoChecker/libs"
 
     # Make evochecker.jar executable
-    chmod +x "$HP_PATH/arch/apps/EvoChecker/EvoChecker-1.1.0.jar"
+    chmod +x "$PKG_DIR/apps/EvoChecker/EvoChecker-1.1.0.jar"
     
     #----- Copy runtime-amd64 folder to EvoChecker libs folder
     #try cp -r "$SCRIPT_DIR/arch/apps/runtime-amd64" "$LIBS_PATH"
-    if [ -d "$HP_PATH/arch/apps/runtime-amd64" ]; then
-        cp -r "$HP_PATH/arch/apps/runtime-amd64" "$LIBS_PATH"
+    if [ -d "$PKG_DIR/apps/runtime-amd64" ]; then
+        cp -r "$PKG_DIR/apps/runtime-amd64" "$LIBS_PATH"
     else
-        echo "ERROR: runtime-amd64 folder not found in $HP_PATH/arch/apps/runtime-amd64"
+        echo "ERROR: runtime-amd64 folder not found in $PKG_DIR/apps/runtime-amd64"
         echo "Please ensure the folder exists before running this script."
         exit 1
     fi
@@ -69,8 +67,8 @@ if [ "$MODE" == "arch" ]; then
     #----- Run FastAPI server
     echo "Running FastAPI server for Hybrid Planning..."
 
-    echo "Running main_arch.py on port 8001"
-    cd "$HP_PATH" && fastapi dev main_arch.py --port 8001
+    echo "Running arch_plan/server.py on port 8001"
+    cd "$SCRIPT_DIR/src" && fastapi dev arch_plan/server.py --port 8001
 
 # ---------- else
 else
