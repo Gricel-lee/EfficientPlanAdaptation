@@ -1,13 +1,10 @@
-[build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "arch-plan"
 version = "0.1.0"
 description = "ARCH: hybrid task planning with uncertainty augmentation, plan adaptation and LLM-generated explanations"
 readme = "README.md"
 requires-python = ">=3.10"
+
 
 # Direct dependencies only (what the code imports or runs). Lower bounds are the
 # versions ARCH was developed and tested with; pip resolves the transitive ones.
@@ -24,6 +21,8 @@ dependencies = [
     "up-pyperplan>=1.1.0",
     "up-symk>=1.3.1",
     "ortools>=9.14.6206,<10",
+    # Constraint programming model that checks the mission constraints when retries are added
+    "cpmpy>=1.1.1,<2",
     # SMT solver used by TemPEST through PySMT
     "z3-solver>=4.15.0.0",
     # Plots
@@ -32,21 +31,30 @@ dependencies = [
     "google-genai>=1.60.0,<2",
 ]
 
-# NOTE: TemPEST (src/arch_plan/apps/tempest) is a vendored third-party package and is
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+
+# NOTE: TemPEST (apps/tempest, at the root of the project) is a vendored third-party package and is
 # installed separately, because a relative local path cannot be declared as a
 # dependency here. It pulls the PySMT commit it needs:
-#     pip install ./src/arch_plan/apps/tempest
+#     pip install ./apps/tempest
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.4.1",
 ]
+# Jupyter kernel needed to run run_planner.ipynb
+notebook = [
+    "ipykernel>=6",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["arch_plan*"]
-# apps/ holds third-party tools (TemPEST, EvoChecker), not part of the package
-exclude = ["arch_plan.apps*", "arch_plan.static*", "arch_plan.llm.assets*"]
+# Folders with data files only (declared below as package data)
+exclude = ["arch_plan.static*", "arch_plan.llm.assets*"]
 
 # Non-Python files shipped inside the package
 [tool.setuptools.package-data]

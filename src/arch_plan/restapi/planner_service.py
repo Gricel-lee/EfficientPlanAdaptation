@@ -279,6 +279,8 @@ def run_hybrid_planner(problem: Problem, PROBLEM_DATABASE: Dict[str, Problem]):
             _set_status(problem, "failed", PROBLEM_DATABASE)
             _error_message(problem, f"JSON file does not exist: {problem.json_file}.", PROBLEM_DATABASE)
             return
+        # EvoChecker must be installed (raises FileNotFoundError with instructions otherwise)
+        config.check_evochecker_installed()
         # TODO: Add more checks, e.g., parsing the JSON file to ensure it has the expected structure.
 
         #----- 3. Copy libs folder from EvoChecker to the folder containing this script (required for EvoChecker to run)

@@ -1,28 +1,18 @@
 #!/bin/bash
 
-#---- This script runs the hybrid planner.
-#---- Note: Remember to first read README in GitHub to download dependencies and create virtual environment.
+#---- This script installs the ARCH hybrid planner (arch_plan package) and everything it needs.
+#---- It only installs. To run the planner, open run_planner.ipynb (from Python) or run_planner_ui.ipynb (web app).
 # Make this file executable by running:
 # chmod +x run.sh
+# It can be run again at any time: steps that are already done are skipped.
 
-# ---- Instructions:
-# --- Set parameters in config.ini file
-#---- Note: If evochecker stops in iterations, restart terminal and any IDEs ----
-#---- Note: All .json files in INPUT_DIR must be planning problems
-#---- Note: No folder called "data" must be present from which this .sh file is called (EvoChecker creates one and it will be deleted)
-#---- Note: No folder called "libs" must be present. A libs folder will be created. It contains the necessary libraries for EvoChecker.
-
-# After running this script, the FastAPI server will be running at http://localhost:8001
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Make sure to run this script with the LTA argument: arch
-# or with no argument (defaults to arch)
-# (this is to allow for future extensions with other modes)
-MODE=${1:-arch}
-echo "Running: $MODE"
+# Folder of the third-party tools (TemPEST, EvoChecker)
+APPS_DIR="$SCRIPT_DIR/apps"
 
-# 1 Check Java 17+
+#----- 1 Check Java 17+ (needed by EvoChecker)
 JAVA_VERSION=$(java -version 2>&1 | awk -F[\"._] 'NR==1{print $2}')
 if [ -z "$JAVA_VERSION" ] || [ "$JAVA_VERSION" -lt 17 ] 2>/dev/null; then
     echo "Java 17+ not found (found: ${JAVA_VERSION:-none}). Installing openjdk-17-jre..."
@@ -31,48 +21,51 @@ if [ -z "$JAVA_VERSION" ] || [ "$JAVA_VERSION" -lt 17 ] 2>/dev/null; then
 fi
 echo "Java version: $(java -version 2>&1 | head -1)"
 
-# 2 Folder of the arch_plan package
-PKG_DIR="$SCRIPT_DIR/src/arch_plan"
+#----- 2 Python virtual environment
+VENV_DIR="$SCRIPT_DIR/.venv"
+VENV_PYTHON="$VENV_DIR/bin/python"
 
-# Python virtual environment
-SOURCE="$SCRIPT_DIR/.venv/bin/activate"
+#----- Create the python virtual environment if it does not exist
+if [ ! -x "$VENV_PYTHON" ]; then
+    echo "No virtual environment found. Creating $VENV_DIR ..."
+    python3 -m venv "$VENV_DIR" || { echo "ERROR: could not create $VENV_DIR"; exit 1; }
+fi
 
-#----- Activate python virtual environment
-source "$SOURCE"
-echo "source $SOURCE" 
+#----- Install TemPEST first (it pulls the PySMT version it needs), unless already installed
+if ! "$VENV_PYTHON" -c "import tempest" 2>/dev/null; then
+    "$VENV_PYTHON" -m pip install "$APPS_DIR/tempest" || { echo "ERROR: TemPEST installation failed."; exit 1; }
+fi
 
-# 3 Run Planner
-# ----------2.1 Run ARCH planner
-if [ "$MODE" == "arch" ]; then
+#----- ** Install ARCH (using pip configured through pyproject.toml), plus the optional notebook group defined in .toml (for Jupyter notebook support)
+"$VENV_PYTHON" -m pip install -e "$SCRIPT_DIR[notebook]" || { echo "ERROR: ARCH installation failed."; exit 1; }
 
-    LIBS_PATH="$PKG_DIR/apps/EvoChecker/libs"
+#----- 3 EvoChecker
+EVO_DIR="$APPS_DIR/EvoChecker"
+LIBS_PATH="$EVO_DIR/libs"
 
-    # Make evochecker.jar executable
-    chmod +x "$PKG_DIR/apps/EvoChecker/EvoChecker-1.1.0.jar"
-    
-    #----- Copy runtime-amd64 folder to EvoChecker libs folder
-    #try cp -r "$SCRIPT_DIR/arch/apps/runtime-amd64" "$LIBS_PATH"
-    if [ -d "$PKG_DIR/apps/runtime-amd64" ]; then
-        cp -r "$PKG_DIR/apps/runtime-amd64" "$LIBS_PATH"
-    else
-        echo "ERROR: runtime-amd64 folder not found in $PKG_DIR/apps/runtime-amd64"
-        echo "Please ensure the folder exists before running this script."
-        exit 1
-    fi
+#----- Download EvoChecker (evoCheckerJar branch includes the jar and the runtime libs) if missing
+if [ ! -f "$EVO_DIR/EvoChecker-1.1.0.jar" ]; then
+    echo "EvoChecker not found. Downloading it into $EVO_DIR ..."
+    git clone --depth 1 --branch evoCheckerJar https://github.com/gerasimou/EvoChecker.git "$EVO_DIR" \
+        || { echo "ERROR: could not download EvoChecker."; exit 1; }
+fi
 
-    #----- Copy libs folder from EvoChecker to the folder containing this script
-    
-    cp -r $LIBS_PATH .
+#----- Make evochecker.jar executable
+chmod +x "$EVO_DIR/EvoChecker-1.1.0.jar"
 
-    #----- Run FastAPI server
-    echo "Running FastAPI server for Hybrid Planning..."
-
-    echo "Running arch_plan/server.py on port 8001"
-    cd "$SCRIPT_DIR/src" && fastapi dev arch_plan/server.py --port 8001
-
-# ---------- else
-else
-    echo "Invalid argument '$MODE'. Use 'arch' or run with no argument."
+#----- Copy runtime-amd64 folder (macOS libraries) to EvoChecker libs folder
+if [ -d "$APPS_DIR/runtime-amd64" ]; then
+    cp -r "$APPS_DIR/runtime-amd64" "$LIBS_PATH"
+elif [ "$(uname)" == "Darwin" ]; then
+    echo "ERROR: runtime-amd64 folder not found in $APPS_DIR/runtime-amd64"
+    echo "Please ensure the folder exists before running this script."
     exit 1
 fi
 
+#----- Copy libs folder from EvoChecker to src/, the folder the planner runs from
+cp -r "$LIBS_PATH" "$SCRIPT_DIR/src/"
+
+echo ""
+echo "Installation complete."
+echo "To run ARCH, open run_planner.ipynb (from Python) or run_planner_ui.ipynb (web app),"
+echo "and select the .venv environment as kernel."

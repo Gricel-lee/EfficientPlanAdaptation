@@ -21,39 +21,31 @@ Refer to [README-Docker](README-Docker.md) for instructions to create and run AR
 
 ### 1.2 Local installation
 
-#### Install and run ARCH locally
+#### Install ARCH locally
 
-Jump to d) to run ARCH. To install:
-
-a) **Download** [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) inside [src/arch_plan/apps/EvoChecker](https://github.com/Gricel-lee/EfficientPlanAdaptation/tree/main/src/arch/apps). The new folder must contain the following files:
-![image](https://github.com/Gricel-lee/EfficientPlanAdaptation/blob/arch-agriculture/assets/images/dirFiles.png)
-
-b) Create a **python environment** and install ARCH. The dependencies are declared in [pyproject.toml](pyproject.toml), at the root of the project. From the root of the project:
+From the root of the project, run:
 ```
-python3 -m venv .venv
-source .venv/bin/activate
-pip install ./src/arch_plan/apps/tempest
-pip install -e .
-deactivate
-```
-(Python 3.10 or newer.) The first `pip install` installs the TemPEST solver together with the PySMT version it needs; the second installs ARCH and the rest of its dependencies. For reference: https://www.dataquest.io/blog/a-complete-guide-to-python-virtual-environments/
-
-
-c) Make run_task.sh executable by running ```chmod +x run.sh```. 
-
-
-d) Run ARCH locally
-
-**Run** from terminal.
-```
+chmod +x run.sh
 ./run.sh
 ```
-This will automatically activate the Python environment, Rest API, and the web app.
+This is the only step needed. ```run.sh``` only installs; it does not start the planner. It:
+- checks that Java 17 or newer is available (and installs it if not),
+- creates the python environment ```.venv``` at the root of the project (Python 3.10 or newer),
+- installs the TemPEST solver, and ARCH with its dependencies (declared in [pyproject.toml](pyproject.toml)),
+- downloads [EvoChecker](https://github.com/gerasimou/EvoChecker/tree/evoCheckerJar) into ```apps/EvoChecker```. To use an EvoChecker installed somewhere else, set the environment variable ```ARCH_EVOCHECKER_DIR``` to the folder containing ```EvoChecker-1.1.0.jar``` and its ```libs``` folder.
+
+It can be run again at any time, e.g., after changing the dependencies in ```pyproject.toml```.
+
+#### Run ARCH locally
+
+There are two Jupyter notebooks. For both, select the ```.venv``` environment as kernel and run the cells.
+- [run_planner_ui.ipynb](run_planner_ui.ipynb) starts the Rest API and the web app. Interrupt the cell to stop them.
+- [run_planner.ipynb](run_planner.ipynb) runs the planner directly from Python on a JSON planning problem, without the Rest API or the web app, and reads the plan and the Pareto front. Its last section injects task retries into the plan and checks with CPMpy whether the mission constraints (ordering of tasks, maximum duration) still hold, showing the Gantt charts before and after.
 
 
 ## 2 ARCH UI
 
-The API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run.sh).
+The API and **web app** will be running locally at **```http://localhost:8001```** (port 8001 defined in run_planner_ui.ipynb).
 
 Note: To test and submit a planning problem directly through the API try ```http://localhost:8001/docs``` instead. For documentation on how FastAPI works, go to [FastAPI](https://fastapi.tiangolo.com/tutorial/first-steps/#interactive-api-docs).
 
@@ -166,7 +158,7 @@ pysmt-install --z3
 ```
 Then install TemPEST from the following directory:
 ```
-pip install ./src/arch_plan/apps/tempest
+pip install ./apps/tempest
 ```
 Finally, deactivate the python env: 
 ```

@@ -291,6 +291,52 @@ def generate(data: dict, json_path: str = None) -> str:
         v: [d for d in task_graph.get(v, {}).get('depends_on', []) if d in concrete]
         for v in virtual
     }
+    # All the alternatives of each virtual node, concrete or virtual. A virtual node
+    # listed as an alternative of another virtual node is "nested": it is only active
+    # when it is the alternative chosen by its parent.
+    alt_map: dict = {
+        v: [d for d in task_graph.get(v, {}).get('depends_on', []) if d in concrete or d in virtual]
+        for v in virtual
+    }
+    nested_virtual: set = {a for alts in alt_map.values() for a in alts if a in virtual}
+
+    def leaf_alternatives(vid: str, guards: tuple = ()) -> list:
+        """Return the concrete tasks that can complete a virtual node.
+
+        Args:
+            vid: Id of the virtual node.
+            guards: Presence variables of the nested virtual nodes already crossed.
+
+        Returns:
+            List of (concrete task id, [presence variable names]) where the variables
+            are the nested virtual nodes that must be active for that task to count.
+        """
+        leaves: list = []
+        for alt in alt_map.get(vid, []):
+            if alt in virtual:
+                leaves += leaf_alternatives(alt, guards + (f'_p_{safe(alt)}',))
+            else:
+                leaves.append((alt, list(guards)))
+        return leaves
+
+    def virtual_emit_order() -> list:
+        """Return the virtual nodes with nested ones before the nodes that list them.
+
+        Returns:
+            Sorted list of virtual node ids, alternatives first.
+        """
+        ordered: list = []
+        def visit(vid: str) -> None:
+            if vid in ordered:
+                return
+            for alt in alt_map.get(vid, []):
+                if alt in virtual:
+                    visit(alt)
+            ordered.append(vid)
+        for vid in sorted(virtual):
+            visit(vid)
+        return ordered
+
     belongs_to:  dict = {s: v for v, subs in subtask_map.items() for s in subs}
     optional_subs = set(belongs_to)          # subtasks of virtual nodes
     or_optional   = (find_or_optional(task_graph, targets, required)
@@ -529,18 +575,28 @@ def generate(data: dict, json_path: str = None) -> str:
     # ── Virtual nodes (bind canonical vars to active alternative) ─────────────
     if virtual:
         w('    # ── Virtual nodes (canonical vars bound to whichever alternative runs) ─')
-        for vid in sorted(virtual):
-            subs = subtask_map.get(vid, [])
+        for vid in virtual_emit_order():
+            subs = alt_map.get(vid, [])
             if not subs:
-                w(f'    # WARNING: {vid!r} — no concrete alternatives found, skipping')
+                w(f'    # WARNING: {vid!r} — no alternatives found, skipping')
                 continue
-            w(f'    # {vid}  → exactly one of {subs}')
+            plist = [f'_p_{safe(s)}' for s in subs]
             w(f'    ts[{vid!r}] = model.new_int_var(0, horizon, {(vid+"_s")!r})')
             w(f'    te[{vid!r}] = model.new_int_var(0, horizon, {(vid+"_e")!r})')
-            w(f'    pr[{vid!r}]  = model.new_bool_var({(vid+"_active")!r})')
-            plist = [f'_p_{safe(s)}' for s in subs]
-            w(f'    model.add_exactly_one([{", ".join(plist)}])')
-            w(f'    model.add(pr[{vid!r}] == 1)')   # virtual node is always "done" (one alt runs)
+            if vid in nested_virtual:
+                # Nested virtual node: active only when chosen by its parent. When active,
+                # one of its alternatives runs; at most one of them runs in any case.
+                pv = f'_p_{safe(vid)}'
+                w(f'    # {vid}  → one of {subs} when active (alternative of another virtual node)')
+                w(f'    {pv} = model.new_bool_var({(vid+"_active")!r})')
+                w(f'    pr[{vid!r}]  = {pv}')
+                w(f'    model.add_at_most_one([{", ".join(plist)}])')
+                w(f'    model.add_bool_or([{", ".join(plist)}, ~{pv}])')
+            else:
+                w(f'    # {vid}  → exactly one of {subs}')
+                w(f'    pr[{vid!r}]  = model.new_bool_var({(vid+"_active")!r})')
+                w(f'    model.add_exactly_one([{", ".join(plist)}])')
+                w(f'    model.add(pr[{vid!r}] == 1)')   # virtual node is always "done" (one alt runs)
             for st in subs:
                 p = f'_p_{safe(st)}'
                 w(f'    model.add(ts[{vid!r}] == ts[{st!r}]).OnlyEnforceIf({p})')
@@ -698,7 +754,12 @@ def generate(data: dict, json_path: str = None) -> str:
                 # The OR-branch already does this via or_dep_bvars; the AND-branch
                 # needs the same safeguard since it has no per-edge "did I use this"
                 # bool to hang the reverse-implication off of.
-                if dep in or_optional:
+                # The same holds for any other optional dependency (an alternative of
+                # a virtual node, a derived-optional task or a nested virtual node): a
+                # task can only run if every one of its AND dependencies runs.
+                dep_is_optional = (dep in or_optional or dep in optional_subs
+                                   or dep in derived_optional or dep in nested_virtual)
+                if dep_is_optional:
                     dep_p = f'_p_{safe(dep)}'
                     if is_opt:
                         w(f'    model.add_implication({p_tid}, {dep_p})')
@@ -707,7 +768,9 @@ def generate(data: dict, json_path: str = None) -> str:
 
                 if dep in virtual:
                     # Expand virtual dep → per-subtask constraints with travel
-                    for sub in subtask_map.get(dep, []):
+                    # (alternatives that are virtual nodes themselves are expanded too,
+                    # guarded by the presence of each nested virtual node on the way)
+                    for sub, nested_g in leaf_alternatives(dep):
                         sub_end = task_locs.get(sub, {}).get('end', '')
                         if tid_interch:
                             dir_t = dir_vars[tid]
@@ -715,9 +778,9 @@ def generate(data: dict, json_path: str = None) -> str:
                                 (tid_locs['start'], dir_t),
                                 (tid_locs['end'],   f'~{dir_t}'),
                             ]:
-                                emit_dep_travel(w, tid, sub, sub_end, to_loc, [g_dir])
+                                emit_dep_travel(w, tid, sub, sub_end, to_loc, [g_dir] + nested_g)
                         else:
-                            emit_dep_travel(w, tid, sub, sub_end, tid_locs.get('start', ''), [])
+                            emit_dep_travel(w, tid, sub, sub_end, tid_locs.get('start', ''), nested_g)
                 elif dep_interch:
                     dir_d = dir_vars[dep]
                     if tid_interch:

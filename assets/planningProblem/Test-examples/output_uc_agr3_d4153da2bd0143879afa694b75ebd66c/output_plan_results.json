@@ -1,0 +1,381 @@
+{
+    "plan": [
+        {
+            "name": "move",
+            "agent": "human1",
+            "initialLocation": "l2",
+            "endLocation": "l1",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "human1",
+            "initialLocation": "l1",
+            "endLocation": "l2",
+            "taskId": "Harvest_Row1"
+        },
+        {
+            "name": "dotask",
+            "agent": "human1",
+            "initialLocation": "l2",
+            "endLocation": "l9",
+            "taskId": "Deliver_Box1_CP"
+        },
+        {
+            "name": "move",
+            "agent": "human1",
+            "initialLocation": "l9",
+            "endLocation": "l6",
+            "taskId": null
+        },
+        {
+            "name": "move",
+            "agent": "human1",
+            "initialLocation": "l6",
+            "endLocation": "l5",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "human1",
+            "initialLocation": "l5",
+            "endLocation": "l6",
+            "taskId": "Harvest_Row3"
+        },
+        {
+            "name": "dotask",
+            "agent": "human1",
+            "initialLocation": "l6",
+            "endLocation": "l10",
+            "taskId": "Deliver_Box3_HP"
+        },
+        {
+            "name": "move",
+            "agent": "human1",
+            "initialLocation": "l10",
+            "endLocation": "l3",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "human1",
+            "initialLocation": "l3",
+            "endLocation": "l4",
+            "taskId": "Harvest_Row2"
+        },
+        {
+            "name": "dotask",
+            "agent": "human1",
+            "initialLocation": "l4",
+            "endLocation": "l9",
+            "taskId": "Deliver_Box2_CP"
+        },
+        {
+            "name": "move",
+            "agent": "human1",
+            "initialLocation": "l9",
+            "endLocation": "l8",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "human1",
+            "initialLocation": "l8",
+            "endLocation": "l7",
+            "taskId": "Harvest_Row4"
+        },
+        {
+            "name": "move",
+            "agent": "human1",
+            "initialLocation": "l7",
+            "endLocation": "l8",
+            "taskId": null
+        },
+        {
+            "name": "dotask",
+            "agent": "human1",
+            "initialLocation": "l8",
+            "endLocation": "l10",
+            "taskId": "Deliver_Box4_HP"
+        },
+        {
+            "name": "dotask",
+            "agent": "tractor1",
+            "initialLocation": "l9",
+            "endLocation": "l11",
+            "taskId": "Tractor_Final"
+        }
+    ],
+    "pareto": [
+        {
+            "paretoSolutionId": 1,
+            "QoS": {
+                "probabilitySucc": 1.0,
+                "cost": 24.0
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "Row1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "CP"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "Row3"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "HP"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "Row2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "CP"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "Row4"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "HP"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "tractor1",
+                    "task": "Final"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 2,
+            "QoS": {
+                "probabilitySucc": 1.0,
+                "cost": 24.0
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "Row1"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "CP"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "Row3"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "HP"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "Row2"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "CP"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "Row4"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "HP"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "tractor1",
+                    "task": "Final"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 3,
+            "QoS": {
+                "probabilitySucc": 1.0,
+                "cost": 24.0
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "Row1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "CP"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "Row3"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "HP"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "Row2"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "CP"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "Row4"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "HP"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "tractor1",
+                    "task": "Final"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 4,
+            "QoS": {
+                "probabilitySucc": 1.0,
+                "cost": 24.0
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "Row1"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "CP"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "Row3"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "HP"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "Row2"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "CP"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "Row4"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "HP"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "tractor1",
+                    "task": "Final"
+                }
+            ]
+        },
+        {
+            "paretoSolutionId": 5,
+            "QoS": {
+                "probabilitySucc": 1.0,
+                "cost": 24.0
+            },
+            "tasksRetries": [
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "Row1"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "CP"
+                },
+                {
+                    "maxRetry": 1,
+                    "agent": "human1",
+                    "task": "Row3"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "HP"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "Row2"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "CP"
+                },
+                {
+                    "maxRetry": 2,
+                    "agent": "human1",
+                    "task": "Row4"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "human1",
+                    "task": "HP"
+                },
+                {
+                    "maxRetry": 3,
+                    "agent": "tractor1",
+                    "task": "Final"
+                }
+            ]
+        }
+    ]
+}

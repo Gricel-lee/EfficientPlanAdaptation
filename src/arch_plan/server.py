@@ -3,8 +3,7 @@
 
 # To run this application:
 # 1. Ensure your follow the GitHub README installation instructions.
-# 2. Run the API and application from your terminal, all by running:
-#    ./run.sh
+# 2. Run the API and application from the run_planner_ui.ipynb notebook.
 # 3. Open your browser and go to http://127.0.0.1:8001/ to see the UI.
 
 # Optionally, use cmd to interact with the API endpoints directly. See

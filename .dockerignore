@@ -11,7 +11,7 @@
 *.pyd
 
 # EvoChecker is git-cloned during build; exclude local copy to avoid conflict
-src/arch_plan/apps/EvoChecker/
+apps/EvoChecker/
 
 # Local virtual environment (not needed in Docker)
 .venv/

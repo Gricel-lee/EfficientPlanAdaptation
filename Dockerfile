@@ -31,17 +31,18 @@ WORKDIR /app
 # Copy project
 COPY pyproject.toml README.md ./
 COPY src/ ./src/
+COPY apps/ ./apps/
 COPY config.ini ./ 
 
 # Download EvoChecker (evoCheckerJar branch includes the jar + Linux .so runtime libs)
 RUN git clone --depth 1 --branch evoCheckerJar \
     https://github.com/gerasimou/EvoChecker.git \
-    src/arch_plan/apps/EvoChecker && \
-    chmod +x src/arch_plan/apps/EvoChecker/EvoChecker-1.1.0.jar && \
-    cp -r src/arch_plan/apps/EvoChecker/libs src/libs
+    apps/EvoChecker && \
+    chmod +x apps/EvoChecker/EvoChecker-1.1.0.jar && \
+    cp -r apps/EvoChecker/libs src/libs
 
 # Install tempest first so it pulls the pysmt version it requires
-RUN pip install --no-cache-dir src/arch_plan/apps/tempest/
+RUN pip install --no-cache-dir apps/tempest/
 
 # Install ARCH and its dependencies (declared in pyproject.toml) in editable mode,
 # so the code keeps running from /app/src
@@ -51,7 +52,7 @@ RUN pip install --no-cache-dir -e .
 RUN pysmt-install --z3 --confirm-agreement
 
 # Set the EvoChecker library path for the Docker environment
-ENV LD_LIBRARY_PATH=/app/src/arch_plan/apps/EvoChecker/libs/runtime
+ENV LD_LIBRARY_PATH=/app/apps/EvoChecker/libs/runtime
 
 EXPOSE 8001
 
